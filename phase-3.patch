@@ -1,0 +1,1475 @@
+From 4cc532d36bb05405716d77bc54ff56efaca3e0c3 Mon Sep 17 00:00:00 2001
+From: Claude <claude@anthropic.local>
+Date: Mon, 27 Jul 2026 08:54:17 +0000
+Subject: [PATCH] phase 3: interior pages
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+- Approach page: three capabilities with deep content (What happens, What
+  you leave with, A first week, Duration, Investment). Deep-linkable via
+  #assess / #build / #advise anchors from homepage capability tiles.
+- Work page: three-column engagement approach (How we start / How we work
+  / How we close) + featured Verixar engagement card. Placeholder note
+  for more as they close.
+- Contact page: two-column layout with contact block on the left
+  (booking status, email, location, response window) and 'what to
+  include' prompt on the right.
+
+New components:
+- CapabilityDetail (sections/) — reusable deep-content block for
+  Approach page capabilities
+- EngagementCard (sections/) — editorial artefact block for Work page
+  featured engagements
+
+Content:
+- content/site.ts extended with capability deep-content, engagements
+  array (Verixar for v0.1), and contactPrompts.
+---
+ app/approach/page.module.css                  | 100 ++++++---
+ app/approach/page.tsx                         |  89 +++++---
+ app/contact/page.module.css                   | 210 ++++++++++++++++++
+ app/contact/page.tsx                          | 122 +++++++---
+ app/work/page.module.css                      | 156 +++++++++++++
+ app/work/page.tsx                             | 119 +++++++---
+ .../sections/CapabilityDetail.module.css      | 128 +++++++++++
+ components/sections/CapabilityDetail.tsx      |  86 +++++++
+ components/sections/EngagementCard.module.css | 119 ++++++++++
+ components/sections/EngagementCard.tsx        |  69 ++++++
+ components/sections/index.ts                  |   2 +
+ content/site.ts                               |  80 ++++++-
+ 12 files changed, 1172 insertions(+), 108 deletions(-)
+ create mode 100644 app/contact/page.module.css
+ create mode 100644 app/work/page.module.css
+ create mode 100644 components/sections/CapabilityDetail.module.css
+ create mode 100644 components/sections/CapabilityDetail.tsx
+ create mode 100644 components/sections/EngagementCard.module.css
+ create mode 100644 components/sections/EngagementCard.tsx
+
+diff --git a/app/approach/page.module.css b/app/approach/page.module.css
+index 99b9e63..3352688 100644
+--- a/app/approach/page.module.css
++++ b/app/approach/page.module.css
+@@ -1,45 +1,93 @@
+-.h {
++/* ── Page head ─────────────────────────────────────────────── */
++.pageHead {
++  padding: 96px 48px 96px;
++  background: var(--paper);
++  border-bottom: 1px solid var(--border-hairline);
++  position: relative;
++  overflow: hidden;
++}
++.pageHead::before {
++  content: "";
++  position: absolute;
++  inset: 0;
++  background-image:
++    linear-gradient(var(--ink) 1px, transparent 1px),
++    linear-gradient(90deg, var(--ink) 1px, transparent 1px);
++  background-size: 48px 48px;
++  opacity: 0.04;
++  pointer-events: none;
++}
++.pageHeadInner {
++  max-width: var(--max-content);
++  margin: 0 auto;
++  position: relative;
++}
++.h1 {
+   font-family: var(--font-serif);
+-  font-size: clamp(44px, 6vw, 72px);
+-  line-height: 1.05;
++  font-size: clamp(48px, 7vw, 88px);
++  line-height: 0.98;
+   letter-spacing: -0.03em;
+   font-weight: 400;
+   margin: 24px 0 32px;
+-  max-width: 900px;
++  max-width: 1100px;
+ }
+-.h em {
++.h1 em {
+   font-style: italic;
+   color: var(--moss);
+ }
+-
+-.p {
+-  font-size: 17px;
+-  line-height: 1.6;
++.sub {
++  font-size: 18px;
++  line-height: 1.55;
+   color: var(--text-body);
+-  max-width: 640px;
+-  margin-bottom: 16px;
++  max-width: 780px;
+ }
+ 
+-.link {
++/* ── Closing frame ─────────────────────────────────────────── */
++.closing {
++  padding: 96px 48px;
++  background: var(--stone-50);
++  border-bottom: 1px solid var(--border-hairline);
++}
++.closingInner {
++  max-width: 900px;
++  margin: 0 auto;
++}
++.closingP {
++  font-family: var(--font-serif);
++  font-size: 20px;
++  line-height: 1.5;
+   color: var(--text-primary);
+-  border-bottom: 1px solid var(--border-default);
+-  transition: border-color var(--motion-fast);
++  margin-bottom: 20px;
+ }
+-.link:hover {
+-  border-color: var(--moss);
++.closingP:last-of-type {
++  margin-bottom: 32px;
+ }
+-
+-.phase {
+-  margin-top: 48px;
++.closingEpigraph {
++  font-family: var(--font-serif);
++  font-size: 24px;
++  color: var(--text-muted);
+   padding-top: 24px;
+   border-top: 1px solid var(--border-hairline);
+-  font-family: var(--font-mono);
+-  font-size: 11px;
+-  letter-spacing: 0.14em;
+-  text-transform: uppercase;
+-  color: var(--text-muted);
+ }
+-.phase span {
++.closingEpigraph em {
++  font-style: italic;
+   color: var(--moss);
+-  padding-right: 6px;
++}
++
++@media (max-width: 900px) {
++  .pageHead {
++    padding: 64px 24px 64px;
++  }
++  .sub {
++    font-size: 16px;
++  }
++  .closing {
++    padding: 64px 24px;
++  }
++  .closingP {
++    font-size: 18px;
++  }
++  .closingEpigraph {
++    font-size: 20px;
++  }
+ }
+diff --git a/app/approach/page.tsx b/app/approach/page.tsx
+index bb25f7c..1180390 100644
+--- a/app/approach/page.tsx
++++ b/app/approach/page.tsx
+@@ -1,40 +1,75 @@
+-import { PageShell } from "@/components/layout";
+-import { Eyebrow } from "@/components/ui";
++import { Eyebrow, Cta } from "@/components/ui";
++import { CapabilityDetail } from "@/components/sections";
++import { capabilities, cta } from "@/content/site";
+ import styles from "./page.module.css";
+ 
+ export const metadata = {
+   title: "Approach",
+   description:
+-    "How Breachrr Security works — capabilities, methodology, who we help and who we're not right for.",
++    "How Breachrr Security works — three capabilities, scoped per engagement. Assess, Build, Advise.",
+ };
+ 
+ /**
+- * Approach page — deferred to phase 3.
+- * Placeholder shows a phase-labelled note so the nav resolves and the reader
+- * isn't dropped into a 404.
++ * Approach page — compact. Full deep-content for all three capabilities
++ * on one scrollable page. Deep-linkable via #assess / #build / #advise.
+  */
+ export default function ApproachPage() {
+   return (
+-    <PageShell>
+-      <Eyebrow prefix="§">Approach</Eyebrow>
+-      <h1 className={styles.h}>
+-        The <em>substantial</em> page.
+-      </h1>
+-      <p className={styles.p}>
+-        This is where the Approach content lives — what each capability
+-        actually looks like in practice, how we work, who we help in depth,
+-        who we're not right for.
+-      </p>
+-      <p className={styles.p}>
+-        Content is being written now. Check back shortly, or email{" "}
+-        <a href="mailto:mo@breachrrsecurity.com" className={styles.link}>
+-          mo@breachrrsecurity.com
+-        </a>{" "}
+-        directly.
+-      </p>
+-      <p className={styles.phase}>
+-        <span>Phase 3</span> · Full Approach page under construction.
+-      </p>
+-    </PageShell>
++    <>
++      {/* Page header */}
++      <header className={styles.pageHead}>
++        <div className={styles.pageHeadInner}>
++          <Eyebrow prefix="§">Approach</Eyebrow>
++          <h1 className={styles.h1}>
++            Three capabilities.<br />
++            <em>One shape, cut to fit.</em>
++          </h1>
++          <p className={styles.sub}>
++            How the practice works. Assess, Build, Advise — what each one
++            actually looks like, what you leave with, and how a first week
++            starts. Not a tiered menu. A shape we cut to fit the engagement
++            in front of us.
++          </p>
++        </div>
++      </header>
++
++      {/* Three capabilities */}
++      {capabilities.map((cap, i) => (
++        <CapabilityDetail
++          key={cap.slug}
++          slug={cap.slug}
++          number={`0${i + 1}`}
++          name={cap.name}
++          tagline={cap.tagline}
++          whatHappens={cap.whatHappens}
++          delivers={cap.delivers}
++          firstWeek={cap.firstWeek}
++          investment={cap.investment}
++          duration={cap.duration}
++        />
++      ))}
++
++      {/* Closing frame */}
++      <section className={styles.closing}>
++        <div className={styles.closingInner}>
++          <p className={styles.closingP}>
++            Three capabilities. Different engagements combine them differently.
++            A program build-out often starts with an assessment. Ongoing
++            advisory usually follows a program. Sometimes a single assessment
++            is all that's needed — sometimes a five-year advisory partnership
++            begins after one intense week.
++          </p>
++          <p className={styles.closingP}>
++            We scope engagements to what the work actually needs, not what a
++            tiered pricing sheet says.
++          </p>
++          <p className={styles.closingEpigraph}>
++            <em>Not a sequence. A shape we cut to fit.</em>
++          </p>
++        </div>
++      </section>
++
++      <Cta {...cta} variant="ink" />
++    </>
+   );
+ }
+diff --git a/app/contact/page.module.css b/app/contact/page.module.css
+new file mode 100644
+index 0000000..2bfa39a
+--- /dev/null
++++ b/app/contact/page.module.css
+@@ -0,0 +1,210 @@
++.pageHead {
++  padding: 96px 48px;
++  background: var(--paper);
++  border-bottom: 1px solid var(--border-hairline);
++  position: relative;
++  overflow: hidden;
++}
++.pageHead::before {
++  content: "";
++  position: absolute;
++  inset: 0;
++  background-image:
++    linear-gradient(var(--ink) 1px, transparent 1px),
++    linear-gradient(90deg, var(--ink) 1px, transparent 1px);
++  background-size: 48px 48px;
++  opacity: 0.04;
++  pointer-events: none;
++}
++.pageHeadInner {
++  max-width: var(--max-content);
++  margin: 0 auto;
++  position: relative;
++}
++.h1 {
++  font-family: var(--font-serif);
++  font-size: clamp(48px, 7vw, 88px);
++  line-height: 0.98;
++  letter-spacing: -0.03em;
++  font-weight: 400;
++  margin: 24px 0 32px;
++  max-width: 1100px;
++}
++.h1 em {
++  font-style: italic;
++  color: var(--moss);
++}
++.sub {
++  font-size: 18px;
++  line-height: 1.55;
++  color: var(--text-body);
++  max-width: 780px;
++}
++
++/* ── Body ──────────────────────────────────────────────────── */
++.body {
++  padding: 96px 48px;
++}
++.bodyInner {
++  max-width: 1200px;
++  margin: 0 auto;
++  display: grid;
++  grid-template-columns: 5fr 4fr;
++  gap: 80px;
++  align-items: start;
++}
++
++/* ── Contact side ──────────────────────────────────────────── */
++.contactSide {
++  display: flex;
++  flex-direction: column;
++  gap: 40px;
++}
++
++.status {
++  padding-bottom: 24px;
++  border-bottom: 1px solid var(--border-hairline);
++}
++
++.contactBlock { }
++.contactLabel {
++  font-family: var(--font-mono);
++  font-size: 11px;
++  letter-spacing: 0.18em;
++  text-transform: uppercase;
++  color: var(--text-muted);
++  margin-bottom: 12px;
++}
++.contactValue {
++  font-family: var(--font-serif);
++  font-size: 32px;
++  letter-spacing: -0.02em;
++  color: var(--text-primary);
++  line-height: 1.15;
++  display: inline-block;
++  padding-bottom: 4px;
++  border-bottom: 1px solid transparent;
++  transition: border-color var(--motion-fast);
++}
++a.contactValue:hover {
++  border-bottom-color: var(--moss);
++}
++.contactNote {
++  font-size: 14px;
++  line-height: 1.55;
++  color: var(--text-body);
++  margin-top: 16px;
++  max-width: 440px;
++}
++
++.button {
++  display: inline-flex;
++  align-items: center;
++  gap: 12px;
++  padding: 18px 28px;
++  background: var(--ink);
++  color: var(--paper);
++  font-family: var(--font-sans);
++  font-size: 15px;
++  font-weight: 500;
++  letter-spacing: 0.02em;
++  border-radius: var(--radius-md);
++  align-self: flex-start;
++  transition: background var(--motion-fast), transform var(--motion-fast);
++  margin-top: 12px;
++}
++.button:hover {
++  background: #000000;
++  transform: translateY(-1px);
++}
++.buttonArrow {
++  display: inline-block;
++  transition: transform var(--motion-default);
++}
++.button:hover .buttonArrow {
++  transform: translateX(3px);
++}
++
++/* ── Prompt side ───────────────────────────────────────────── */
++.promptSide {
++  padding: 40px 40px 32px;
++  background: var(--stone-50);
++  border: 1px solid var(--border-hairline);
++}
++.promptLabel {
++  font-family: var(--font-mono);
++  font-size: 11px;
++  letter-spacing: 0.18em;
++  text-transform: uppercase;
++  color: var(--moss);
++  margin-bottom: 20px;
++}
++.promptH {
++  font-family: var(--font-serif);
++  font-size: 28px;
++  line-height: 1.15;
++  letter-spacing: -0.02em;
++  font-weight: 400;
++  margin: 0 0 20px;
++}
++.promptH em {
++  font-style: italic;
++  color: var(--moss);
++}
++.promptIntro {
++  font-size: 15px;
++  line-height: 1.55;
++  color: var(--text-body);
++  margin-bottom: 24px;
++}
++.promptList {
++  list-style: none;
++  padding: 0;
++  margin: 0 0 24px;
++  display: flex;
++  flex-direction: column;
++  gap: 12px;
++  padding-top: 24px;
++  border-top: 1px solid var(--border-hairline);
++}
++.promptItem {
++  display: flex;
++  gap: 12px;
++  align-items: flex-start;
++  font-size: 15px;
++  line-height: 1.5;
++  color: var(--text-primary);
++}
++.promptDot {
++  font-family: var(--font-serif);
++  color: var(--moss);
++  font-size: 18px;
++  line-height: 1;
++  flex-shrink: 0;
++  padding-top: 2px;
++}
++.promptClose {
++  font-family: var(--font-serif);
++  font-style: italic;
++  font-size: 15px;
++  line-height: 1.55;
++  color: var(--text-muted);
++  padding-top: 20px;
++  border-top: 1px solid var(--border-hairline);
++}
++
++@media (max-width: 900px) {
++  .pageHead {
++    padding: 64px 24px;
++  }
++  .body {
++    padding: 64px 24px;
++  }
++  .bodyInner {
++    grid-template-columns: 1fr;
++    gap: 40px;
++  }
++  .contactValue {
++    font-size: 24px;
++  }
++}
+diff --git a/app/contact/page.tsx b/app/contact/page.tsx
+index ec7fc54..f62adb3 100644
+--- a/app/contact/page.tsx
++++ b/app/contact/page.tsx
+@@ -1,37 +1,107 @@
+-import { PageShell } from "@/components/layout";
+ import { Eyebrow } from "@/components/ui";
+ import { LiveIndicator } from "@/components/brand";
+-import { site } from "@/content/site";
+-import styles from "../approach/page.module.css";
++import { site, contactPrompts } from "@/content/site";
++import styles from "./page.module.css";
+ 
+ export const metadata = {
+   title: "Contact",
+-  description: "How to reach Breachrr Security.",
++  description: "How to reach Breachrr Security. Email replies within 48 hours.",
+ };
+ 
++/**
++ * Contact page.
++ *
++ * Two-column layout: contact block (email, location, booking, response
++ * window) on the left; "what to include when you write" prompt on the right.
++ * No form — a mailto: link plus a text prompt to help the reader write a
++ * useful first email.
++ */
+ export default function ContactPage() {
++  const subject = encodeURIComponent("Intro conversation");
++  const mailto = `mailto:${site.contact.email}?subject=${subject}`;
++
+   return (
+-    <PageShell>
+-      <Eyebrow prefix="§">Contact</Eyebrow>
+-      <h1 className={styles.h}>
+-        Start the <em>conversation.</em>
+-      </h1>
+-      <p className={styles.p}>
+-        An intro conversation is 30 minutes. We'll ask about your stage,
+-        your compliance target, and what forced the conversation. Then we
+-        tell you honestly whether we're the right fit.
+-      </p>
+-      <p className={styles.p}>
+-        Email <a href={`mailto:${site.contact.email}`} className={styles.link}>
+-          {site.contact.email}
+-        </a>. Replies within {site.responseWindow}.
+-      </p>
+-      <p className={styles.p}>
+-        <LiveIndicator>{site.bookingStatus}</LiveIndicator>
+-      </p>
+-      <p className={styles.phase}>
+-        <span>Phase 3</span> · Booking form integration coming.
+-      </p>
+-    </PageShell>
++    <>
++      <header className={styles.pageHead}>
++        <div className={styles.pageHeadInner}>
++          <Eyebrow prefix="§">Contact</Eyebrow>
++          <h1 className={styles.h1}>
++            Start the <em>conversation.</em>
++          </h1>
++          <p className={styles.sub}>
++            An intro conversation is 30 minutes. We&apos;ll ask about your
++            stage, your compliance target, and what forced the conversation.
++            Then we tell you honestly whether we&apos;re the right fit.
++          </p>
++        </div>
++      </header>
++
++      <section className={styles.body}>
++        <div className={styles.bodyInner}>
++          {/* Left: contact block */}
++          <div className={styles.contactSide}>
++            <div className={styles.status}>
++              <LiveIndicator>{site.bookingStatus}</LiveIndicator>
++            </div>
++
++            <div className={styles.contactBlock}>
++              <div className={styles.contactLabel}>Email</div>
++              <a href={mailto} className={styles.contactValue}>
++                {site.contact.email}
++              </a>
++              <p className={styles.contactNote}>
++                Replies within {site.responseWindow}. If it&apos;s urgent — an
++                active incident, a compliance deadline this week — say so in
++                the subject.
++              </p>
++            </div>
++
++            <div className={styles.contactBlock}>
++              <div className={styles.contactLabel}>Where we work</div>
++              <p className={styles.contactValue}>{site.location}</p>
++              <p className={styles.contactNote}>
++                Remote-first. Onsite when it helps.
++              </p>
++            </div>
++
++            <a href={mailto} className={styles.button}>
++              Start the conversation
++              <span className={styles.buttonArrow} aria-hidden="true">
++                →
++              </span>
++            </a>
++          </div>
++
++          {/* Right: what to include */}
++          <aside className={styles.promptSide}>
++            <div className={styles.promptLabel}>
++              What to include, if you can
++            </div>
++            <h2 className={styles.promptH}>
++              A useful first email <em>looks like this.</em>
++            </h2>
++            <p className={styles.promptIntro}>
++              You don&apos;t have to include all of this. But the more of it
++              you can share up front, the more useful the intro conversation
++              will be.
++            </p>
++            <ul className={styles.promptList}>
++              {contactPrompts.map((prompt, i) => (
++                <li key={i} className={styles.promptItem}>
++                  <span className={styles.promptDot} aria-hidden="true">
++                    ·
++                  </span>
++                  <span>{prompt}</span>
++                </li>
++              ))}
++            </ul>
++            <p className={styles.promptClose}>
++              Don&apos;t have answers to some of these yet? Say so.
++              That&apos;s often part of what we solve together.
++            </p>
++          </aside>
++        </div>
++      </section>
++    </>
+   );
+ }
+diff --git a/app/work/page.module.css b/app/work/page.module.css
+new file mode 100644
+index 0000000..eb99b83
+--- /dev/null
++++ b/app/work/page.module.css
+@@ -0,0 +1,156 @@
++.pageHead {
++  padding: 96px 48px;
++  background: var(--paper);
++  border-bottom: 1px solid var(--border-hairline);
++  position: relative;
++  overflow: hidden;
++}
++.pageHead::before {
++  content: "";
++  position: absolute;
++  inset: 0;
++  background-image:
++    linear-gradient(var(--ink) 1px, transparent 1px),
++    linear-gradient(90deg, var(--ink) 1px, transparent 1px);
++  background-size: 48px 48px;
++  opacity: 0.04;
++  pointer-events: none;
++}
++.pageHeadInner {
++  max-width: var(--max-content);
++  margin: 0 auto;
++  position: relative;
++}
++.h1 {
++  font-family: var(--font-serif);
++  font-size: clamp(48px, 7vw, 88px);
++  line-height: 0.98;
++  letter-spacing: -0.03em;
++  font-weight: 400;
++  margin: 24px 0 32px;
++  max-width: 1100px;
++}
++.h1 em {
++  font-style: italic;
++  color: var(--moss);
++}
++.sub {
++  font-size: 18px;
++  line-height: 1.55;
++  color: var(--text-body);
++  max-width: 780px;
++}
++
++/* ── How we work ────────────────────────────────────────────── */
++.howWeWork {
++  padding: 96px 48px;
++  border-bottom: 1px solid var(--border-hairline);
++}
++.howWeWorkInner {
++  max-width: var(--max-content);
++  margin: 0 auto;
++  display: grid;
++  grid-template-columns: repeat(3, 1fr);
++  gap: 40px;
++}
++.wwCol {
++  padding: 32px 32px 32px 0;
++  border-right: 1px solid var(--border-hairline);
++}
++.wwCol:last-child {
++  border-right: none;
++  padding-right: 0;
++}
++.wwLabel {
++  font-family: var(--font-mono);
++  font-size: 11px;
++  letter-spacing: 0.18em;
++  text-transform: uppercase;
++  color: var(--moss);
++  margin-bottom: 20px;
++}
++.wwText {
++  font-family: var(--font-serif);
++  font-size: 18px;
++  line-height: 1.55;
++  color: var(--text-primary);
++}
++
++/* ── Featured ───────────────────────────────────────────────── */
++.featured {
++  padding: 120px 48px;
++  background: var(--stone-50);
++  border-bottom: 1px solid var(--border-hairline);
++}
++.featuredInner {
++  max-width: var(--max-content);
++  margin: 0 auto;
++}
++.featuredH {
++  font-family: var(--font-serif);
++  font-size: clamp(36px, 4.5vw, 56px);
++  line-height: 1.05;
++  letter-spacing: -0.025em;
++  font-weight: 400;
++  margin: 20px 0 48px;
++  max-width: 900px;
++}
++.featuredH em {
++  font-style: italic;
++  color: var(--moss);
++}
++
++.engagementList {
++  display: flex;
++  flex-direction: column;
++  gap: 24px;
++}
++
++.moreNote {
++  font-size: 15px;
++  line-height: 1.6;
++  color: var(--text-body);
++  max-width: 720px;
++  margin: 56px auto 0;
++  text-align: center;
++  padding-top: 40px;
++  border-top: 1px solid var(--border-hairline);
++}
++
++.link {
++  color: var(--text-primary);
++  border-bottom: 1px solid var(--border-default);
++  transition: border-color var(--motion-fast);
++}
++.link:hover {
++  border-bottom-color: var(--moss);
++}
++
++@media (max-width: 1100px) {
++  .howWeWorkInner {
++    grid-template-columns: 1fr;
++    gap: 20px;
++  }
++  .wwCol {
++    border-right: none;
++    border-bottom: 1px solid var(--border-hairline);
++    padding: 24px 0;
++  }
++  .wwCol:last-child {
++    border-bottom: none;
++  }
++}
++@media (max-width: 720px) {
++  .pageHead, .howWeWork, .featured {
++    padding-left: 24px;
++    padding-right: 24px;
++  }
++  .pageHead, .howWeWork {
++    padding-top: 64px;
++    padding-bottom: 64px;
++  }
++  .featured {
++    padding-top: 72px;
++    padding-bottom: 72px;
++  }
++}
+diff --git a/app/work/page.tsx b/app/work/page.tsx
+index c252ade..5802ede 100644
+--- a/app/work/page.tsx
++++ b/app/work/page.tsx
+@@ -1,35 +1,102 @@
+-import { PageShell } from "@/components/layout";
+-import { Eyebrow } from "@/components/ui";
+-import styles from "../approach/page.module.css";
++import { Eyebrow, Cta } from "@/components/ui";
++import { EngagementCard } from "@/components/sections";
++import { engagements, cta } from "@/content/site";
++import styles from "./page.module.css";
+ 
+ export const metadata = {
+   title: "Work",
+-  description: "Selected engagements from Breachrr Security.",
++  description:
++    "Selected engagements from Breachrr Security. As engagements close, they show up here.",
+ };
+ 
++/**
++ * Work page.
++ *
++ * Two-part structure:
++ *   1. How we work — three-column note on engagement approach
++ *   2. Featured engagements — Verixar for v0.1; more added as they close
++ */
+ export default function WorkPage() {
+   return (
+-    <PageShell>
+-      <Eyebrow prefix="§">Work</Eyebrow>
+-      <h1 className={styles.h}>
+-        Selected <em>engagements.</em>
+-      </h1>
+-      <p className={styles.p}>
+-        This page shows the work as it closes. Rather than fill it with
+-        stock imagery and generic client logos, we're keeping it honest —
+-        it'll populate as engagements complete and clients approve the
+-        write-up.
+-      </p>
+-      <p className={styles.p}>
+-        For a current picture of what we're working on, email{" "}
+-        <a href="mailto:mo@breachrrsecurity.com" className={styles.link}>
+-          mo@breachrrsecurity.com
+-        </a>{" "}
+-        directly.
+-      </p>
+-      <p className={styles.phase}>
+-        <span>Phase 3</span> · Case studies added as engagements close.
+-      </p>
+-    </PageShell>
++    <>
++      {/* Page head */}
++      <header className={styles.pageHead}>
++        <div className={styles.pageHeadInner}>
++          <Eyebrow prefix="§">Work</Eyebrow>
++          <h1 className={styles.h1}>
++            Selected engagements.<br />
++            <em>As they close.</em>
++          </h1>
++          <p className={styles.sub}>
++            Every engagement starts with a scoping conversation and ends with
++            a closing review. In between, weekly check-ins and full-team
++            visibility — we don&apos;t work in silos, and we don&apos;t throw
++            documents over the wall.
++          </p>
++        </div>
++      </header>
++
++      {/* How we work — three columns */}
++      <section className={styles.howWeWork}>
++        <div className={styles.howWeWorkInner}>
++          <div className={styles.wwCol}>
++            <div className={styles.wwLabel}>How we start</div>
++            <p className={styles.wwText}>
++              A 30-minute intro call. We ask about the moment that forced the
++              conversation, your compliance target, and what&apos;s already in
++              place. If we&apos;re the right fit, we scope. If we&apos;re not,
++              we say so — and pass a recommendation if we know one.
++            </p>
++          </div>
++          <div className={styles.wwCol}>
++            <div className={styles.wwLabel}>How we work</div>
++            <p className={styles.wwText}>
++              Weekly progress reviews recorded and archived. Findings and
++              deliverables tracked in a shared register you keep after the
++              engagement. Your team learns as we work — nothing we hand over
++              needs an external translator.
++            </p>
++          </div>
++          <div className={styles.wwCol}>
++            <div className={styles.wwLabel}>How we close</div>
++            <p className={styles.wwText}>
++              A closing review — what was delivered, what remains, and what
++              handoff looks like. If ongoing advisory makes sense, we
++              propose it. If not, we leave clean and check back in three
++              months.
++            </p>
++          </div>
++        </div>
++      </section>
++
++      {/* Featured engagements */}
++      <section className={styles.featured}>
++        <div className={styles.featuredInner}>
++          <Eyebrow prefix="Featured" tone="moss">
++            Engagements
++          </Eyebrow>
++          <h2 className={styles.featuredH}>
++            What a program build-out <em>looks like.</em>
++          </h2>
++          <div className={styles.engagementList}>
++            {engagements.map((eng) => (
++              <EngagementCard key={eng.slug} {...eng} />
++            ))}
++          </div>
++
++          <p className={styles.moreNote}>
++            More engagements will appear here as they close and clients
++            approve the write-ups. For a current picture of what
++            we&apos;re working on, email{" "}
++            <a href="mailto:mo@breachrrsecurity.com" className={styles.link}>
++              mo@breachrrsecurity.com
++            </a>
++            .
++          </p>
++        </div>
++      </section>
++
++      <Cta {...cta} variant="ink" />
++    </>
+   );
+ }
+diff --git a/components/sections/CapabilityDetail.module.css b/components/sections/CapabilityDetail.module.css
+new file mode 100644
+index 0000000..18f4360
+--- /dev/null
++++ b/components/sections/CapabilityDetail.module.css
+@@ -0,0 +1,128 @@
++.section {
++  padding: 96px 48px;
++  border-bottom: 1px solid var(--border-hairline);
++  scroll-margin-top: 96px;
++}
++
++/* Alternate section backgrounds — creates the section rhythm on the Approach page.
++   The parent Approach page adds :nth-child-based rules. */
++
++.inner {
++  max-width: var(--max-content);
++  margin: 0 auto;
++  display: grid;
++  grid-template-columns: 320px 1fr;
++  gap: 80px;
++}
++
++.aside {
++  padding-top: 8px;
++}
++
++.h {
++  font-family: var(--font-serif);
++  font-size: clamp(44px, 5vw, 64px);
++  line-height: 0.95;
++  letter-spacing: -0.03em;
++  font-weight: 400;
++  margin: 20px 0 16px;
++}
++
++.tagline {
++  font-family: var(--font-serif);
++  font-size: 20px;
++  line-height: 1.35;
++  color: var(--text-body);
++  margin-bottom: 32px;
++}
++.tagline em {
++  font-style: italic;
++  color: var(--moss);
++}
++
++.metaBlock {
++  padding: 16px 0;
++  border-top: 1px solid var(--border-hairline);
++}
++.metaBlock:last-child {
++  border-bottom: 1px solid var(--border-hairline);
++}
++.metaLabel {
++  font-family: var(--font-mono);
++  font-size: 10px;
++  letter-spacing: 0.18em;
++  text-transform: uppercase;
++  color: var(--text-muted);
++  margin-bottom: 6px;
++}
++.metaValue {
++  font-family: var(--font-serif);
++  font-size: 16px;
++  color: var(--text-primary);
++}
++
++.body {
++  display: flex;
++  flex-direction: column;
++  gap: 40px;
++}
++
++.block { }
++
++.blockLabel {
++  font-family: var(--font-mono);
++  font-size: 11px;
++  letter-spacing: 0.18em;
++  text-transform: uppercase;
++  color: var(--text-muted);
++  margin-bottom: 16px;
++  padding-bottom: 12px;
++  border-bottom: 1px solid var(--border-hairline);
++}
++
++.blockText {
++  font-size: 17px;
++  line-height: 1.6;
++  color: var(--text-primary);
++  max-width: 720px;
++}
++
++.list {
++  list-style: none;
++  padding: 0;
++  margin: 0;
++  display: flex;
++  flex-direction: column;
++  gap: 12px;
++  max-width: 720px;
++}
++
++.listItem {
++  display: flex;
++  gap: 12px;
++  align-items: flex-start;
++  font-size: 16px;
++  line-height: 1.55;
++  color: var(--text-primary);
++}
++
++.listDot {
++  font-family: var(--font-serif);
++  color: var(--moss);
++  font-size: 20px;
++  line-height: 1;
++  flex-shrink: 0;
++  padding-top: 2px;
++}
++
++@media (max-width: 1100px) {
++  .inner {
++    grid-template-columns: 1fr;
++    gap: 40px;
++  }
++}
++@media (max-width: 720px) {
++  .section {
++    padding: 64px 24px;
++  }
++}
+diff --git a/components/sections/CapabilityDetail.tsx b/components/sections/CapabilityDetail.tsx
+new file mode 100644
+index 0000000..2acf13e
+--- /dev/null
++++ b/components/sections/CapabilityDetail.tsx
+@@ -0,0 +1,86 @@
++import { Eyebrow } from "@/components/ui";
++import styles from "./CapabilityDetail.module.css";
++
++interface CapabilityDetailProps {
++  slug: string;
++  number: string;
++  name: string;
++  tagline: string;
++  whatHappens: string;
++  delivers: readonly string[];
++  firstWeek: string;
++  investment: string;
++  duration: string;
++}
++
++/**
++ * CapabilityDetail — deep-content section for a single capability.
++ *
++ * Used three times on the Approach page (Assess, Build, Advise). Sidebar layout:
++ * capability header on the left, structured deep-content on the right
++ * (What happens · What you deliver · A first week · Investment).
++ *
++ * The slug becomes an anchor target, so /approach#assess deep-links from
++ * homepage capability tiles.
++ */
++export function CapabilityDetail({
++  slug,
++  number,
++  name,
++  tagline,
++  whatHappens,
++  delivers,
++  firstWeek,
++  investment,
++  duration,
++}: CapabilityDetailProps) {
++  return (
++    <section id={slug} className={styles.section}>
++      <div className={styles.inner}>
++        <aside className={styles.aside}>
++          <Eyebrow prefix={number} tone="moss">
++            Capability
++          </Eyebrow>
++          <h2 className={styles.h}>{name}</h2>
++          <p className={styles.tagline}>
++            <em>{tagline}</em>
++          </p>
++          <div className={styles.metaBlock}>
++            <div className={styles.metaLabel}>Duration</div>
++            <div className={styles.metaValue}>{duration}</div>
++          </div>
++          <div className={styles.metaBlock}>
++            <div className={styles.metaLabel}>Investment</div>
++            <div className={styles.metaValue}>{investment}</div>
++          </div>
++        </aside>
++
++        <div className={styles.body}>
++          <div className={styles.block}>
++            <div className={styles.blockLabel}>What happens</div>
++            <p className={styles.blockText}>{whatHappens}</p>
++          </div>
++
++          <div className={styles.block}>
++            <div className={styles.blockLabel}>What you leave with</div>
++            <ul className={styles.list}>
++              {delivers.map((item, i) => (
++                <li key={i} className={styles.listItem}>
++                  <span className={styles.listDot} aria-hidden="true">
++                    ·
++                  </span>
++                  <span>{item}</span>
++                </li>
++              ))}
++            </ul>
++          </div>
++
++          <div className={styles.block}>
++            <div className={styles.blockLabel}>A first week, roughly</div>
++            <p className={styles.blockText}>{firstWeek}</p>
++          </div>
++        </div>
++      </div>
++    </section>
++  );
++}
+diff --git a/components/sections/EngagementCard.module.css b/components/sections/EngagementCard.module.css
+new file mode 100644
+index 0000000..aadd3ff
+--- /dev/null
++++ b/components/sections/EngagementCard.module.css
+@@ -0,0 +1,119 @@
++.card {
++  background: var(--bg-raised);
++  border: 1px solid var(--border-hairline);
++  padding: 48px 56px 40px;
++  max-width: 900px;
++  margin: 0 auto;
++  position: relative;
++  scroll-margin-top: 96px;
++}
++
++.header {
++  display: flex;
++  flex-direction: column;
++  gap: 20px;
++  margin-bottom: 32px;
++  padding-bottom: 24px;
++  border-bottom: 1px solid var(--border-hairline);
++}
++
++.client {
++  font-family: var(--font-serif);
++  font-size: clamp(36px, 4.5vw, 52px);
++  line-height: 1.05;
++  letter-spacing: -0.025em;
++  font-weight: 400;
++  color: var(--text-primary);
++  margin: 0;
++}
++
++.summary {
++  font-family: var(--font-serif);
++  font-size: 20px;
++  line-height: 1.35;
++  color: var(--text-primary);
++  margin-bottom: 40px;
++  max-width: 720px;
++}
++
++.metrics {
++  display: grid;
++  grid-template-columns: repeat(3, 1fr);
++  gap: 20px;
++  padding: 32px 0;
++  border-top: 1px solid var(--border-hairline);
++  border-bottom: 1px solid var(--border-hairline);
++}
++.metric {
++  display: flex;
++  flex-direction: column;
++  gap: 6px;
++}
++.metricValue {
++  font-family: var(--font-mono);
++  font-size: 28px;
++  letter-spacing: -0.02em;
++  color: var(--text-primary);
++  line-height: 1;
++}
++.metricLabel {
++  font-size: 12px;
++  color: var(--text-muted);
++  line-height: 1.4;
++}
++
++.divider {
++  display: flex;
++  align-items: center;
++  gap: 16px;
++  margin: 40px 0;
++}
++.dividerRule {
++  flex: 1;
++  height: 1px;
++  background: var(--border-hairline);
++}
++.dividerDot {
++  font-family: var(--font-serif);
++  color: var(--moss);
++  font-size: 22px;
++  line-height: 0;
++  transform: translateY(0.01em);
++}
++
++.body {
++  font-family: var(--font-serif);
++  font-style: italic;
++  font-size: 17px;
++  line-height: 1.65;
++  color: var(--text-body);
++  max-width: 720px;
++  margin: 0 auto 32px;
++  text-align: left;
++}
++
++.footer {
++  display: flex;
++  justify-content: flex-end;
++  padding-top: 20px;
++  border-top: 1px solid var(--border-hairline);
++}
++.signature {
++  font-family: var(--font-serif);
++  font-size: 14px;
++  color: var(--text-muted);
++}
++.signature em {
++  font-style: italic;
++  color: var(--moss);
++}
++
++@media (max-width: 720px) {
++  .card {
++    padding: 32px 24px 24px;
++  }
++  .metrics {
++    grid-template-columns: 1fr;
++    gap: 16px;
++  }
++}
+diff --git a/components/sections/EngagementCard.tsx b/components/sections/EngagementCard.tsx
+new file mode 100644
+index 0000000..0646f46
+--- /dev/null
++++ b/components/sections/EngagementCard.tsx
+@@ -0,0 +1,69 @@
++import { Eyebrow } from "@/components/ui";
++import styles from "./EngagementCard.module.css";
++
++interface EngagementCardProps {
++  slug: string;
++  client: string;
++  capability: string;
++  year: string;
++  duration: string;
++  summary: string;
++  metrics: readonly {
++    value: string;
++    label: string;
++  }[];
++  body: string;
++}
++
++/**
++ * EngagementCard — featured engagement block.
++ *
++ * Editorial artefact — Practice Note metadata header (client · capability ·
++ * year), Georgia summary, three-metric row, italic body paragraph.
++ */
++export function EngagementCard({
++  slug,
++  client,
++  capability,
++  year,
++  duration,
++  summary,
++  metrics,
++  body,
++}: EngagementCardProps) {
++  return (
++    <article className={styles.card} id={slug}>
++      <header className={styles.header}>
++        <Eyebrow prefix={year} tone="moss">
++          {capability} · {duration}
++        </Eyebrow>
++        <h3 className={styles.client}>{client}</h3>
++      </header>
++
++      <p className={styles.summary}>{summary}</p>
++
++      <div className={styles.metrics}>
++        {metrics.map((m, i) => (
++          <div key={i} className={styles.metric}>
++            <div className={styles.metricValue}>{m.value}</div>
++            <div className={styles.metricLabel}>{m.label}</div>
++          </div>
++        ))}
++      </div>
++
++      <div className={styles.divider} aria-hidden="true">
++        <span className={styles.dividerRule} />
++        <span className={styles.dividerDot}>·</span>
++        <span className={styles.dividerRule} />
++      </div>
++
++      <p className={styles.body}>{body}</p>
++
++      <footer className={styles.footer}>
++        <span className={styles.signature}>
++          — Prepared by <em>Breachrr Security</em>
++        </span>
++      </footer>
++    </article>
++  );
++}
+diff --git a/components/sections/index.ts b/components/sections/index.ts
+index 3067dee..84f6ea1 100644
+--- a/components/sections/index.ts
++++ b/components/sections/index.ts
+@@ -3,3 +3,5 @@ export { HeroRotator } from "./HeroRotator";
+ export { CapabilitiesSection } from "./CapabilitiesSection";
+ export { BuyerStagesSection } from "./BuyerStagesSection";
+ export { PracticeIntro } from "./PracticeIntro";
++export { CapabilityDetail } from "./CapabilityDetail";
++export { EngagementCard } from "./EngagementCard";
+diff --git a/content/site.ts b/content/site.ts
+index 33f4090..dee191f 100644
+--- a/content/site.ts
++++ b/content/site.ts
+@@ -74,22 +74,60 @@ export const capabilities = [
+     summary:
+       "Grey-box product assessment across code, cloud, and identity. You leave with a numbered findings register, prioritised, and a plan for closing them.",
+     duration: "Typically 2–4 weeks",
++    whatHappens:
++      "A grey-box product assessment across code, cloud, and identity. We start with a scoping conversation — what you're building, what compliance target is ahead, what's already been done. Then we spend two to four weeks combining static analysis, cloud configuration review, and identity/access audit against what we find. No black-box guesswork; we work with your team and your access.",
++    delivers: [
++      "Numbered findings register — severity, evidence, remediation guidance",
++      "Executive summary (2–3 pages) written for a non-technical reader",
++      "Technical appendix with reproducible steps for engineering",
++      "90-minute walkthrough call with your team, recorded",
++      "Optional: help closing the critical and high findings",
++    ],
++    firstWeek:
++      "Day 1–2 · scoping call, access setup, code repository tour. Day 3–5 · automated scanning setup, initial cloud configuration review. Day 6–7 · first findings triage, priority ranking review with your team.",
++    investment: "From £12,500. Scoped to stack complexity.",
+   },
+   {
+     slug: "build",
+     name: "Build",
+-    tagline: "A programme, not a policy binder.",
++    tagline: "A program, not a policy binder.",
+     summary:
+-      "Programme build-out anchored to a compliance target — SOC 2, ISO 27001, UK GDPR. Policy stack, control framework, remediation roadmap. Delivered collaboratively, not thrown over the wall.",
++      "Program build-out anchored to a compliance target — SOC 2, ISO 27001, UK GDPR. Policy stack, control framework, remediation roadmap. Delivered collaboratively, not thrown over the wall.",
+     duration: "Typically 12 weeks",
++    whatHappens:
++      "A twelve-week program build-out anchored to a compliance target — SOC 2 Type II, ISO 27001, UK GDPR. We start where the last audit left off, or where nothing exists. The program is designed collaboratively — your team learns as we build, so what we hand over stays running after we leave. Weekly progress reviews throughout; no month-three surprises.",
++    delivers: [
++      "Complete policy stack — 10 to 15 documents, adapted to your operating context",
++      "Control framework mapped to your target — SOC 2 CC, ISO Annex A, or equivalent",
++      "Evidence collection process and reusable templates",
++      "60–90 day remediation roadmap for what's still outstanding at handoff",
++      "Team enablement — documentation and light-touch training",
++      "Weekly progress reviews, recorded and archived",
++    ],
++    firstWeek:
++      "Day 1 · kickoff and current-state audit. Day 2–3 · policy stack draft, priority-order the controls. Day 4–5 · first control assessments, remediation prioritisation, roadmap first pass.",
++    investment: "From £48,000 for the full 12-week program.",
+   },
+   {
+     slug: "advise",
+     name: "Advise",
+     tagline: "The team you'd have hired if you had time.",
+     summary:
+-      "Fractional security leadership, quarterly reviews, incident-response preparedness. The ongoing partnership after the programme is running.",
++      "Fractional security leadership, quarterly reviews, incident-response preparedness. The ongoing partnership after the program is running.",
+     duration: "Monthly retainer",
++    whatHappens:
++      "Ongoing partnership after — or alongside — the program. Fractional security leadership means the practice is your security team lead for as many hours per month as you need. Quarterly reviews keep the program healthy as the company grows. Incident-response preparedness means you don't figure it out under pressure.",
++    delivers: [
++      "Monthly office hours — typically 8–16 hours across the month",
++      "Quarterly program health reviews and roadmap adjustments",
++      "Incident-response playbook + biannual readiness drills",
++      "Compliance renewal support — SOC 2 Type II re-audit, ISO surveillance",
++      "Board-level security reporting when the room needs it",
++      "Escalation call — the first hour of any active incident",
++    ],
++    firstWeek:
++      "Week 1 · onboarding, systems familiarisation, current-state review. Week 2–3 · first strategic review, priority setting. Week 4 · monthly leadership check-in, cadence established.",
++    investment: "From £3,200 / month.",
+   },
+ ] as const;
+ 
+@@ -138,3 +176,39 @@ export const practiceIntro = {
+   body:
+     "Breachrr Security is a small practice. MO is the principal — London and Lagos. Engagements draw on a short bench of trusted collaborators when the work calls for it. If we work together, you'll know who is doing the work, and you'll hear from them directly.",
+ } as const;
++
++/**
++ * Featured engagements — surfaced on the Work page.
++ * For v0.1 this is the Verixar programme build-out. As engagements
++ * close and clients approve write-ups, add them here.
++ */
++export const engagements = [
++  {
++    slug: "verixar",
++    client: "Verixar",
++    capability: "build",
++    year: "2026",
++    duration: "12 weeks",
++    summary:
++      "Program build-out anchored to SOC 2 Type II readiness for a growing SaaS company facing their first enterprise procurement cycle.",
++    metrics: [
++      { value: "42 / 42", label: "controls closed" },
++      { value: "12", label: "weeks, on schedule" },
++      { value: "SOC 2 T-II", label: "ready for audit" },
++    ],
++    body: "Verixar arrived in the middle of a first enterprise sales cycle with a security questionnaire they couldn't yet answer. Twelve weeks later, the program was in place — policy stack, control framework, evidence collection, and a remediation roadmap for the items outside the initial scope. Full write-up available as a Practice Note.",
++    published: true,
++  },
++] as const;
++
++/**
++ * The "what to include" prompt on the contact page.
++ * Not a form — a text prompt that helps the reader write a useful first email.
++ */
++export const contactPrompts = [
++  "Company name and what you build",
++  "Roughly what stage you're at (headcount, funding, customers)",
++  "What forced the conversation — compliance, a customer, an incident, something else",
++  "Any timeline you're working against",
++  "What's already in place, if anything",
++] as const;
+-- 
+2.43.0
+
