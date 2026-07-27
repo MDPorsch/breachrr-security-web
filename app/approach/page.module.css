@@ -1,45 +1,93 @@
-.h {
+/* ── Page head ─────────────────────────────────────────────── */
+.pageHead {
+  padding: 96px 48px 96px;
+  background: var(--paper);
+  border-bottom: 1px solid var(--border-hairline);
+  position: relative;
+  overflow: hidden;
+}
+.pageHead::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--ink) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ink) 1px, transparent 1px);
+  background-size: 48px 48px;
+  opacity: 0.04;
+  pointer-events: none;
+}
+.pageHeadInner {
+  max-width: var(--max-content);
+  margin: 0 auto;
+  position: relative;
+}
+.h1 {
   font-family: var(--font-serif);
-  font-size: clamp(44px, 6vw, 72px);
-  line-height: 1.05;
+  font-size: clamp(48px, 7vw, 88px);
+  line-height: 0.98;
   letter-spacing: -0.03em;
   font-weight: 400;
   margin: 24px 0 32px;
-  max-width: 900px;
+  max-width: 1100px;
 }
-.h em {
+.h1 em {
+  font-style: italic;
+  color: var(--moss);
+}
+.sub {
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--text-body);
+  max-width: 780px;
+}
+
+/* ── Closing frame ─────────────────────────────────────────── */
+.closing {
+  padding: 96px 48px;
+  background: var(--stone-50);
+  border-bottom: 1px solid var(--border-hairline);
+}
+.closingInner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.closingP {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  line-height: 1.5;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+}
+.closingP:last-of-type {
+  margin-bottom: 32px;
+}
+.closingEpigraph {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  color: var(--text-muted);
+  padding-top: 24px;
+  border-top: 1px solid var(--border-hairline);
+}
+.closingEpigraph em {
   font-style: italic;
   color: var(--moss);
 }
 
-.p {
-  font-size: 17px;
-  line-height: 1.6;
-  color: var(--text-body);
-  max-width: 640px;
-  margin-bottom: 16px;
-}
-
-.link {
-  color: var(--text-primary);
-  border-bottom: 1px solid var(--border-default);
-  transition: border-color var(--motion-fast);
-}
-.link:hover {
-  border-color: var(--moss);
-}
-
-.phase {
-  margin-top: 48px;
-  padding-top: 24px;
-  border-top: 1px solid var(--border-hairline);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-.phase span {
-  color: var(--moss);
-  padding-right: 6px;
+@media (max-width: 900px) {
+  .pageHead {
+    padding: 64px 24px 64px;
+  }
+  .sub {
+    font-size: 16px;
+  }
+  .closing {
+    padding: 64px 24px;
+  }
+  .closingP {
+    font-size: 18px;
+  }
+  .closingEpigraph {
+    font-size: 20px;
+  }
 }

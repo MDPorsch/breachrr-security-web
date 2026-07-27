@@ -1,0 +1,128 @@
+.section {
+  padding: 96px 48px;
+  border-bottom: 1px solid var(--border-hairline);
+  scroll-margin-top: 96px;
+}
+
+/* Alternate section backgrounds — creates the section rhythm on the Approach page.
+   The parent Approach page adds :nth-child-based rules. */
+
+.inner {
+  max-width: var(--max-content);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 80px;
+}
+
+.aside {
+  padding-top: 8px;
+}
+
+.h {
+  font-family: var(--font-serif);
+  font-size: clamp(44px, 5vw, 64px);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  font-weight: 400;
+  margin: 20px 0 16px;
+}
+
+.tagline {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  line-height: 1.35;
+  color: var(--text-body);
+  margin-bottom: 32px;
+}
+.tagline em {
+  font-style: italic;
+  color: var(--moss);
+}
+
+.metaBlock {
+  padding: 16px 0;
+  border-top: 1px solid var(--border-hairline);
+}
+.metaBlock:last-child {
+  border-bottom: 1px solid var(--border-hairline);
+}
+.metaLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.metaValue {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  color: var(--text-primary);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.block { }
+
+.blockLabel {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-hairline);
+}
+
+.blockText {
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  max-width: 720px;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 720px;
+}
+
+.listItem {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--text-primary);
+}
+
+.listDot {
+  font-family: var(--font-serif);
+  color: var(--moss);
+  font-size: 20px;
+  line-height: 1;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+@media (max-width: 1100px) {
+  .inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+@media (max-width: 720px) {
+  .section {
+    padding: 64px 24px;
+  }
+}
