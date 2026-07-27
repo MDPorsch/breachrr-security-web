@@ -1,0 +1,139 @@
+.section {
+  padding: 120px 48px;
+  background: var(--bg-raised);
+  border-bottom: 1px solid var(--border-hairline);
+}
+
+.inner {
+  max-width: var(--max-content);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 80px;
+}
+
+.aside { padding-top: 8px; }
+
+.h {
+  font-family: var(--font-serif);
+  font-size: clamp(32px, 3.6vw, 44px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 20px 0 20px;
+}
+.h em {
+  font-style: italic;
+  color: var(--moss);
+}
+
+.p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-body);
+  margin-bottom: 32px;
+}
+
+.allLink {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--moss);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border-hairline);
+  transition: border-color var(--motion-fast);
+}
+.allLink:hover {
+  border-bottom-color: var(--moss);
+}
+.allLinkArrow {
+  transition: transform var(--motion-default);
+}
+.allLink:hover .allLinkArrow {
+  transform: translateX(3px);
+}
+
+/* ── Grid of service category cards ───────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.card {
+  display: block;
+  padding: 28px 28px 24px;
+  background: var(--paper);
+  border: 1px solid var(--border-hairline);
+  transition:
+    background var(--motion-fast),
+    border-color var(--motion-fast),
+    transform var(--motion-fast);
+}
+.card:hover {
+  background: var(--stone-50);
+  border-color: var(--border-default);
+}
+
+.cardTop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.cardH {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.cardArrow {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  color: var(--text-dim);
+  transition: transform var(--motion-default), color var(--motion-fast);
+}
+.card:hover .cardArrow {
+  color: var(--moss);
+  transform: translateX(3px);
+}
+
+.cardTagline {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-body);
+  margin-bottom: 16px;
+}
+
+.cardMeta {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding-top: 12px;
+  border-top: 1px solid var(--border-hairline);
+}
+
+@media (max-width: 1100px) {
+  .inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+@media (max-width: 720px) {
+  .section {
+    padding: 72px 24px;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

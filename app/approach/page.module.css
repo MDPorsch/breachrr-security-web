@@ -91,3 +91,39 @@
     font-size: 20px;
   }
 }
+
+/* ── Services tie-in ──────────────────────────────────────── */
+.servicesLink {
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border-hairline);
+}
+.servicesLinkLabel {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+.servicesLinkAnchor {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border-default);
+  transition: border-color var(--motion-fast);
+}
+.servicesLinkAnchor:hover {
+  border-bottom-color: var(--moss);
+}
+.servicesLinkArrow {
+  color: var(--moss);
+  transition: transform var(--motion-default);
+}
+.servicesLinkAnchor:hover .servicesLinkArrow {
+  transform: translateX(3px);
+}

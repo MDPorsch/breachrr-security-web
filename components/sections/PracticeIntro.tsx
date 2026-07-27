@@ -23,7 +23,7 @@ export function PracticeIntro() {
           />
         </div>
         <div className={styles.textSide}>
-          <Eyebrow prefix="03">{practiceIntro.eyebrow}</Eyebrow>
+          <Eyebrow prefix="05">{practiceIntro.eyebrow}</Eyebrow>
           <h2 className={styles.h}>
             {practiceIntro.headline}{" "}
             <em>{practiceIntro.accent}</em>

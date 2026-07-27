@@ -17,14 +17,15 @@ export function CapabilitiesSection() {
     <section className={styles.section} id="capabilities">
       <div className={styles.inner}>
         <aside className={styles.aside}>
-          <Eyebrow prefix="01">What we do</Eyebrow>
+          <Eyebrow prefix="01">How we work</Eyebrow>
           <h2 className={styles.h}>
-            Assess. Build. <em>Advise.</em>
+            Three engagement types.<br />
+            <em>Assess. Build. Advise.</em>
           </h2>
           <p className={styles.p}>
-            Three capabilities. Not a fixed sequence — engagements scoped to
-            what the work actually needs. Sometimes all three across a year.
-            Sometimes one for a fortnight.
+            These describe the shape of the work — how an engagement is scoped
+            and delivered. Every engagement is one of these types applied
+            across one or more service areas.
           </p>
           <p className={styles.pMuted}>Not a sequence. A shape we cut to fit.</p>
         </aside>

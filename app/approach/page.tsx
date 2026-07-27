@@ -53,7 +53,7 @@ export default function ApproachPage() {
       <section className={styles.closing}>
         <div className={styles.closingInner}>
           <p className={styles.closingP}>
-            Three capabilities. Different engagements combine them differently.
+            Three engagement types. Different engagements combine them differently.
             A program build-out often starts with an assessment. Ongoing
             advisory usually follows a program. Sometimes a single assessment
             is all that's needed — sometimes a five-year advisory partnership
@@ -66,6 +66,14 @@ export default function ApproachPage() {
           <p className={styles.closingEpigraph}>
             <em>Not a sequence. A shape we cut to fit.</em>
           </p>
+
+          <div className={styles.servicesLink}>
+            <div className={styles.servicesLinkLabel}>The domains we work across</div>
+            <a href="/services" className={styles.servicesLinkAnchor}>
+              See the six service areas
+              <span className={styles.servicesLinkArrow} aria-hidden="true">→</span>
+            </a>
+          </div>
         </div>
       </section>
 
