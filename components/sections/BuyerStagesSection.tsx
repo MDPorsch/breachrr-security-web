@@ -14,7 +14,7 @@ export function BuyerStagesSection() {
     <section className={styles.section} id="who-we-help">
       <div className={styles.inner}>
         <aside className={styles.aside}>
-          <Eyebrow prefix="02">Who we help</Eyebrow>
+          <Eyebrow prefix="03">Who we help</Eyebrow>
           <h2 className={styles.h}>
             You might recognise <em>where you are.</em>
           </h2>

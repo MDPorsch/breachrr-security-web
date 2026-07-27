@@ -5,3 +5,7 @@ export { BuyerStagesSection } from "./BuyerStagesSection";
 export { PracticeIntro } from "./PracticeIntro";
 export { CapabilityDetail } from "./CapabilityDetail";
 export { EngagementCard } from "./EngagementCard";
+export { ServicesSection } from "./ServicesSection";
+export { ServiceCategoryCard } from "./ServiceCategoryCard";
+export { PhilosophyBlock } from "./PhilosophyBlock";
+export { FaqBlock } from "./FaqBlock";
