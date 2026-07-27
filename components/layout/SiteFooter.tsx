@@ -7,7 +7,7 @@ import styles from "./SiteFooter.module.css";
  * SiteFooter — full footer block.
  *
  * Three columns: wordmark + tagline (left), nav echo (centre),
- * contact + corporate mark + copyright (right).
+ * contact + legal + corporate mark + copyright (right).
  */
 export function SiteFooter() {
   return (
@@ -17,8 +17,6 @@ export function SiteFooter() {
           <Wordmark variant="paper" size="footer" />
           <p className={styles.tagline}>
             Cybersecurity services for startups and growing businesses.
-            <br />
-            {site.location}.
           </p>
         </div>
 
@@ -44,6 +42,27 @@ export function SiteFooter() {
             <p className={styles.metaNote}>
               Replies within {site.responseWindow}.
             </p>
+          </div>
+
+          <div className={styles.metaBlock}>
+            <div className={styles.metaLabel}>Legal</div>
+            <ul className={styles.legalList}>
+              <li>
+                <Link href="/terms" className={styles.legalLink}>
+                  Terms of Service
+                </Link>
+              </li>
+              <li>
+                <Link href="/privacy" className={styles.legalLink}>
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/trust" className={styles.legalLink}>
+                  Trust &amp; Disclosure
+                </Link>
+              </li>
+            </ul>
           </div>
         </div>
       </div>

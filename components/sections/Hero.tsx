@@ -16,7 +16,7 @@ export function Hero() {
       <div className={styles.inner}>
         <div className={styles.top}>
           <p className={styles.eyebrow}>
-            Cybersecurity services · {site.location}
+            Cybersecurity services
           </p>
           <div className={styles.status}>
             <LiveIndicator>{site.bookingStatus}</LiveIndicator>

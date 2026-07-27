@@ -117,3 +117,23 @@
     gap: 12px;
   }
 }
+
+/* ── Legal links (added phase 5) ───────────────────────── */
+.legalList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+}
+
+.legalLink {
+  font-size: 13px;
+  color: var(--text-body);
+  padding: 2px 0;
+  transition: color var(--motion-fast);
+}
+.legalLink:hover {
+  color: var(--text-primary);
+}

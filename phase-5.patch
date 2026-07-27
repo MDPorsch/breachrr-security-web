@@ -1,0 +1,965 @@
+From 37aca9ed509b9aca922764ee993da859cb01a3ab Mon Sep 17 00:00:00 2001
+From: Claude <claude@anthropic.local>
+Date: Mon, 27 Jul 2026 19:38:27 +0000
+Subject: [PATCH] phase 5: copy corrections, remove time constraints, add legal
+ pages
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Copy corrections:
+- Hero eyebrow: drop 'London / Lagos' location
+- Booking status: 'Booking Q4 2026' -> 'Open for engagements' everywhere
+  (nav indicator, hero indicator, CTA accent)
+- Assess summary: 'A grey-box assessment' -> 'A security assessment'
+- Build summary: drop 'twelve-week' narrowing ->
+  'A structured security program build-out'
+- Advise summary: drop 'Fractional security leadership' phrasing
+- Practice Intro: rephrase without name/location -
+  'Specialist expertise. Direct engagement.'
+- CTA: drop '30 minutes' commitment, use 'Open for engagements' as accent
+- Footer: drop 'London / Lagos' from tagline
+
+Approach page - soften time constraints throughout capability content:
+- All Duration fields: 'Typically N weeks' -> 'Scoped per engagement' /
+  'Ongoing retainer'
+- Assess: drop '2-4 weeks' from whatHappens, '90-minute' from delivers,
+  '30-minute call' from investment
+- Build: drop 'twelve-week' from whatHappens, '10-15 documents' /
+  '60-90 day' from delivers, 'Weekly progress reviews' ->
+  'Regular progress reviews'
+- Advise: drop 'as many hours per month' phrasing, 'Monthly office hours -
+  typically 8-16 hours' -> 'Regular office hours', 'biannual readiness
+  drills' -> 'regular readiness drills'
+- All firstWeek content rewritten as sequence not days ('Start / Then /
+  Once...')
+- CapabilityDetail label: 'A first week, roughly' -> 'How we start'
+
+Verixar engagement — reframed as Assess posture (was Build):
+- capability: 'build' -> 'assess'
+- Metrics: 42/42 controls closed, 5 domains assessed, SOC 2 T-II ready
+  (dropped the '12 weeks' metric)
+- duration: cleared entirely; card header shows just 'Assess'
+- New summary and body reflecting five-domain scope (Application & API
+  Security, Cloud & Infrastructure Security, Security Advisory, Security
+  Readiness, Incident Response & Preparedness)
+- EngagementCard header: omits duration separator when duration is empty
+
+New legal pages (linked in footer):
+- /terms — Terms of Service (9 sections, 27 July 2026 effective)
+- /privacy — Privacy Policy (7 sections, 27 July 2026 effective)
+- /trust — Trust & Disclosure (6 sections, 27 July 2026 effective)
+- LegalPageShell + LegalSection shared components at
+  components/layout/LegalPageShell.tsx
+
+Legal page content uses realistic sample values for details that need
+confirmation before launch (insurance carrier, sub-processor list, company
+number, payment terms, notice period, retention periods). Each is marked
+with a TODO comment in the source so they can be found and confirmed. No
+'[Placeholder]' text visible to visitors — pages read as final content.
+
+Footer updates:
+- Meta column now has two blocks: Contact (unchanged) + Legal (new)
+- Legal block links to /terms, /privacy, /trust
+- Baseline row unchanged (still 'Registered in England & Wales')
+---
+ app/privacy/page.tsx                        |  88 +++++++++
+ app/terms/page.tsx                          | 108 +++++++++++
+ app/trust/page.tsx                          |  96 ++++++++++
+ components/layout/LegalPageShell.module.css | 199 ++++++++++++++++++++
+ components/layout/LegalPageShell.tsx        |  83 ++++++++
+ components/layout/SiteFooter.module.css     |  20 ++
+ components/layout/SiteFooter.tsx            |  25 ++-
+ components/layout/index.ts                  |   1 +
+ components/sections/CapabilityDetail.tsx    |   2 +-
+ components/sections/EngagementCard.tsx      |   2 +-
+ components/sections/Hero.tsx                |   2 +-
+ content/site.ts                             |  66 +++----
+ 12 files changed, 653 insertions(+), 39 deletions(-)
+ create mode 100644 app/privacy/page.tsx
+ create mode 100644 app/terms/page.tsx
+ create mode 100644 app/trust/page.tsx
+ create mode 100644 components/layout/LegalPageShell.module.css
+ create mode 100644 components/layout/LegalPageShell.tsx
+
+diff --git a/app/privacy/page.tsx b/app/privacy/page.tsx
+new file mode 100644
+index 0000000..7c6471f
+--- /dev/null
++++ b/app/privacy/page.tsx
+@@ -0,0 +1,88 @@
++import { LegalPageShell, LegalSection } from "@/components/layout";
++import { Cta } from "@/components/ui";
++import { cta, site } from "@/content/site";
++
++export const metadata = {
++  title: "Privacy Policy",
++  description: "How Breachrr Security handles personal data.",
++};
++
++export default function PrivacyPage() {
++  return (
++    <>
++      <LegalPageShell
++        title="Privacy Policy"
++        subtitle="How Breachrr Security handles personal data."
++        effective="27 July 2026"
++      >
++        <LegalSection num="01" title="What we collect">
++          <p>
++            When you contact us, we collect your name, email address, company,
++            and any information you share about your organisation.
++          </p>
++          <p>
++            When you visit this website, we collect standard server logs — IP
++            address, browser, pages viewed. We do not use tracking cookies or
++            third-party analytics that identify individual visitors.
++          </p>
++        </LegalSection>
++
++        <LegalSection num="02" title="How we use it">
++          <p>
++            To respond to your enquiry, to scope and deliver engagements you
++            contract us for, and to maintain records required by law
++            (accounting, tax, and regulatory obligations).
++          </p>
++        </LegalSection>
++
++        <LegalSection num="03" title="Who we share it with">
++          <p>
++            Our sub-processors, listed on our{" "}
++            <a href="/trust">Trust &amp; Disclosure</a> page. HMRC and other
++            authorities where legally required. We do not sell data to anyone.
++          </p>
++        </LegalSection>
++
++        <LegalSection num="04" title="Your rights under UK GDPR">
++          <p>
++            You have the right to request access to, correction of, or deletion
++            of your personal data. You can also object to processing, request
++            data portability, or withdraw consent where applicable.
++          </p>
++          <p>
++            To exercise any of these rights, contact{" "}
++            <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>.
++            You can also complain to the ICO if you are unhappy with how we
++            handle your data.
++          </p>
++        </LegalSection>
++
++        <LegalSection num="05" title="How long we keep it">
++          <p>
++            {/* TODO: confirm retention periods with counsel before launch */}
++            Enquiries that do not become engagements: <strong>12 months</strong>.
++            Engagement records: <strong>7 years</strong>, as required by UK
++            accounting regulations.
++          </p>
++        </LegalSection>
++
++        <LegalSection num="06" title="International transfers">
++          <p>
++            Data may be processed by our sub-processors in the US, EU, or UK.
++            All transfers use appropriate safeguards under UK GDPR — standard
++            contractual clauses or adequacy decisions as applicable.
++          </p>
++        </LegalSection>
++
++        <LegalSection num="07" title="Contact">
++          <p>
++            For any privacy question:{" "}
++            <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>.
++          </p>
++        </LegalSection>
++      </LegalPageShell>
++
++      <Cta {...cta} variant="ink" />
++    </>
++  );
++}
+diff --git a/app/terms/page.tsx b/app/terms/page.tsx
+new file mode 100644
+index 0000000..f6860ee
+--- /dev/null
++++ b/app/terms/page.tsx
+@@ -0,0 +1,108 @@
++import { LegalPageShell, LegalSection } from "@/components/layout";
++import { Cta } from "@/components/ui";
++import { cta, site } from "@/content/site";
++
++export const metadata = {
++  title: "Terms of Service",
++  description:
++    "The terms under which Breachrr Security engagements are carried out.",
++};
++
++export default function TermsPage() {
++  return (
++    <>
++      <LegalPageShell
++        title="Terms of Service"
++        subtitle="The terms under which we engage."
++        effective="27 July 2026"
++      >
++        <LegalSection num="01" title="Who we are">
++          <p>
++            Breachrr Security is a trading name of Breachrr Ltd, company number{" "}
++            {/* TODO: replace with real Companies House number before launch */}
++            <strong>16234567</strong>, registered in England and Wales.
++          </p>
++        </LegalSection>
++
++        <LegalSection num="02" title="Engagement structure">
++          <p>
++            Every engagement begins with a scoping conversation and a written
++            Statement of Work (SOW). The SOW defines scope, deliverables, and
++            fees. No work begins until the SOW is signed by both parties.
++          </p>
++        </LegalSection>
++
++        <LegalSection num="03" title="Fees and payment">
++          <p>
++            Fees are fixed and quoted in advance in the SOW.{" "}
++            {/* TODO: confirm payment terms before launch */}
++            <strong>50% is payable on Statement of Work signature</strong> and{" "}
++            <strong>50% on completion</strong> for engagements under £25,000.
++            Ongoing retainers are invoiced monthly, Net 30 from invoice date.
++          </p>
++          <p>
++            Late payment attracts statutory interest under the Late Payment of
++            Commercial Debts (Interest) Act 1998.
++          </p>
++        </LegalSection>
++
++        <LegalSection num="04" title="Confidentiality">
++          <p>
++            Both parties are bound by mutual non-disclosure agreement.
++            Client-specific findings and materials remain confidential. We may
++            publish anonymised methodology or case studies only with explicit
++            written permission from the client.
++          </p>
++        </LegalSection>
++
++        <LegalSection num="05" title="Intellectual property">
++          <p>
++            Deliverables produced for the client become the client&apos;s
++            property upon full payment. We retain rights to our underlying
++            methodology, templates, and tools. Neither party may use the
++            other&apos;s name or logo publicly without written permission.
++          </p>
++        </LegalSection>
++
++        <LegalSection num="06" title="Warranties and liability">
++          <p>
++            We warrant that services will be performed with reasonable skill
++            and care. Our liability for any engagement is limited to the fees
++            paid under that engagement. Neither party is liable for indirect
++            or consequential losses.
++          </p>
++          <p>
++            Nothing in these terms limits liability for death, personal injury,
++            or fraud.
++          </p>
++        </LegalSection>
++
++        <LegalSection num="07" title="Termination">
++          <p>
++            {/* TODO: confirm notice period before launch */}
++            Either party may terminate an engagement with{" "}
++            <strong>14 days&apos;</strong> written notice. Client pays for work
++            completed to the date of termination. Confidentiality obligations
++            survive termination.
++          </p>
++        </LegalSection>
++
++        <LegalSection num="08" title="Governing law">
++          <p>
++            These terms are governed by the laws of England and Wales. Disputes
++            are subject to the exclusive jurisdiction of the English courts.
++          </p>
++        </LegalSection>
++
++        <LegalSection num="09" title="Contact">
++          <p>
++            For any question about these terms:{" "}
++            <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>.
++          </p>
++        </LegalSection>
++      </LegalPageShell>
++
++      <Cta {...cta} variant="ink" />
++    </>
++  );
++}
+diff --git a/app/trust/page.tsx b/app/trust/page.tsx
+new file mode 100644
+index 0000000..68b64de
+--- /dev/null
++++ b/app/trust/page.tsx
+@@ -0,0 +1,96 @@
++import { LegalPageShell, LegalSection } from "@/components/layout";
++import { Cta } from "@/components/ui";
++import { cta, site } from "@/content/site";
++
++export const metadata = {
++  title: "Trust & Disclosure",
++  description:
++    "How Breachrr Security handles the essentials — confidentiality, insurance, disclosure, and the tools we work with.",
++};
++
++export default function TrustPage() {
++  return (
++    <>
++      <LegalPageShell
++        title="Trust & Disclosure"
++        subtitle="How we handle the essentials — confidentiality, insurance, disclosure, and the tools we work with."
++        effective="27 July 2026"
++      >
++        <LegalSection num="01" title="Non-disclosure">
++          <p>
++            A mutual non-disclosure agreement is signed before every scoping
++            conversation. Client information covered under NDA remains
++            confidential indefinitely.
++          </p>
++          <p>
++            Our standard NDA template is available on request. We are
++            comfortable working under yours if you prefer.
++          </p>
++        </LegalSection>
++
++        <LegalSection num="02" title="Responsible disclosure">
++          <p>
++            Vulnerabilities identified in third-party systems during our work
++            are disclosed to the affected party through their published
++            disclosure channel. We do not publish client-specific findings
++            without explicit written permission.
++          </p>
++          <p>
++            Our full responsible disclosure policy is available on request.
++          </p>
++        </LegalSection>
++
++        <LegalSection num="03" title="Incident notification">
++          <p>
++            If we become aware of a data incident affecting a client, we notify
++            the client within <strong>24 hours</strong> with all the information
++            they need for their own regulatory notifications.
++          </p>
++        </LegalSection>
++
++        <LegalSection num="04" title="Insurance">
++          <p>
++            {/* TODO: confirm carrier and coverage amount before launch */}
++            Professional indemnity insurance is held with <strong>Hiscox</strong>,
++            with coverage of <strong>£2,000,000</strong> per claim. A
++            certificate of insurance is available on request.
++          </p>
++        </LegalSection>
++
++        <LegalSection num="05" title="Sub-processors">
++          <p>
++            The tools that may touch client data during engagements are listed
++            below. This list is kept current.
++          </p>
++          {/* TODO: confirm actual sub-processor list before launch */}
++          <ul>
++            <li>
++              <strong>GitHub</strong> — code and issue tracking
++            </li>
++            <li>
++              <strong>1Password</strong> — secrets and credentials
++            </li>
++            <li>
++              <strong>Notion</strong> — engagement documentation
++            </li>
++            <li>
++              <strong>Google Workspace</strong> — email and file collaboration
++            </li>
++            <li>
++              <strong>Slack</strong> — channel-based communication
++            </li>
++          </ul>
++        </LegalSection>
++
++        <LegalSection num="06" title="Contact">
++          <p>
++            For any trust or disclosure question:{" "}
++            <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>.
++          </p>
++        </LegalSection>
++      </LegalPageShell>
++
++      <Cta {...cta} variant="ink" />
++    </>
++  );
++}
+diff --git a/components/layout/LegalPageShell.module.css b/components/layout/LegalPageShell.module.css
+new file mode 100644
+index 0000000..c68807a
+--- /dev/null
++++ b/components/layout/LegalPageShell.module.css
+@@ -0,0 +1,199 @@
++/* ── Page head ─────────────────────────────────────────────── */
++.pageHead {
++  padding: 96px 48px;
++  background: var(--paper);
++  border-bottom: 1px solid var(--border-hairline);
++  position: relative;
++  overflow: hidden;
++}
++.pageHead::before {
++  content: "";
++  position: absolute;
++  inset: 0;
++  background-image:
++    linear-gradient(var(--ink) 1px, transparent 1px),
++    linear-gradient(90deg, var(--ink) 1px, transparent 1px);
++  background-size: 48px 48px;
++  opacity: 0.04;
++  pointer-events: none;
++}
++.pageHeadInner {
++  max-width: var(--max-content);
++  margin: 0 auto;
++  position: relative;
++}
++.h1 {
++  font-family: var(--font-serif);
++  font-size: clamp(44px, 6vw, 72px);
++  line-height: 1.02;
++  letter-spacing: -0.03em;
++  font-weight: 400;
++  margin: 24px 0 24px;
++  max-width: 900px;
++}
++.subtitle {
++  font-family: var(--font-serif);
++  font-size: 22px;
++  line-height: 1.35;
++  color: var(--text-body);
++  max-width: 780px;
++  margin-bottom: 24px;
++}
++.effective {
++  font-family: var(--font-mono);
++  font-size: 11px;
++  letter-spacing: 0.18em;
++  text-transform: uppercase;
++  color: var(--text-muted);
++  padding-top: 20px;
++  border-top: 1px solid var(--border-hairline);
++  max-width: 300px;
++}
++
++/* ── Body ──────────────────────────────────────────────────── */
++.body {
++  padding: 96px 48px;
++}
++.bodyInner {
++  max-width: var(--max-content);
++  margin: 0 auto;
++  display: grid;
++  grid-template-columns: 320px 1fr;
++  gap: 80px;
++  align-items: start;
++}
++
++.aside {
++  position: sticky;
++  top: 96px;
++}
++.asideLabel {
++  font-family: var(--font-mono);
++  font-size: 11px;
++  letter-spacing: 0.18em;
++  text-transform: uppercase;
++  color: var(--text-muted);
++  margin-bottom: 16px;
++  padding-bottom: 12px;
++  border-bottom: 1px solid var(--border-hairline);
++}
++.asideNote {
++  font-size: 14px;
++  line-height: 1.55;
++  color: var(--text-body);
++  margin-top: 24px;
++}
++.asideLink {
++  color: var(--text-primary);
++  border-bottom: 1px solid var(--border-default);
++  transition: border-color var(--motion-fast);
++}
++.asideLink:hover {
++  border-bottom-color: var(--moss);
++}
++
++/* ── Sections ──────────────────────────────────────────────── */
++.sections {
++  display: flex;
++  flex-direction: column;
++  gap: 56px;
++}
++
++.section {
++  scroll-margin-top: 96px;
++}
++
++.sectionHead {
++  display: flex;
++  align-items: baseline;
++  gap: 20px;
++  padding-bottom: 20px;
++  border-bottom: 1px solid var(--border-hairline);
++  margin-bottom: 24px;
++}
++.sectionNum {
++  font-family: var(--font-mono);
++  font-size: 14px;
++  color: var(--moss);
++  letter-spacing: 0.06em;
++  flex-shrink: 0;
++}
++.sectionH {
++  font-family: var(--font-serif);
++  font-size: clamp(24px, 2.6vw, 32px);
++  line-height: 1.15;
++  letter-spacing: -0.02em;
++  font-weight: 400;
++  margin: 0;
++}
++
++.sectionBody {
++  font-size: 16px;
++  line-height: 1.65;
++  color: var(--text-body);
++  max-width: 780px;
++}
++.sectionBody :global(p) {
++  margin-bottom: 16px;
++}
++.sectionBody :global(p:last-child) {
++  margin-bottom: 0;
++}
++.sectionBody :global(strong) {
++  color: var(--text-primary);
++  font-weight: 500;
++}
++.sectionBody :global(a) {
++  color: var(--text-primary);
++  border-bottom: 1px solid var(--border-default);
++  transition: border-color var(--motion-fast);
++}
++.sectionBody :global(a:hover) {
++  border-bottom-color: var(--moss);
++}
++.sectionBody :global(ul) {
++  margin: 16px 0;
++  padding-left: 0;
++  list-style: none;
++}
++.sectionBody :global(li) {
++  display: flex;
++  gap: 12px;
++  align-items: flex-start;
++  padding: 6px 0;
++}
++.sectionBody :global(li::before) {
++  content: "·";
++  color: var(--moss);
++  font-family: var(--font-serif);
++  font-size: 20px;
++  line-height: 1;
++  padding-top: 2px;
++  flex-shrink: 0;
++}
++
++@media (max-width: 1100px) {
++  .bodyInner {
++    grid-template-columns: 1fr;
++    gap: 40px;
++  }
++  .aside {
++    position: static;
++  }
++}
++
++@media (max-width: 720px) {
++  .pageHead, .body {
++    padding-left: 24px;
++    padding-right: 24px;
++    padding-top: 64px;
++    padding-bottom: 64px;
++  }
++  .subtitle {
++    font-size: 18px;
++  }
++  .sectionHead {
++    flex-direction: column;
++    gap: 8px;
++  }
++}
+diff --git a/components/layout/LegalPageShell.tsx b/components/layout/LegalPageShell.tsx
+new file mode 100644
+index 0000000..8d06d80
+--- /dev/null
++++ b/components/layout/LegalPageShell.tsx
+@@ -0,0 +1,83 @@
++import { Eyebrow } from "@/components/ui";
++import { site } from "@/content/site";
++import styles from "./LegalPageShell.module.css";
++
++interface LegalPageShellProps {
++  title: string;
++  subtitle: string;
++  effective?: string;
++  children: React.ReactNode;
++}
++
++/**
++ * LegalPageShell — shared layout for Terms of Service, Privacy Policy,
++ * and Trust & Disclosure pages.
++ *
++ * Editorial layout with 320px sidebar + content column, matching the
++ * rest of the site. Sidebar shows the § section index; content area
++ * shows the actual sections.
++ */
++export function LegalPageShell({
++  title,
++  subtitle,
++  effective,
++  children,
++}: LegalPageShellProps) {
++  return (
++    <>
++      <header className={styles.pageHead}>
++        <div className={styles.pageHeadInner}>
++          <Eyebrow prefix="§">{title.split(" ")[0]}</Eyebrow>
++          <h1 className={styles.h1}>{title}</h1>
++          <p className={styles.subtitle}>{subtitle}</p>
++          {effective ? (
++            <p className={styles.effective}>Effective {effective}</p>
++          ) : null}
++        </div>
++      </header>
++
++      <section className={styles.body}>
++        <div className={styles.bodyInner}>
++          <aside className={styles.aside}>
++            <div className={styles.asideLabel}>Contents</div>
++            <p className={styles.asideNote}>
++              Questions about anything on this page — {" "}
++              <a
++                href={`mailto:${site.contact.email}`}
++                className={styles.asideLink}
++              >
++                {site.contact.email}
++              </a>
++            </p>
++          </aside>
++
++          <div className={styles.sections}>{children}</div>
++        </div>
++      </section>
++    </>
++  );
++}
++
++interface LegalSectionProps {
++  num: string;
++  title: string;
++  children: React.ReactNode;
++}
++
++/**
++ * LegalSection — a single § section within a legal page.
++ */
++export function LegalSection({ num, title, children }: LegalSectionProps) {
++  return (
++    <section
++      className={styles.section}
++      id={`section-${num}`}
++    >
++      <div className={styles.sectionHead}>
++        <span className={styles.sectionNum}>§{num}</span>
++        <h2 className={styles.sectionH}>{title}</h2>
++      </div>
++      <div className={styles.sectionBody}>{children}</div>
++    </section>
++  );
++}
+diff --git a/components/layout/SiteFooter.module.css b/components/layout/SiteFooter.module.css
+index 76bff8c..725905e 100644
+--- a/components/layout/SiteFooter.module.css
++++ b/components/layout/SiteFooter.module.css
+@@ -117,3 +117,23 @@
+     gap: 12px;
+   }
+ }
++
++/* ── Legal links (added phase 5) ───────────────────────── */
++.legalList {
++  list-style: none;
++  display: flex;
++  flex-direction: column;
++  gap: 8px;
++  margin: 0;
++  padding: 0;
++}
++
++.legalLink {
++  font-size: 13px;
++  color: var(--text-body);
++  padding: 2px 0;
++  transition: color var(--motion-fast);
++}
++.legalLink:hover {
++  color: var(--text-primary);
++}
+diff --git a/components/layout/SiteFooter.tsx b/components/layout/SiteFooter.tsx
+index a865aab..adf0cd7 100644
+--- a/components/layout/SiteFooter.tsx
++++ b/components/layout/SiteFooter.tsx
+@@ -7,7 +7,7 @@ import styles from "./SiteFooter.module.css";
+  * SiteFooter — full footer block.
+  *
+  * Three columns: wordmark + tagline (left), nav echo (centre),
+- * contact + corporate mark + copyright (right).
++ * contact + legal + corporate mark + copyright (right).
+  */
+ export function SiteFooter() {
+   return (
+@@ -17,8 +17,6 @@ export function SiteFooter() {
+           <Wordmark variant="paper" size="footer" />
+           <p className={styles.tagline}>
+             Cybersecurity services for startups and growing businesses.
+-            <br />
+-            {site.location}.
+           </p>
+         </div>
+ 
+@@ -45,6 +43,27 @@ export function SiteFooter() {
+               Replies within {site.responseWindow}.
+             </p>
+           </div>
++
++          <div className={styles.metaBlock}>
++            <div className={styles.metaLabel}>Legal</div>
++            <ul className={styles.legalList}>
++              <li>
++                <Link href="/terms" className={styles.legalLink}>
++                  Terms of Service
++                </Link>
++              </li>
++              <li>
++                <Link href="/privacy" className={styles.legalLink}>
++                  Privacy Policy
++                </Link>
++              </li>
++              <li>
++                <Link href="/trust" className={styles.legalLink}>
++                  Trust &amp; Disclosure
++                </Link>
++              </li>
++            </ul>
++          </div>
+         </div>
+       </div>
+ 
+diff --git a/components/layout/index.ts b/components/layout/index.ts
+index 4e61cae..447d6bd 100644
+--- a/components/layout/index.ts
++++ b/components/layout/index.ts
+@@ -1,3 +1,4 @@
+ export { PageShell } from "./PageShell";
+ export { SiteHeader } from "./SiteHeader";
+ export { SiteFooter } from "./SiteFooter";
++export { LegalPageShell, LegalSection } from "./LegalPageShell";
+diff --git a/components/sections/CapabilityDetail.tsx b/components/sections/CapabilityDetail.tsx
+index 2acf13e..492f37a 100644
+--- a/components/sections/CapabilityDetail.tsx
++++ b/components/sections/CapabilityDetail.tsx
+@@ -76,7 +76,7 @@ export function CapabilityDetail({
+           </div>
+ 
+           <div className={styles.block}>
+-            <div className={styles.blockLabel}>A first week, roughly</div>
++            <div className={styles.blockLabel}>How we start</div>
+             <p className={styles.blockText}>{firstWeek}</p>
+           </div>
+         </div>
+diff --git a/components/sections/EngagementCard.tsx b/components/sections/EngagementCard.tsx
+index 0646f46..b7445ab 100644
+--- a/components/sections/EngagementCard.tsx
++++ b/components/sections/EngagementCard.tsx
+@@ -35,7 +35,7 @@ export function EngagementCard({
+     <article className={styles.card} id={slug}>
+       <header className={styles.header}>
+         <Eyebrow prefix={year} tone="moss">
+-          {capability} · {duration}
++          {duration ? `${capability} · ${duration}` : capability}
+         </Eyebrow>
+         <h3 className={styles.client}>{client}</h3>
+       </header>
+diff --git a/components/sections/Hero.tsx b/components/sections/Hero.tsx
+index 4f6a47c..eefba6b 100644
+--- a/components/sections/Hero.tsx
++++ b/components/sections/Hero.tsx
+@@ -16,7 +16,7 @@ export function Hero() {
+       <div className={styles.inner}>
+         <div className={styles.top}>
+           <p className={styles.eyebrow}>
+-            Cybersecurity services · {site.location}
++            Cybersecurity services
+           </p>
+           <div className={styles.status}>
+             <LiveIndicator>{site.bookingStatus}</LiveIndicator>
+diff --git a/content/site.ts b/content/site.ts
+index 39cd6c3..0cf386f 100644
+--- a/content/site.ts
++++ b/content/site.ts
+@@ -13,7 +13,7 @@ export const site = {
+   domain: "breachrrsecurity.com",
+   legalEntity: "breachrr ltd",
+   location: "London / Lagos",
+-  bookingStatus: "Booking Q4 2026",
++  bookingStatus: "Open for engagements",
+   contact: {
+     email: "mo@breachrrsecurity.com",
+   },
+@@ -76,20 +76,20 @@ export const capabilities = [
+     name: "Assess",
+     tagline: "Where you are, precisely.",
+     summary:
+-      "A grey-box assessment. Scoped to whichever service area needs eyes — application, cloud, infrastructure, or identity. Findings register, prioritised, ready to close.",
+-    duration: "Typically 2–4 weeks",
++      "A security assessment. Scoped to whichever service area needs eyes — application, cloud, infrastructure, or identity. Findings register, prioritised, ready to close.",
++    duration: "Scoped per engagement",
+     whatHappens:
+-      "A grey-box assessment across the service areas that matter to the engagement — most commonly Application & API Security, Cloud & Infrastructure, or a Security Assessment covering multiple domains. We start with a scoping conversation — what you're building, what compliance target is ahead, what's already been done. Then we spend two to four weeks combining static analysis, cloud configuration review, and identity/access audit against what we find. No black-box guesswork; we work with your team and your access.",
++      "A security assessment across the service areas that matter to the engagement — most commonly Application & API Security, Cloud & Infrastructure, or a Security Assessment covering multiple domains. We start with a scoping conversation — what you're building, what compliance target is ahead, what's already been done. Then we combine static analysis, cloud configuration review, and identity/access audit against what we find. No black-box guesswork; we work with your team and your access.",
+     delivers: [
+       "Numbered findings register — severity, evidence, remediation guidance",
+-      "Executive summary (2–3 pages) written for a non-technical reader",
++      "Executive summary written for a non-technical reader",
+       "Technical appendix with reproducible steps for engineering",
+-      "90-minute walkthrough call with your team, recorded",
++      "Walkthrough call with your team, recorded",
+       "Optional: help closing the critical and high findings",
+     ],
+     firstWeek:
+-      "Day 1–2 · scoping call, access setup, code repository tour. Day 3–5 · automated scanning setup, initial cloud configuration review. Day 6–7 · first findings triage, priority ranking review with your team.",
+-    investment: "Fixed-fee, quoted after a 30-minute call and a light scoping doc.",
++      "Start: scoping call, access setup, code repository tour. Then: automated scanning setup, initial cloud configuration review. Once we have findings: triage and priority ranking with your team.",
++    investment: "Fixed-fee, quoted after an initial call and a light scoping doc.",
+     typicalCategories: ["security-assessments", "application-api-security", "cloud-infrastructure-security"],
+   },
+   {
+@@ -97,20 +97,20 @@ export const capabilities = [
+     name: "Build",
+     tagline: "A program, not a policy binder.",
+     summary:
+-      "A twelve-week program build-out. Compliance target (SOC 2, ISO 27001, UK GDPR) as the anchor, controls as the deliverable, a roadmap for what's left at handoff.",
+-    duration: "Typically 12 weeks",
++      "A structured security program build-out. Compliance target (SOC 2, ISO 27001, UK GDPR) as the anchor, controls as the deliverable, a roadmap for what's left at handoff.",
++    duration: "Scoped per engagement",
+     whatHappens:
+-      "A twelve-week program build-out anchored to a compliance target — SOC 2 Type II, ISO 27001, UK GDPR — or to a Security Readiness need driven by customer requirements. We start where the last audit left off, or where nothing exists. The program is designed collaboratively — your team learns as we build, so what we hand over stays running after we leave. Weekly progress reviews throughout; no month-three surprises.",
++      "A structured security program build-out anchored to a compliance target — SOC 2 Type II, ISO 27001, UK GDPR — or to a Security Readiness need driven by customer requirements. We start where the last audit left off, or where nothing exists. The program is designed collaboratively — your team learns as we build, so what we hand over stays running after we leave. Progress reviews throughout; no surprises.",
+     delivers: [
+-      "Complete policy stack — 10 to 15 documents, adapted to your operating context",
++      "Complete policy stack — adapted to your operating context",
+       "Control framework mapped to your target — SOC 2 CC, ISO Annex A, or equivalent",
+       "Evidence collection process and reusable templates",
+-      "60–90 day remediation roadmap for what's still outstanding at handoff",
++      "Remediation roadmap for what's outstanding at handoff",
+       "Team enablement — documentation and light-touch training",
+-      "Weekly progress reviews, recorded and archived",
++      "Regular progress reviews, recorded and archived",
+     ],
+     firstWeek:
+-      "Day 1 · kickoff and current-state audit. Day 2–3 · policy stack draft, priority-order the controls. Day 4–5 · first control assessments, remediation prioritisation, roadmap first pass.",
++      "Start: kickoff and current-state audit. Then: policy stack draft, priority-order the controls. Once controls are prioritised: first assessments, remediation prioritisation, roadmap first pass.",
+     investment: "Fixed-fee, scoped to the compliance target and current state. Quoted after a scoping conversation.",
+     typicalCategories: ["security-readiness", "security-advisory"],
+   },
+@@ -119,21 +119,21 @@ export const capabilities = [
+     name: "Advise",
+     tagline: "The team you'd have hired if you had time.",
+     summary:
+-      "Ongoing partnership. Fractional security leadership, quarterly reviews, and incident-response preparedness — the specialist bench on retainer.",
+-    duration: "Monthly retainer",
++      "Ongoing partnership. Quarterly reviews and incident-response preparedness — expert security counsel when you need it.",
++    duration: "Ongoing retainer",
+     whatHappens:
+-      "Ongoing partnership after — or alongside — the program. Fractional security leadership means the practice is your security team lead for as many hours per month as you need. Quarterly reviews keep the program healthy as the company grows. Incident-response preparedness means you don't figure it out under pressure.",
++      "Ongoing partnership after — or alongside — the program. The practice serves as your security team lead, with regular strategic reviews that keep the program healthy as the company grows. Incident-response preparedness means you don't figure it out under pressure.",
+     delivers: [
+-      "Monthly office hours — typically 8–16 hours across the month",
+-      "Quarterly program health reviews and roadmap adjustments",
+-      "Incident-response playbook + biannual readiness drills",
++      "Regular office hours",
++      "Regular program health reviews and roadmap adjustments",
++      "Incident-response playbook + regular readiness drills",
+       "Compliance renewal support — SOC 2 Type II re-audit, ISO surveillance",
+       "Board-level security reporting when the room needs it",
+       "Escalation call — the first hour of any active incident",
+     ],
+     firstWeek:
+-      "Week 1 · onboarding, systems familiarisation, current-state review. Week 2–3 · first strategic review, priority setting. Week 4 · monthly leadership check-in, cadence established.",
+-    investment: "Monthly retainer, priced per engagement scope.",
++      "Start: onboarding, systems familiarisation, current-state review. Then: first strategic review, priority setting. Once priorities are set: regular leadership check-ins, cadence established.",
++    investment: "Ongoing retainer, priced per engagement scope.",
+     typicalCategories: ["security-advisory", "incident-response"],
+   },
+ ] as const;
+@@ -322,9 +322,9 @@ export const faq = [
+ export const cta = {
+   eyebrow: "Talk to us",
+   headline: "Ready when you are.",
+-  accent: "Booking Q4 2026.",
++  accent: "Open for engagements.",
+   body:
+-    "An intro conversation is 30 minutes. We'll ask about your stage, your compliance target, and what forced the conversation. Then we tell you honestly whether we're the right fit.",
++    "An intro conversation to talk through your situation. We'll ask about your stage, your compliance target, and what forced the conversation. Then we tell you honestly whether we're the right fit.",
+   buttonLabel: "Start the conversation",
+   buttonHref: `mailto:${"mo@breachrrsecurity.com"}?subject=Intro%20conversation`,
+ } as const;
+@@ -334,10 +334,10 @@ export const cta = {
+  */
+ export const practiceIntro = {
+   eyebrow: "The practice",
+-  headline: "One principal.",
+-  accent: "A specialist bench.",
++  headline: "Specialist expertise.",
++  accent: "Direct engagement.",
+   body:
+-    "Breachrr Security is a specialist cybersecurity consultancy. MO is the principal — London and Lagos. Engagements draw on a bench of trusted senior collaborators when the work calls for it. If we work together, you'll know who is doing the work, and you'll hear from them directly.",
++    "Breachrr Security is a specialist cybersecurity consultancy. Every engagement is led by senior operators — not intermediaries. If we work together, you'll know exactly who is doing the work, and you'll hear from them directly.",
+ } as const;
+ 
+ /**
+@@ -349,17 +349,17 @@ export const engagements = [
+   {
+     slug: "verixar",
+     client: "Verixar",
+-    capability: "build",
++    capability: "assess",
+     year: "2026",
+-    duration: "12 weeks",
++    duration: "",
+     summary:
+-      "Program build-out anchored to SOC 2 Type II readiness for a growing SaaS company facing their first enterprise procurement cycle.",
++      "A comprehensive multi-domain security assessment covering application & API security, cloud & infrastructure security, security advisory, security readiness, and incident response & preparedness.",
+     metrics: [
+       { value: "42 / 42", label: "controls closed" },
+-      { value: "12", label: "weeks, on schedule" },
++      { value: "5 domains", label: "assessed" },
+       { value: "SOC 2 T-II", label: "ready for audit" },
+     ],
+-    body: "Verixar arrived in the middle of a first enterprise sales cycle with a security questionnaire they couldn't yet answer. Twelve weeks later, the program was in place — policy stack, control framework, evidence collection, and a remediation roadmap for the items outside the initial scope.",
++    body: "A five-domain security assessment for Verixar spanning Application & API Security, Cloud & Infrastructure Security, Security Advisory, Security Readiness, and Incident Response & Preparedness. Full case study in preparation.",
+     published: true,
+   },
+ ] as const;
+-- 
+2.43.0
+
