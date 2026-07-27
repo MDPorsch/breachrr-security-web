@@ -13,7 +13,7 @@ export const site = {
   domain: "breachrrsecurity.com",
   legalEntity: "breachrr ltd",
   location: "London / Lagos",
-  bookingStatus: "Booking Q4 2026",
+  bookingStatus: "Open for engagements",
   contact: {
     email: "mo@breachrrsecurity.com",
   },
@@ -76,20 +76,20 @@ export const capabilities = [
     name: "Assess",
     tagline: "Where you are, precisely.",
     summary:
-      "A grey-box assessment. Scoped to whichever service area needs eyes — application, cloud, infrastructure, or identity. Findings register, prioritised, ready to close.",
-    duration: "Typically 2–4 weeks",
+      "A security assessment. Scoped to whichever service area needs eyes — application, cloud, infrastructure, or identity. Findings register, prioritised, ready to close.",
+    duration: "Scoped per engagement",
     whatHappens:
-      "A grey-box assessment across the service areas that matter to the engagement — most commonly Application & API Security, Cloud & Infrastructure, or a Security Assessment covering multiple domains. We start with a scoping conversation — what you're building, what compliance target is ahead, what's already been done. Then we spend two to four weeks combining static analysis, cloud configuration review, and identity/access audit against what we find. No black-box guesswork; we work with your team and your access.",
+      "A security assessment across the service areas that matter to the engagement — most commonly Application & API Security, Cloud & Infrastructure, or a Security Assessment covering multiple domains. We start with a scoping conversation — what you're building, what compliance target is ahead, what's already been done. Then we combine static analysis, cloud configuration review, and identity/access audit against what we find. No black-box guesswork; we work with your team and your access.",
     delivers: [
       "Numbered findings register — severity, evidence, remediation guidance",
-      "Executive summary (2–3 pages) written for a non-technical reader",
+      "Executive summary written for a non-technical reader",
       "Technical appendix with reproducible steps for engineering",
-      "90-minute walkthrough call with your team, recorded",
+      "Walkthrough call with your team, recorded",
       "Optional: help closing the critical and high findings",
     ],
     firstWeek:
-      "Day 1–2 · scoping call, access setup, code repository tour. Day 3–5 · automated scanning setup, initial cloud configuration review. Day 6–7 · first findings triage, priority ranking review with your team.",
-    investment: "Fixed-fee, quoted after a 30-minute call and a light scoping doc.",
+      "Start: scoping call, access setup, code repository tour. Then: automated scanning setup, initial cloud configuration review. Once we have findings: triage and priority ranking with your team.",
+    investment: "Fixed-fee, quoted after an initial call and a light scoping doc.",
     typicalCategories: ["security-assessments", "application-api-security", "cloud-infrastructure-security"],
   },
   {
@@ -97,20 +97,20 @@ export const capabilities = [
     name: "Build",
     tagline: "A program, not a policy binder.",
     summary:
-      "A twelve-week program build-out. Compliance target (SOC 2, ISO 27001, UK GDPR) as the anchor, controls as the deliverable, a roadmap for what's left at handoff.",
-    duration: "Typically 12 weeks",
+      "A structured security program build-out. Compliance target (SOC 2, ISO 27001, UK GDPR) as the anchor, controls as the deliverable, a roadmap for what's left at handoff.",
+    duration: "Scoped per engagement",
     whatHappens:
-      "A twelve-week program build-out anchored to a compliance target — SOC 2 Type II, ISO 27001, UK GDPR — or to a Security Readiness need driven by customer requirements. We start where the last audit left off, or where nothing exists. The program is designed collaboratively — your team learns as we build, so what we hand over stays running after we leave. Weekly progress reviews throughout; no month-three surprises.",
+      "A structured security program build-out anchored to a compliance target — SOC 2 Type II, ISO 27001, UK GDPR — or to a Security Readiness need driven by customer requirements. We start where the last audit left off, or where nothing exists. The program is designed collaboratively — your team learns as we build, so what we hand over stays running after we leave. Progress reviews throughout; no surprises.",
     delivers: [
-      "Complete policy stack — 10 to 15 documents, adapted to your operating context",
+      "Complete policy stack — adapted to your operating context",
       "Control framework mapped to your target — SOC 2 CC, ISO Annex A, or equivalent",
       "Evidence collection process and reusable templates",
-      "60–90 day remediation roadmap for what's still outstanding at handoff",
+      "Remediation roadmap for what's outstanding at handoff",
       "Team enablement — documentation and light-touch training",
-      "Weekly progress reviews, recorded and archived",
+      "Regular progress reviews, recorded and archived",
     ],
     firstWeek:
-      "Day 1 · kickoff and current-state audit. Day 2–3 · policy stack draft, priority-order the controls. Day 4–5 · first control assessments, remediation prioritisation, roadmap first pass.",
+      "Start: kickoff and current-state audit. Then: policy stack draft, priority-order the controls. Once controls are prioritised: first assessments, remediation prioritisation, roadmap first pass.",
     investment: "Fixed-fee, scoped to the compliance target and current state. Quoted after a scoping conversation.",
     typicalCategories: ["security-readiness", "security-advisory"],
   },
@@ -119,21 +119,21 @@ export const capabilities = [
     name: "Advise",
     tagline: "The team you'd have hired if you had time.",
     summary:
-      "Ongoing partnership. Fractional security leadership, quarterly reviews, and incident-response preparedness — the specialist bench on retainer.",
-    duration: "Monthly retainer",
+      "Ongoing partnership. Quarterly reviews and incident-response preparedness — expert security counsel when you need it.",
+    duration: "Ongoing retainer",
     whatHappens:
-      "Ongoing partnership after — or alongside — the program. Fractional security leadership means the practice is your security team lead for as many hours per month as you need. Quarterly reviews keep the program healthy as the company grows. Incident-response preparedness means you don't figure it out under pressure.",
+      "Ongoing partnership after — or alongside — the program. The practice serves as your security team lead, with regular strategic reviews that keep the program healthy as the company grows. Incident-response preparedness means you don't figure it out under pressure.",
     delivers: [
-      "Monthly office hours — typically 8–16 hours across the month",
-      "Quarterly program health reviews and roadmap adjustments",
-      "Incident-response playbook + biannual readiness drills",
+      "Regular office hours",
+      "Regular program health reviews and roadmap adjustments",
+      "Incident-response playbook + regular readiness drills",
       "Compliance renewal support — SOC 2 Type II re-audit, ISO surveillance",
       "Board-level security reporting when the room needs it",
       "Escalation call — the first hour of any active incident",
     ],
     firstWeek:
-      "Week 1 · onboarding, systems familiarisation, current-state review. Week 2–3 · first strategic review, priority setting. Week 4 · monthly leadership check-in, cadence established.",
-    investment: "Monthly retainer, priced per engagement scope.",
+      "Start: onboarding, systems familiarisation, current-state review. Then: first strategic review, priority setting. Once priorities are set: regular leadership check-ins, cadence established.",
+    investment: "Ongoing retainer, priced per engagement scope.",
     typicalCategories: ["security-advisory", "incident-response"],
   },
 ] as const;
@@ -322,9 +322,9 @@ export const faq = [
 export const cta = {
   eyebrow: "Talk to us",
   headline: "Ready when you are.",
-  accent: "Booking Q4 2026.",
+  accent: "Open for engagements.",
   body:
-    "An intro conversation is 30 minutes. We'll ask about your stage, your compliance target, and what forced the conversation. Then we tell you honestly whether we're the right fit.",
+    "An intro conversation to talk through your situation. We'll ask about your stage, your compliance target, and what forced the conversation. Then we tell you honestly whether we're the right fit.",
   buttonLabel: "Start the conversation",
   buttonHref: `mailto:${"mo@breachrrsecurity.com"}?subject=Intro%20conversation`,
 } as const;
@@ -334,10 +334,10 @@ export const cta = {
  */
 export const practiceIntro = {
   eyebrow: "The practice",
-  headline: "One principal.",
-  accent: "A specialist bench.",
+  headline: "Specialist expertise.",
+  accent: "Direct engagement.",
   body:
-    "Breachrr Security is a specialist cybersecurity consultancy. MO is the principal — London and Lagos. Engagements draw on a bench of trusted senior collaborators when the work calls for it. If we work together, you'll know who is doing the work, and you'll hear from them directly.",
+    "Breachrr Security is a specialist cybersecurity consultancy. Every engagement is led by senior operators — not intermediaries. If we work together, you'll know exactly who is doing the work, and you'll hear from them directly.",
 } as const;
 
 /**
@@ -349,17 +349,17 @@ export const engagements = [
   {
     slug: "verixar",
     client: "Verixar",
-    capability: "build",
+    capability: "assess",
     year: "2026",
-    duration: "12 weeks",
+    duration: "",
     summary:
-      "Program build-out anchored to SOC 2 Type II readiness for a growing SaaS company facing their first enterprise procurement cycle.",
+      "A comprehensive multi-domain security assessment covering application & API security, cloud & infrastructure security, security advisory, security readiness, and incident response & preparedness.",
     metrics: [
       { value: "42 / 42", label: "controls closed" },
-      { value: "12", label: "weeks, on schedule" },
+      { value: "5 domains", label: "assessed" },
       { value: "SOC 2 T-II", label: "ready for audit" },
     ],
-    body: "Verixar arrived in the middle of a first enterprise sales cycle with a security questionnaire they couldn't yet answer. Twelve weeks later, the program was in place — policy stack, control framework, evidence collection, and a remediation roadmap for the items outside the initial scope.",
+    body: "A five-domain security assessment for Verixar spanning Application & API Security, Cloud & Infrastructure Security, Security Advisory, Security Readiness, and Incident Response & Preparedness. Full case study in preparation.",
     published: true,
   },
 ] as const;

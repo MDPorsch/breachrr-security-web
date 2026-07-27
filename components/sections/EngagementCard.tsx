@@ -35,7 +35,7 @@ export function EngagementCard({
     <article className={styles.card} id={slug}>
       <header className={styles.header}>
         <Eyebrow prefix={year} tone="moss">
-          {capability} · {duration}
+          {duration ? `${capability} · ${duration}` : capability}
         </Eyebrow>
         <h3 className={styles.client}>{client}</h3>
       </header>

@@ -76,7 +76,7 @@ export function CapabilityDetail({
           </div>
 
           <div className={styles.block}>
-            <div className={styles.blockLabel}>A first week, roughly</div>
+            <div className={styles.blockLabel}>How we start</div>
             <p className={styles.blockText}>{firstWeek}</p>
           </div>
         </div>
