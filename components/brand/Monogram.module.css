@@ -1,0 +1,80 @@
+.monogram {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  line-height: 1;
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+}
+
+.s {
+  font-style: italic;
+}
+
+.dot {
+  display: inline-block;
+  margin-left: 0.04em;
+  transform: translateY(0.01em);
+  line-height: 1;
+}
+
+/* ── Variants (letterform colours) ─────────────────────────── */
+
+.variant-paper .s { color: var(--ink); }
+.variant-paper .dot { color: var(--moss); }
+
+.variant-ink .s { color: var(--paper); }
+.variant-ink .dot { color: var(--moss-phosphor); }
+
+.variant-moss .s,
+.variant-moss .dot { color: var(--paper); }
+
+.variant-monochrome .s,
+.variant-monochrome .dot { color: currentColor; }
+
+/* ── Containers ────────────────────────────────────────────── */
+
+.container-none {
+  padding: 0;
+  background: transparent;
+}
+
+/* Container background is derived from variant colour */
+.container-rounded,
+.container-square {
+  padding-inline: 0.4em;
+  padding-block: 0.36em;
+  aspect-ratio: 1 / 1;
+  align-items: center;
+}
+
+.container-rounded {
+  border-radius: 0.22em;
+}
+
+.container-square {
+  border-radius: 0;
+}
+
+/* Container backgrounds are the INVERSE of the variant — i.e. the
+   ink variant gets an ink background (letter is paper on ink). */
+.container-rounded.variant-ink,
+.container-square.variant-ink {
+  background: var(--ink);
+}
+.container-rounded.variant-moss,
+.container-square.variant-moss {
+  background: var(--moss);
+}
+.container-rounded.variant-paper,
+.container-square.variant-paper {
+  background: var(--paper);
+  border: 1px solid var(--stone-300);
+}
+
+/* ── Sizes ─────────────────────────────────────────────────── */
+
+.size-sm { font-size: 24px; }
+.size-md { font-size: 44px; }
+.size-lg { font-size: 88px; }
+.size-xl { font-size: 128px; }

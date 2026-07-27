@@ -1,0 +1,110 @@
+/*
+ * Breachrr Security — Design Tokens
+ * Source of truth for CSS. Mirrors tokens.ts.
+ * v0.1
+ */
+
+:root {
+  /* ── Palette ────────────────────────────────────────────── */
+  --paper: #f5f2ec;
+  --ink: #1a1613;
+  --moss: #2f7d5b;
+  --moss-phosphor: #6ecfa0;
+
+  /* Warm neutral ramp */
+  --stone-50: #faf7f1;
+  --stone-100: #f0ebe1;
+  --stone-200: #e2ddd4;
+  --stone-300: #cfc6b8;
+  --stone-400: #a89f92;
+  --stone-500: #8a8078;
+  --stone-600: #6b6360;
+  --stone-700: #4a4340;
+  --stone-800: #2e2724;
+  --stone-900: #1a1613;
+
+  /* Severity — retuned for paper */
+  --sev-critical: #b32c1e;
+  --sev-high: #c97a12;
+  --sev-medium: #b5941a;
+  --sev-low: #345f8a;
+  --sev-clean: #2f7d5b;
+
+  /* Cross-brand reference */
+  --parent-accent: #dc2626;
+
+  /* ── Semantic surfaces ─────────────────────────────────── */
+  --bg: var(--paper);
+  --bg-raised: #ffffff;
+  --bg-inset: var(--stone-50);
+  --bg-emphasis: var(--stone-100);
+  --bg-ink: var(--ink);
+
+  /* Borders */
+  --border-hairline: var(--stone-200);
+  --border-default: var(--stone-300);
+  --border-strong: var(--stone-500);
+  --border-focus: var(--moss);
+
+  /* Text */
+  --text-primary: var(--ink);
+  --text-body: var(--stone-700);
+  --text-muted: var(--stone-500);
+  --text-dim: var(--stone-400);
+  --text-inverse: var(--paper);
+
+  /* Brand */
+  --brand-accent: var(--moss);
+  --brand-accent-bright: var(--moss-phosphor);
+
+  /* CTA */
+  --cta-bg: var(--ink);
+  --cta-text: var(--paper);
+  --cta-bg-hover: #000000;
+
+  /* ── Type stack ─────────────────────────────────────────── */
+  /* --font-serif is Georgia system font, not from next/font */
+  --font-serif: Georgia, "Times New Roman", Times, serif;
+  /* --font-sans and --font-mono alias the geist package's variables at runtime.
+     The geist package sets --font-geist-sans and --font-geist-mono on <html>
+     via the layout's className. If the package isn't loaded yet (SSR paint),
+     these fall back to system sans-serif and monospace, which is fine. */
+  --font-sans: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+
+  /* ── Spacing (4px base) ─────────────────────────────────── */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-30: 7.5rem;
+
+  /* ── Radii ──────────────────────────────────────────────── */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+
+  /* ── Motion ─────────────────────────────────────────────── */
+  --motion-fast: 120ms ease-out;
+  --motion-default: 200ms ease-out;
+  --motion-slow: 320ms ease-out;
+  --motion-pulse: 2400ms ease-in-out infinite;
+
+  /* ── Layout ─────────────────────────────────────────────── */
+  --max-content: 1440px;
+  --sidebar-width: 320px;
+  --sidebar-gap: 80px;
+  --section-rhythm: 120px;
+  --container-padding: 48px;
+  --grid-unit: 48px;
+}

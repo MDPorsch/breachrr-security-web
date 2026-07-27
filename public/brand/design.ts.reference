@@ -1,0 +1,339 @@
+/**
+ * Breachrr Security — Design Tokens
+ *
+ * Single source of truth for the cybersecurity services brand's visual system.
+ * A companion to the Breachrr technology product's design.ts (dark canvas, red period).
+ * This one is the paper canvas, moss middle-dot.
+ *
+ * Naming:
+ *   palette.*  — raw values (what something looks like)
+ *   color.*    — semantic aliases (what something means)
+ *   type.*     — typography roles
+ *   space.*    — spacing scale (4px base)
+ *   radius.*   — border-radius scale
+ *   border.*   — pre-composed borders
+ *   motion.*   — animation timings
+ *
+ * v0.1
+ */
+
+// ─────────────────────────────────────────────────────────────────────
+// PALETTE — raw values
+// ─────────────────────────────────────────────────────────────────────
+
+export const palette = {
+  paper: "#f5f2ec", // warm off-white, the canonical canvas
+  ink:   "#1a1613", // warm near-black
+  moss:  "#2f7d5b", // signal moss, the single accent
+  mossPhosphor: "#6ecfa0", // brighter moss for AA contrast on ink
+
+  /** Warm neutral ramp — stone.50 → stone.900 */
+  stone: {
+    50:  "#faf7f1",
+    100: "#f0ebe1",
+    200: "#e2ddd4",
+    300: "#cfc6b8",
+    400: "#a89f92",
+    500: "#8a8078",
+    600: "#6b6360",
+    700: "#4a4340",
+    800: "#2e2724",
+    900: "#1a1613",
+  },
+
+  /** Severity — retuned for paper. Inherits meaning from the product but
+   *  shifts values so nothing screams against cream. */
+  severity: {
+    critical: "#b32c1e",
+    high:     "#c97a12",
+    medium:   "#b5941a",
+    low:      "#345f8a",
+    clean:    "#2f7d5b", // same as moss — clean IS the brand
+  },
+} as const;
+
+// ─────────────────────────────────────────────────────────────────────
+// COLOR — semantic aliases
+// ─────────────────────────────────────────────────────────────────────
+
+export const color = {
+  // Surfaces
+  bg:         palette.paper,
+  bgRaised:   "#ffffff",
+  bgInset:    palette.stone[50],
+  bgEmphasis: palette.stone[100],
+
+  // Borders
+  borderHairline: palette.stone[200],
+  borderDefault:  palette.stone[300],
+  borderStrong:   palette.stone[500],
+  borderFocus:    palette.moss,
+
+  // Text
+  textPrimary: palette.ink,
+  textBody:    palette.stone[700],
+  textMuted:   palette.stone[500],
+  textDim:     palette.stone[400],
+  textInverse: palette.paper,
+
+  // Brand accent
+  brandAccent:       palette.moss,
+  brandAccentBright: palette.mossPhosphor, // use on ink
+
+  // Severity — mirrors palette.severity for semantic use in code
+  severityCritical: palette.severity.critical,
+  severityHigh:     palette.severity.high,
+  severityMedium:   palette.severity.medium,
+  severityLow:      palette.severity.low,
+  severityClean:    palette.severity.clean,
+
+  // CTAs
+  ctaBg:      palette.ink,
+  ctaText:    palette.paper,
+  ctaBgHover: "#000000",
+
+  // Cross-brand reference — technology brand's red period
+  parentAccent: "#dc2626", // Breachrr technology brand's red
+} as const;
+
+// ─────────────────────────────────────────────────────────────────────
+// TYPOGRAPHY
+// ─────────────────────────────────────────────────────────────────────
+
+export const fontFamily = {
+  /** Georgia is deliberately a system font. No licensing, no loading,
+   *  renders identically everywhere. Fraunces or similar is NOT a
+   *  substitute — the whole brand is calibrated to Georgia's metrics. */
+  serif: 'Georgia, "Times New Roman", Times, serif',
+
+  /** Geist for UI, body, eyebrows. Loaded via Google Fonts. */
+  sans: 'Geist, system-ui, -apple-system, sans-serif',
+
+  /** Geist Mono for data, timestamps, section marks, metadata. */
+  mono: 'Geist Mono, ui-monospace, SFMono-Regular, monospace',
+} as const;
+
+/**
+ * Type scale. Use role-based tokens, not size.
+ */
+export const type = {
+  /** Hero display — one per page maximum. */
+  display: {
+    family: fontFamily.serif,
+    size:   "clamp(44px, 6.5vw, 84px)",
+    weight: 400,
+    line:   "0.98",
+    track:  "-0.03em",
+  },
+  /** Section headline. Georgia. */
+  headline: {
+    family: fontFamily.serif,
+    size:   "clamp(28px, 3.6vw, 40px)",
+    weight: 400,
+    line:   "1.1",
+    track:  "-0.02em",
+  },
+  /** Sub-headline. Georgia. */
+  subhead: {
+    family: fontFamily.serif,
+    size:   "1.375rem", // 22px
+    weight: 400,
+    line:   "1.25",
+    track:  "-0.015em",
+  },
+  /** Body copy. Geist sans. */
+  body: {
+    family: fontFamily.sans,
+    size:   "0.9375rem", // 15px
+    weight: 400,
+    line:   "1.6",
+    track:  "0",
+  },
+  /** Larger body for hero sub-copy. */
+  bodyLarge: {
+    family: fontFamily.sans,
+    size:   "1.125rem", // 18px
+    weight: 400,
+    line:   "1.55",
+    track:  "0",
+  },
+  /** Small body / caption. */
+  bodySmall: {
+    family: fontFamily.sans,
+    size:   "0.8125rem", // 13px
+    weight: 400,
+    line:   "1.5",
+    track:  "0",
+  },
+  /** Eyebrow — the section-label style. 11px 0.18em uppercase. */
+  eyebrow: {
+    family:    fontFamily.sans,
+    size:      "0.6875rem", // 11px
+    weight:    500,
+    line:      "1",
+    track:     "0.18em",
+    transform: "uppercase",
+  },
+  /** Mono — data, timestamps, IDs. */
+  mono: {
+    family: fontFamily.mono,
+    size:   "0.8125rem", // 13px
+    weight: 400,
+    line:   "1.7",
+    track:  "0",
+  },
+  /** Large data display — big mono numbers. */
+  data: {
+    family: fontFamily.mono,
+    size:   "2rem", // 32px
+    weight: 400,
+    line:   "1",
+    track:  "-0.02em",
+  },
+  /** Corporate mark — footer legal treatment. */
+  corporate: {
+    family:    fontFamily.mono,
+    size:      "0.6875rem", // 11px
+    weight:    400,
+    line:      "1",
+    track:     "0.05em",
+    transform: "lowercase" as const,
+  },
+} as const;
+
+// ─────────────────────────────────────────────────────────────────────
+// SPACING — 4px base grid
+// ─────────────────────────────────────────────────────────────────────
+
+export const space = {
+  px:  "1px",
+  0.5: "0.125rem",  // 2
+  1:   "0.25rem",   // 4
+  2:   "0.5rem",    // 8
+  3:   "0.75rem",   // 12
+  4:   "1rem",      // 16
+  5:   "1.25rem",   // 20
+  6:   "1.5rem",    // 24
+  8:   "2rem",      // 32
+  10:  "2.5rem",    // 40
+  12:  "3rem",      // 48
+  16:  "4rem",      // 64
+  20:  "5rem",      // 80
+  24:  "6rem",      // 96
+  30:  "7.5rem",    // 120 — standard section rhythm
+} as const;
+
+// ─────────────────────────────────────────────────────────────────────
+// RADII
+// ─────────────────────────────────────────────────────────────────────
+
+export const radius = {
+  none:  "0",
+  sm:    "0.25rem",  // 4
+  md:    "0.375rem", // 6 — inputs, buttons
+  lg:    "0.5rem",   // 8
+  xl:    "0.75rem",  // 12 — cards
+  "2xl": "1rem",     // 16
+  full:  "9999px",
+} as const;
+
+// ─────────────────────────────────────────────────────────────────────
+// BORDERS — pre-composed
+// ─────────────────────────────────────────────────────────────────────
+
+export const border = {
+  hairline: `1px solid ${color.borderHairline}`,
+  default:  `1px solid ${color.borderDefault}`,
+  strong:   `1px solid ${color.borderStrong}`,
+} as const;
+
+// ─────────────────────────────────────────────────────────────────────
+// MOTION — restrained. One live indicator, everything else static.
+// ─────────────────────────────────────────────────────────────────────
+
+export const motion = {
+  fast:    "120ms ease-out",
+  default: "200ms ease-out",
+  slow:    "320ms ease-out",
+  /** Live-indicator pulse — the only "always on" motion in the system. */
+  pulse:   "2400ms ease-in-out infinite",
+  /** Marginal moss bar on method row hover. */
+  marginBar: "320ms cubic-bezier(0.2, 0.9, 0.3, 1)",
+} as const;
+
+// ─────────────────────────────────────────────────────────────────────
+// HAIRLINE GRID — the background pattern on marketing surfaces
+// ─────────────────────────────────────────────────────────────────────
+
+export const hairlineGrid = {
+  cssBackgroundImage:
+    `linear-gradient(${palette.ink} 1px, transparent 1px), ` +
+    `linear-gradient(90deg, ${palette.ink} 1px, transparent 1px)`,
+  cssBackgroundSize: "48px 48px",
+  cssOpacity:        0.04,
+} as const;
+
+// ─────────────────────────────────────────────────────────────────────
+// LAYOUT
+// ─────────────────────────────────────────────────────────────────────
+
+export const layout = {
+  maxContentWidth:   "1440px",
+  sidebarWidth:      "320px",
+  sidebarGap:        "80px",
+  sectionRhythm:     "120px",   // vertical padding between major sections
+  containerPadding:  "48px",
+  gridUnit:          48,        // hairline grid step in px
+} as const;
+
+// ─────────────────────────────────────────────────────────────────────
+// WORDMARK — construction reference
+// ─────────────────────────────────────────────────────────────────────
+
+export const wordmark = {
+  fontFamily:    fontFamily.serif,
+  fontSize:      "84px", // hero canonical size
+  fontWeight:    400,
+  letterSpacing: "-0.025em",
+  wordSpace:     "0.28em",
+  colours: {
+    breachrrOnPaper: palette.ink,
+    securityOnPaper: palette.moss,
+    dotOnPaper:      palette.moss,
+    breachrrOnInk:   palette.paper,
+    securityOnInk:   palette.mossPhosphor,
+    dotOnInk:        palette.mossPhosphor,
+    onMoss:          palette.paper,
+  },
+  security: {
+    fontStyle: "italic",
+  },
+  dot: {
+    character: "·", // U+00B7
+    size:      "1em",
+    /** Positioned at slightly-below half x-height. In CSS:
+     *  transform: translateY(0.01em). At 84px: translateY(0.84px). */
+    translateY: "0.01em",
+    marginLeft: "0.04em",
+  },
+} as const;
+
+// ─────────────────────────────────────────────────────────────────────
+// EXPORT — the whole system in one bag
+// ─────────────────────────────────────────────────────────────────────
+
+export const tokens = {
+  palette,
+  color,
+  fontFamily,
+  type,
+  space,
+  radius,
+  border,
+  motion,
+  hairlineGrid,
+  layout,
+  wordmark,
+} as const;
+
+export default tokens;

@@ -1,0 +1,45 @@
+.h {
+  font-family: var(--font-serif);
+  font-size: clamp(44px, 6vw, 72px);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  font-weight: 400;
+  margin: 24px 0 32px;
+  max-width: 900px;
+}
+.h em {
+  font-style: italic;
+  color: var(--moss);
+}
+
+.p {
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--text-body);
+  max-width: 640px;
+  margin-bottom: 16px;
+}
+
+.link {
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-default);
+  transition: border-color var(--motion-fast);
+}
+.link:hover {
+  border-color: var(--moss);
+}
+
+.phase {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-hairline);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.phase span {
+  color: var(--moss);
+  padding-right: 6px;
+}

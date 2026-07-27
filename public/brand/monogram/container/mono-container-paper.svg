@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="Breachrr Security app icon">
+  <title>Breachrr Security — Container monogram · paper</title>
+  <desc>Lowercase italic Georgia s + moss middle-dot inside rounded paper container with hairline border. For light-mode app icons and avatars.</desc>
+  <rect width="120" height="120" rx="24" ry="24" fill="#f5f2ec" stroke="#cfc6b8" stroke-width="1"/>
+  <text x="30" y="86" font-family="Georgia, 'Times New Roman', serif" font-size="72" font-style="italic" fill="#1a1613">s<tspan fill="#2f7d5b" dx="1.5" dy="-16">·</tspan></text>
+</svg>

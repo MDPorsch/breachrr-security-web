@@ -1,0 +1,249 @@
+.main {
+  min-height: 100vh;
+  background: var(--paper);
+}
+
+/* ── Page head ───────────────────────────────────────────── */
+.pageHead {
+  padding: 40px 48px 32px;
+  border-bottom: 1px solid var(--border-hairline);
+}
+.pageHeadInner {
+  max-width: var(--max-content);
+  margin: 0 auto;
+}
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+.h1 {
+  font-family: var(--font-serif);
+  font-size: 36px;
+  line-height: 1.1;
+  margin-bottom: 12px;
+}
+.h1 em {
+  font-style: italic;
+  color: var(--moss);
+}
+.sub {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-body);
+  max-width: 720px;
+}
+
+/* ── Sections ────────────────────────────────────────────── */
+.section {
+  padding: 96px 48px;
+  border-bottom: 1px solid var(--border-hairline);
+}
+.sectionInner {
+  max-width: var(--max-content);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 80px;
+}
+.sectionAside {
+  padding-top: 8px;
+}
+.sectionNum {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+.sectionH {
+  font-family: var(--font-serif);
+  font-size: 32px;
+  line-height: 1.1;
+  margin-bottom: 20px;
+}
+.sectionH em {
+  font-style: italic;
+  color: var(--moss);
+}
+.sectionNote {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-body);
+}
+
+.subHead {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 32px 0 16px;
+}
+.subHead:first-child {
+  margin-top: 0;
+}
+
+/* ── Surface panels ──────────────────────────────────────── */
+.surfaceRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.surfacePanel {
+  border: 1px solid var(--border-hairline);
+  padding: 48px 32px;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.surface-paper { background: var(--paper); }
+.surface-ink { background: var(--ink); border-color: var(--ink); }
+.surface-moss { background: var(--moss); border-color: var(--moss); }
+
+.surfaceLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  align-self: flex-start;
+  position: absolute;
+  top: 12px;
+  left: 12px;
+}
+.surface-ink .surfaceLabel { color: var(--stone-500); }
+.surface-moss .surfaceLabel { color: rgba(245, 242, 236, 0.65); }
+
+.surfaceContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  width: 100%;
+}
+
+/* ── Sizes row (for wordmark size demonstration) ─────────── */
+.sizesRow {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.sizeCell {
+  padding: 32px 40px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-hairline);
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  justify-content: space-between;
+}
+.sizeLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
+/* ── Actual sizes row ────────────────────────────────────── */
+.actualSizes {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  padding: 32px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-hairline);
+  flex-wrap: wrap;
+}
+.actualCell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ── Corporate mark grid ─────────────────────────────────── */
+.markGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+}
+.markCell {
+  padding: 40px 32px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-hairline);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+/* ── Indicator grid ──────────────────────────────────────── */
+.indicatorGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+/* ── Footer ──────────────────────────────────────────────── */
+.footer {
+  padding: 40px 48px;
+  border-top: 1px solid var(--border-hairline);
+}
+.footerInner {
+  max-width: var(--max-content);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.footerVersion {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .sectionInner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .surfaceRow,
+  .markGrid,
+  .indicatorGrid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 720px) {
+  .pageHead,
+  .section,
+  .footer {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  .footerInner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .sizeCell {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}

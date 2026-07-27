@@ -1,0 +1,29 @@
+.divider {
+  max-width: var(--max-content);
+  margin: 0 auto;
+  padding: 0 48px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.rule {
+  flex: 1;
+  height: 1px;
+  background: var(--border-hairline);
+}
+
+.dot {
+  font-family: var(--font-serif);
+  color: var(--moss);
+  font-size: 28px;
+  line-height: 0;
+  padding-bottom: 8px;
+  transform: translateY(0.01em);
+}
+
+@media (max-width: 720px) {
+  .divider {
+    padding: 0 24px;
+  }
+}

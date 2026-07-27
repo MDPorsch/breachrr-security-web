@@ -1,0 +1,66 @@
+.wordmark {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: baseline;
+}
+
+.roman {
+  font-style: normal;
+}
+
+.italic {
+  font-style: italic;
+}
+
+/* Word-space between "Breachrr" and "Security" */
+.space {
+  display: inline-block;
+  width: 0.28em;
+}
+
+/* Middle-dot at slightly-below half x-height */
+.dot {
+  display: inline-block;
+  margin-left: 0.04em;
+  transform: translateY(0.01em);
+  line-height: 1;
+}
+
+/* ── Variants ────────────────────────────────────────────────
+   "paper" = on light surfaces (default): ink + moss
+   "ink"   = on dark surfaces: paper + phosphor-moss
+   "moss"  = on moss surface: all paper
+   "monochrome" = single colour (currentColor), for one-colour print */
+
+.variant-paper .roman { color: var(--ink); }
+.variant-paper .italic, .variant-paper .dot { color: var(--moss); }
+
+.variant-ink .roman { color: var(--paper); }
+.variant-ink .italic, .variant-ink .dot { color: var(--moss-phosphor); }
+
+.variant-moss .roman,
+.variant-moss .italic,
+.variant-moss .dot { color: var(--paper); }
+
+.variant-monochrome .roman,
+.variant-monochrome .italic,
+.variant-monochrome .dot { color: currentColor; }
+
+/* ── Sizes ─────────────────────────────────────────────────── */
+
+.size-nav { font-size: 18px; }
+.size-footer { font-size: 18px; }
+.size-hero { font-size: clamp(44px, 7.5vw, 84px); }
+.size-display { font-size: clamp(64px, 10vw, 120px); }
+
+/* Link state — subtle underline on the moss "Security" when interactive */
+a.wordmark {
+  transition: opacity var(--motion-fast);
+}
+a.wordmark:hover {
+  opacity: 0.85;
+}

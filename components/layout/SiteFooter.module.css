@@ -1,0 +1,119 @@
+.footer {
+  border-top: 1px solid var(--border-hairline);
+  background: var(--paper);
+  margin-top: 120px;
+}
+
+.inner {
+  max-width: var(--max-content);
+  margin: 0 auto;
+  padding: 64px 48px 40px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 48px;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 380px;
+}
+.tagline {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--text-body);
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.navLabel,
+.metaLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.navList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+}
+.navLink {
+  font-size: 13px;
+  color: var(--text-body);
+  padding: 2px 0;
+  transition: color var(--motion-fast);
+}
+.navLink:hover {
+  color: var(--text-primary);
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.metaBlock {
+  display: flex;
+  flex-direction: column;
+}
+.contactLink {
+  font-size: 13px;
+  color: var(--text-primary);
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--border-default);
+  align-self: flex-start;
+  transition: border-color var(--motion-fast);
+}
+.contactLink:hover {
+  border-bottom-color: var(--moss);
+}
+.metaNote {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
+.baseline {
+  border-top: 1px solid var(--border-hairline);
+  padding: 20px 48px;
+}
+.baselineInner {
+  max-width: var(--max-content);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.baselineNote {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+@media (max-width: 900px) {
+  .inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding: 48px 24px 32px;
+  }
+  .baseline {
+    padding: 20px 24px;
+  }
+  .baselineInner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}

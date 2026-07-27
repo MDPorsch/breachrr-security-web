@@ -1,0 +1,126 @@
+.section {
+  padding: 120px 48px;
+  border-bottom: 1px solid var(--border-hairline);
+}
+
+.inner {
+  max-width: var(--max-content);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 80px;
+}
+
+.aside { padding-top: 8px; }
+
+.h {
+  font-family: var(--font-serif);
+  font-size: clamp(32px, 3.6vw, 44px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 20px 0 20px;
+}
+.h em {
+  font-style: italic;
+  color: var(--moss);
+}
+
+.p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-body);
+}
+.pMuted {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 15px;
+  color: var(--text-muted);
+  margin-top: 16px;
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.tile {
+  display: block;
+  padding: 32px 32px 28px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-hairline);
+  border-left: 3px solid transparent;
+  transition:
+    border-left-color var(--motion-slow),
+    background var(--motion-fast),
+    transform var(--motion-fast);
+}
+.tile:hover {
+  border-left-color: var(--moss);
+  background: var(--stone-50);
+}
+
+.tileTop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.tileH {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin: 0;
+}
+.tileArrow {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  color: var(--text-dim);
+  transition: transform var(--motion-default), color var(--motion-fast);
+}
+.tile:hover .tileArrow {
+  color: var(--moss);
+  transform: translateX(3px);
+}
+
+.tileTagline {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  color: var(--text-primary);
+  margin: 10px 0 16px;
+}
+.tileTagline em {
+  font-style: italic;
+  color: var(--moss);
+}
+
+.tileSummary {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-body);
+  margin-bottom: 20px;
+}
+
+.tileMeta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding-top: 16px;
+  border-top: 1px solid var(--border-hairline);
+}
+
+@media (max-width: 1100px) {
+  .inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+@media (max-width: 720px) {
+  .section {
+    padding: 72px 24px;
+  }
+}

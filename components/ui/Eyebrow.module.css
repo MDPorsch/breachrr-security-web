@@ -1,0 +1,21 @@
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.prefix {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  color: var(--text-dim);
+}
+
+.tone-muted { color: var(--text-muted); }
+.tone-moss { color: var(--moss); }
+.tone-ink { color: var(--text-primary); }

@@ -1,0 +1,50 @@
+.wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+  animation: live-pulse 2400ms ease-in-out infinite;
+}
+
+.label {
+  line-height: 1;
+}
+
+.variant-moss .dot {
+  background: var(--moss);
+  box-shadow: 0 0 0 4px rgba(47, 125, 91, 0.15);
+}
+.variant-moss {
+  color: var(--moss);
+}
+
+.variant-phosphor .dot {
+  background: var(--moss-phosphor);
+  box-shadow: 0 0 0 4px rgba(110, 207, 160, 0.2);
+}
+.variant-phosphor {
+  color: var(--moss-phosphor);
+}
+
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* Respect reduced-motion preference — dot goes static, opacity stays 1 */
+@media (prefers-reduced-motion: reduce) {
+  .dot {
+    animation: none;
+    opacity: 1;
+  }
+}

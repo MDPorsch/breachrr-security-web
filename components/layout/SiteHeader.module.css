@@ -1,0 +1,113 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(245, 242, 236, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-hairline);
+}
+
+.inner {
+  max-width: var(--max-content);
+  margin: 0 auto;
+  padding: 16px 48px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.wordmarkLink {
+  display: inline-block;
+  flex-shrink: 0;
+  transition: opacity var(--motion-fast);
+}
+.wordmarkLink:hover {
+  opacity: 0.85;
+}
+
+.nav {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+.navList {
+  list-style: none;
+  display: flex;
+  gap: 32px;
+  margin: 0;
+  padding: 0;
+}
+.navLink {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--text-body);
+  padding: 4px 0;
+  border-bottom: 1px solid transparent;
+  transition: color var(--motion-fast), border-color var(--motion-fast);
+}
+.navLink:hover {
+  color: var(--text-primary);
+}
+.navLinkActive {
+  color: var(--text-primary);
+  border-bottom-color: var(--moss);
+}
+
+.status {
+  flex-shrink: 0;
+}
+
+.menuToggle {
+  display: none;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-body);
+  padding: 8px 12px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  transition: color var(--motion-fast), border-color var(--motion-fast);
+}
+.menuToggle:hover {
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+
+@media (max-width: 900px) {
+  .inner {
+    padding: 14px 24px;
+    gap: 16px;
+  }
+  .status {
+    display: none;
+  }
+  .menuToggle {
+    display: inline-block;
+    order: 3;
+    margin-left: auto;
+  }
+  .nav {
+    display: none;
+    order: 4;
+    width: 100%;
+    flex-basis: 100%;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-hairline);
+    margin-top: 12px;
+  }
+  .navOpen {
+    display: flex;
+  }
+  .navList {
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+  }
+  .navLink {
+    display: block;
+    padding: 8px 0;
+    font-size: 15px;
+  }
+}

@@ -1,0 +1,8 @@
+.mark {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  line-height: 1;
+  display: inline-block;
+}
