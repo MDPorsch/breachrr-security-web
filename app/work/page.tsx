@@ -1,6 +1,6 @@
 import { Eyebrow, Cta } from "@/components/ui";
 import { EngagementCard } from "@/components/sections";
-import { engagements, cta } from "@/content/site";
+import { engagements, cta, site } from "@/content/site";
 import styles from "./page.module.css";
 
 export const metadata = {
@@ -95,8 +95,8 @@ export default function WorkPage() {
             More engagements will appear here as they close and clients
             approve the write-ups. For a current picture of what
             we&apos;re working on, email{" "}
-            <a href="mailto:mo@breachrrsecurity.com" className={styles.link}>
-              mo@breachrrsecurity.com
+            <a href={`mailto:${site.contact.email}`} className={styles.link}>
+              {site.contact.email}
             </a>
             .
           </p>

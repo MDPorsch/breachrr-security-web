@@ -15,7 +15,7 @@ export const site = {
   location: "London / Lagos",
   bookingStatus: "Open for engagements",
   contact: {
-    email: "mo@breachrrsecurity.com",
+    email: "info@breachrrsecurity.com",
   },
   responseWindow: "48 hours",
   slogan: "Find the gaps. Fix the risks. Stay secure.",
@@ -326,7 +326,7 @@ export const cta = {
   body:
     "An intro conversation to talk through your situation. We'll ask about your stage, your compliance target, and what forced the conversation. Then we tell you honestly whether we're the right fit.",
   buttonLabel: "Start the conversation",
-  buttonHref: `mailto:${"mo@breachrrsecurity.com"}?subject=Intro%20conversation`,
+  buttonHref: `mailto:info@breachrrsecurity.com?subject=Intro%20conversation`,
 } as const;
 
 /**

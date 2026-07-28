@@ -6,7 +6,7 @@ taking the time to help.
 
 ## Reporting a vulnerability
 
-Please email **mo@breachrrsecurity.com** with the details. Include:
+Please email **info@breachrrsecurity.com** with the details. Include:
 
 - A description of the vulnerability
 - Steps to reproduce (or a proof of concept)
