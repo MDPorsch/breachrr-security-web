@@ -5,7 +5,15 @@ import styles from "./page.module.css";
 
 export const metadata = {
   title: "Contact",
-  description: "How to reach Breachrr Security. Email replies within 48 hours.",
+  description:
+    "Start the conversation with Breachrr Security. Email replies within 48 hours. An intro conversation to talk through your situation, then an honest fit assessment.",
+  alternates: { canonical: "/contact" },
+  openGraph: {
+    url: "/contact",
+    title: "Contact · Breachrr Security",
+    description:
+      "Start the conversation. Replies within 48 hours.",
+  },
 };
 
 /**

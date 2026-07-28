@@ -1,0 +1,9 @@
+# Breachrr Security — Security Policy
+# https://datatracker.ietf.org/doc/html/rfc9116
+
+Contact: mailto:mo@breachrrsecurity.com
+# TODO: add security@breachrrsecurity.com once the alias is provisioned
+Expires: 2027-07-27T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://breachrrsecurity.com/.well-known/security.txt
+Policy: https://breachrrsecurity.com/trust

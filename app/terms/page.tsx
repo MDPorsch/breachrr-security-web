@@ -6,6 +6,12 @@ export const metadata = {
   title: "Terms of Service",
   description:
     "The terms under which Breachrr Security engagements are carried out.",
+  alternates: { canonical: "/terms" },
+  robots: { index: false, follow: true },
+  openGraph: {
+    url: "/terms",
+    title: "Terms of Service · Breachrr Security",
+  },
 };
 
 export default function TermsPage() {

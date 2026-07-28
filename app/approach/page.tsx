@@ -6,7 +6,14 @@ import styles from "./page.module.css";
 export const metadata = {
   title: "Approach",
   description:
-    "How Breachrr Security works — three capabilities, scoped per engagement. Assess, Build, Advise.",
+    "How Breachrr Security works. Three engagement types — Assess, Build, Advise — scoped to what the work needs. Fixed-fee, quoted after a call. See what a security assessment, program build-out, or advisory retainer actually covers.",
+  alternates: { canonical: "/approach" },
+  openGraph: {
+    url: "/approach",
+    title: "Approach · Breachrr Security",
+    description:
+      "Three engagement types — Assess, Build, Advise. Fixed-fee, quoted after a call.",
+  },
 };
 
 /**

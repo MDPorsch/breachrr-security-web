@@ -6,7 +6,14 @@ import styles from "./page.module.css";
 export const metadata = {
   title: "Work",
   description:
-    "Selected engagements from Breachrr Security. As engagements close, they show up here.",
+    "Selected engagements from Breachrr Security. Comprehensive security assessments, program build-outs, and ongoing advisory work with growing SaaS companies. Case studies added as engagements close.",
+  alternates: { canonical: "/work" },
+  openGraph: {
+    url: "/work",
+    title: "Work · Breachrr Security",
+    description:
+      "Selected engagements. As they close, they show up here.",
+  },
 };
 
 /**

@@ -6,6 +6,12 @@ import {
 } from "@/components/brand";
 import styles from "./page.module.css";
 
+export const metadata = {
+  title: "Dev — Brand primitives",
+  description: "Internal brand-primitives verification page.",
+  robots: { index: false, follow: false, nocache: true },
+};
+
 /**
  * /dev — Brand primitives verification page.
  *

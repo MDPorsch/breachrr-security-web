@@ -6,7 +6,14 @@ import styles from "./page.module.css";
 export const metadata = {
   title: "Services",
   description:
-    "Six service areas across the security stack — from assessments to incident response. Every engagement scoped to what the work needs.",
+    "Six service areas across the security stack — security assessments, application & API security, cloud & infrastructure security, security advisory, security readiness (SOC 2, ISO 27001), and incident response. Every engagement scoped to what the work needs.",
+  alternates: { canonical: "/services" },
+  openGraph: {
+    url: "/services",
+    title: "Services · Breachrr Security",
+    description:
+      "Six service areas across the security stack. Every engagement scoped to what the work needs.",
+  },
 };
 
 /**

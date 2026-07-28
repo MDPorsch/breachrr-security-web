@@ -1,0 +1,1518 @@
+From 042b30b2e91795e8b3e56a8c8143c1e3e63e343d Mon Sep 17 00:00:00 2001
+From: Claude <claude@anthropic.local>
+Date: Tue, 28 Jul 2026 02:13:16 +0000
+Subject: [PATCH] phase 6: security hardening + comprehensive SEO
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+SECURITY HARDENING
+
+next.config.mjs — security headers on every route:
+- Content-Security-Policy with self-only sources for a static site.
+  script/style-src include 'unsafe-inline' (Next.js runtime + CSS Modules).
+  frame-ancestors 'none', object-src 'none', upgrade-insecure-requests.
+- Strict-Transport-Security: 2y with includeSubDomains + preload
+- X-Frame-Options: DENY (backstops CSP frame-ancestors)
+- X-Content-Type-Options: nosniff
+- Referrer-Policy: strict-origin-when-cross-origin
+- Permissions-Policy: deny camera, mic, geolocation, payment, USB,
+  MIDI, magnetometer, gyroscope, accelerometer, interest-cohort
+- Cross-Origin-Opener-Policy: same-origin
+- Cross-Origin-Resource-Policy: same-origin
+- X-Powered-By header removed
+- Long cache-control on _next/static hashed assets
+
+public/robots.txt — allow /, disallow /dev/, points to sitemap
+public/.well-known/security.txt — RFC 9116; contact, expires, canonical,
+  policy pointer to /trust
+SECURITY.md — vulnerability disclosure policy; safe-harbour language;
+  documents recommended repo settings (branch protection, 2FA, signed
+  commits, secret scanning, CodeQL)
+.github/dependabot.yml — weekly npm + actions updates, minor/patch grouped
+.github/workflows/ci.yml — TypeScript check, build, npm audit at
+  high-severity threshold on every PR + push to main
+public/site.webmanifest — corrected icon paths, added description/scope
+
+SEO
+
+Root layout (app/layout.tsx):
+- metadataBase set to production URL
+- Title template: '%s · Breachrr Security'
+- Comprehensive keywords, publisher, category, format-detection blocks
+- Explicit canonical, Open Graph, Twitter Card
+- Robots: index+follow with googleBot: max-image-preview 'large'
+- Icons: favicon variants + apple-touch-icon
+- Web manifest link
+- Viewport export with theme-color for light/dark
+- Organization + ProfessionalService JSON-LD (Schema.org)
+- WebSite JSON-LD
+
+Homepage:
+- Explicit metadata with alternates.canonical
+- FAQPage JSON-LD from the 4 homepage questions — eligible for
+  Google rich-result 'People also ask' surfaces
+- ItemList JSON-LD enumerating the 6 service areas
+
+Service detail pages (dynamic /services/[slug]):
+- Dynamic metadata per service — title, description built from
+  tagline+summary, canonical, OpenGraph, Twitter
+- Service JSON-LD per page with hasOfferCatalog listing every
+  specific service under that category
+- BreadcrumbList JSON-LD (Home → Services → [Category])
+
+Approach, Services overview, Work, Contact, Trust:
+- Enhanced metadata with alternates.canonical, OG, Twitter
+
+Terms + Privacy pages:
+- robots: index=false (legal boilerplate shouldn't compete in SEO)
+- Canonical URL still set
+
+Dev page:
+- robots: index=false, follow=false, nocache=true (internal only)
+
+app/sitemap.ts — Next.js sitemap primitive; enumerates all 8 static
+  routes + 6 dynamic service routes with priority + changeFrequency.
+  Available at /sitemap.xml.
+
+app/not-found.tsx + not-found.module.css — proper 404 inside site chrome
+  with four recovery links (Home / Approach / Services / Contact).
+  Returns HTTP 404. Matches brand visual language.
+
+app/opengraph-image.tsx — dynamic 1200x630 OG image generated at edge.
+  Paper canvas + hairline grid + wordmark with moss middle-dot + slogan
+  + booking indicator. Referenced from Twitter + OpenGraph metadata.
+---
+ .github/dependabot.yml          |  31 +++++
+ .github/workflows/ci.yml        |  40 ++++++
+ SECURITY.md                     |  60 +++++++++
+ app/approach/page.tsx           |   9 +-
+ app/contact/page.tsx            |  10 +-
+ app/dev/page.tsx                |   6 +
+ app/layout.tsx                  | 226 ++++++++++++++++++++++++++++++--
+ app/not-found.module.css        |  96 ++++++++++++++
+ app/not-found.tsx               |  69 ++++++++++
+ app/opengraph-image.tsx         | 153 +++++++++++++++++++++
+ app/page.tsx                    |  67 +++++++++-
+ app/privacy/page.tsx            |   6 +
+ app/services/[slug]/page.tsx    |  83 +++++++++++-
+ app/services/page.tsx           |   9 +-
+ app/sitemap.ts                  |  79 +++++++++++
+ app/terms/page.tsx              |   6 +
+ app/trust/page.tsx              |   9 +-
+ app/work/page.tsx               |   9 +-
+ next.config.mjs                 | 126 ++++++++++++++++++
+ public/.well-known/security.txt |   9 ++
+ public/robots.txt               |   9 ++
+ public/site.webmanifest         |  16 ++-
+ 22 files changed, 1105 insertions(+), 23 deletions(-)
+ create mode 100644 .github/dependabot.yml
+ create mode 100644 .github/workflows/ci.yml
+ create mode 100644 SECURITY.md
+ create mode 100644 app/not-found.module.css
+ create mode 100644 app/not-found.tsx
+ create mode 100644 app/opengraph-image.tsx
+ create mode 100644 app/sitemap.ts
+ create mode 100644 public/.well-known/security.txt
+ create mode 100644 public/robots.txt
+
+diff --git a/.github/dependabot.yml b/.github/dependabot.yml
+new file mode 100644
+index 0000000..111365f
+--- /dev/null
++++ b/.github/dependabot.yml
+@@ -0,0 +1,31 @@
++version: 2
++
++updates:
++  # Keep npm dependencies patched.
++  - package-ecosystem: "npm"
++    directory: "/"
++    schedule:
++      interval: "weekly"
++      day: "monday"
++    open-pull-requests-limit: 10
++    labels:
++      - "dependencies"
++    commit-message:
++      prefix: "deps"
++      include: "scope"
++    # Group all minor / patch updates together to reduce PR noise.
++    groups:
++      minor-and-patch:
++        update-types:
++          - "minor"
++          - "patch"
++
++  # Keep GitHub Actions patched.
++  - package-ecosystem: "github-actions"
++    directory: "/"
++    schedule:
++      interval: "weekly"
++    labels:
++      - "ci"
++    commit-message:
++      prefix: "ci"
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+new file mode 100644
+index 0000000..0165146
+--- /dev/null
++++ b/.github/workflows/ci.yml
+@@ -0,0 +1,40 @@
++name: CI
++
++on:
++  pull_request:
++    branches: [main]
++  push:
++    branches: [main]
++
++# Restrict permissions to the minimum needed.
++permissions:
++  contents: read
++
++jobs:
++  quality:
++    name: Quality checks
++    runs-on: ubuntu-latest
++    timeout-minutes: 10
++
++    steps:
++      - name: Checkout
++        uses: actions/checkout@v4
++
++      - name: Set up Node
++        uses: actions/setup-node@v4
++        with:
++          node-version: "20"
++          cache: "npm"
++
++      - name: Install dependencies
++        run: npm ci
++
++      - name: TypeScript check
++        run: npx tsc --noEmit
++
++      - name: Build
++        run: npx next build
++
++      - name: Audit dependencies
++        # Fail the build on any high-severity vulnerability.
++        run: npm audit --audit-level=high
+diff --git a/SECURITY.md b/SECURITY.md
+new file mode 100644
+index 0000000..0c6fbe5
+--- /dev/null
++++ b/SECURITY.md
+@@ -0,0 +1,60 @@
++# Security Policy
++
++We take the security of this repository and the site it produces seriously. If you
++believe you've found a vulnerability, we want to hear from you — thank you for
++taking the time to help.
++
++## Reporting a vulnerability
++
++Please email **mo@breachrrsecurity.com** with the details. Include:
++
++- A description of the vulnerability
++- Steps to reproduce (or a proof of concept)
++- The version / commit hash affected
++- Your name and contact if you'd like credit
++
++Please do **not** open a public GitHub issue for security vulnerabilities.
++
++## What to expect
++
++- **Acknowledgement** within 48 hours
++- **Initial assessment** within 7 days
++- **Resolution timeline** communicated after assessment
++
++We commit to keeping you informed as we work through the report.
++
++## Scope
++
++This policy covers:
++
++- This repository (`breachrr-security-web`)
++- The production site at `https://breachrrsecurity.com`
++
++Out of scope:
++
++- Third-party services we depend on (report to them directly)
++- Social engineering
++- Physical attacks
++- Denial of service via volumetric attacks
++
++## Safe harbour
++
++We consider security research conducted under this policy to be authorised.
++We will not pursue legal action against researchers acting in good faith and
++following the guidance here.
++
++## Recommended repository configuration
++
++The following GitHub settings are recommended for anyone maintaining this repo:
++
++- **Branch protection on `main`:** require PR review before merge, require
++  status checks (CI) to pass, disallow force pushes, disallow deletion
++- **Two-factor authentication:** required for all contributors
++- **Signed commits:** encouraged
++- **Dependabot alerts:** enabled (auto-configured via `.github/dependabot.yml`)
++- **Secret scanning:** enabled
++- **Code scanning (CodeQL):** enabled
++
++## Machine-readable version
++
++See `/.well-known/security.txt` on the production site for the RFC 9116 version.
+diff --git a/app/approach/page.tsx b/app/approach/page.tsx
+index 54d6bb9..24a7810 100644
+--- a/app/approach/page.tsx
++++ b/app/approach/page.tsx
+@@ -6,7 +6,14 @@ import styles from "./page.module.css";
+ export const metadata = {
+   title: "Approach",
+   description:
+-    "How Breachrr Security works — three capabilities, scoped per engagement. Assess, Build, Advise.",
++    "How Breachrr Security works. Three engagement types — Assess, Build, Advise — scoped to what the work needs. Fixed-fee, quoted after a call. See what a security assessment, program build-out, or advisory retainer actually covers.",
++  alternates: { canonical: "/approach" },
++  openGraph: {
++    url: "/approach",
++    title: "Approach · Breachrr Security",
++    description:
++      "Three engagement types — Assess, Build, Advise. Fixed-fee, quoted after a call.",
++  },
+ };
+ 
+ /**
+diff --git a/app/contact/page.tsx b/app/contact/page.tsx
+index f62adb3..a41f05b 100644
+--- a/app/contact/page.tsx
++++ b/app/contact/page.tsx
+@@ -5,7 +5,15 @@ import styles from "./page.module.css";
+ 
+ export const metadata = {
+   title: "Contact",
+-  description: "How to reach Breachrr Security. Email replies within 48 hours.",
++  description:
++    "Start the conversation with Breachrr Security. Email replies within 48 hours. An intro conversation to talk through your situation, then an honest fit assessment.",
++  alternates: { canonical: "/contact" },
++  openGraph: {
++    url: "/contact",
++    title: "Contact · Breachrr Security",
++    description:
++      "Start the conversation. Replies within 48 hours.",
++  },
+ };
+ 
+ /**
+diff --git a/app/dev/page.tsx b/app/dev/page.tsx
+index 1f8f71b..4a65b66 100644
+--- a/app/dev/page.tsx
++++ b/app/dev/page.tsx
+@@ -6,6 +6,12 @@ import {
+ } from "@/components/brand";
+ import styles from "./page.module.css";
+ 
++export const metadata = {
++  title: "Dev — Brand primitives",
++  description: "Internal brand-primitives verification page.",
++  robots: { index: false, follow: false, nocache: true },
++};
++
+ /**
+  * /dev — Brand primitives verification page.
+  *
+diff --git a/app/layout.tsx b/app/layout.tsx
+index 2cdd922..9d96273 100644
+--- a/app/layout.tsx
++++ b/app/layout.tsx
+@@ -1,30 +1,213 @@
+-import type { Metadata } from "next";
++import type { Metadata, Viewport } from "next";
+ import { GeistSans } from "geist/font/sans";
+ import { GeistMono } from "geist/font/mono";
++import Script from "next/script";
+ import { SiteHeader, SiteFooter } from "@/components/layout";
++import { site } from "@/content/site";
+ import "./globals.css";
+ 
++const SITE_URL = "https://breachrrsecurity.com";
++
+ export const metadata: Metadata = {
+-  metadataBase: new URL("https://breachrrsecurity.com"),
++  metadataBase: new URL(SITE_URL),
++
+   title: {
+-    default: "Breachrr Security — Security programs, built for the stage you're at.",
++    default:
++      "Breachrr Security — Cybersecurity services for startups and growing businesses",
+     template: "%s · Breachrr Security",
+   },
++
+   description:
+-    "Breachrr Security helps startups and growing businesses identify and reduce cybersecurity risks, and build a security program that fits how they actually work.",
++    "Breachrr Security helps startups and growing businesses identify and reduce cybersecurity risks, and build a security program that fits how they actually work. Security assessments, program build-outs, and ongoing advisory.",
++
++  applicationName: "Breachrr Security",
++  authors: [{ name: "Breachrr Security" }],
++  generator: "Next.js",
++  creator: "Breachrr Security",
++  publisher: "Breachrr Ltd",
++  category: "cybersecurity",
++
++  keywords: [
++    "cybersecurity consultancy",
++    "security assessment",
++    "SOC 2 readiness",
++    "ISO 27001",
++    "UK GDPR",
++    "application security",
++    "cloud security",
++    "security program",
++    "fractional CISO",
++    "incident response",
++    "startup security",
++    "SaaS security",
++    "grey-box assessment",
++    "security advisory",
++  ],
++
++  referrer: "strict-origin-when-cross-origin",
++
++  formatDetection: {
++    telephone: false,
++    email: false,
++    address: false,
++  },
++
++  alternates: {
++    canonical: "/",
++  },
++
+   openGraph: {
+     type: "website",
++    locale: "en_GB",
++    url: SITE_URL,
++    siteName: "Breachrr Security",
++    title:
++      "Breachrr Security — Cybersecurity services for startups and growing businesses",
++    description:
++      "Security assessments, program build-outs, and ongoing advisory. Open for engagements.",
++    images: [
++      {
++        url: "/opengraph-image",
++        width: 1200,
++        height: 630,
++        alt: "Breachrr Security — Find the gaps. Fix the risks. Stay secure.",
++      },
++    ],
++  },
++
++  twitter: {
++    card: "summary_large_image",
+     title: "Breachrr Security",
+     description:
+-      "Cybersecurity services for startups and growing businesses. Assessments, technical services, ongoing advisory.",
+-    siteName: "Breachrr Security",
+-    locale: "en_GB",
++      "Cybersecurity services for startups and growing businesses. Open for engagements.",
++    images: ["/opengraph-image"],
+   },
++
+   robots: {
+-    // Placeholder — during v0.1 dev we won't be indexed.
+-    index: false,
+-    follow: false,
++    index: true,
++    follow: true,
++    nocache: false,
++    googleBot: {
++      index: true,
++      follow: true,
++      noimageindex: false,
++      "max-video-preview": -1,
++      "max-image-preview": "large",
++      "max-snippet": -1,
++    },
++  },
++
++  icons: {
++    icon: [
++      { url: "/favicon.ico", sizes: "any" },
++      { url: "/favicon-16.png", type: "image/png", sizes: "16x16" },
++      { url: "/favicon-32.png", type: "image/png", sizes: "32x32" },
++      { url: "/favicon-48.png", type: "image/png", sizes: "48x48" },
++      { url: "/favicon-96.png", type: "image/png", sizes: "96x96" },
++    ],
++    apple: [
++      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
++    ],
++  },
++
++  manifest: "/site.webmanifest",
++
++  verification: {
++    // TODO: add real verification codes when Google Search Console + Bing Webmaster
++    // are set up. Left empty for now — safe default.
++  },
++
++  other: {
++    "msapplication-TileColor": "#1a1613",
++    "theme-color": "#1a1613",
++  },
++};
++
++export const viewport: Viewport = {
++  themeColor: [
++    { media: "(prefers-color-scheme: light)", color: "#f5f2ec" },
++    { media: "(prefers-color-scheme: dark)", color: "#1a1613" },
++  ],
++  colorScheme: "light",
++  width: "device-width",
++  initialScale: 1,
++};
++
++/**
++ * Organization JSON-LD (Schema.org)
++ *
++ * Signals to search engines what this site represents. The `ProfessionalService`
++ * schema on the homepage extends this with service-specific structure.
++ */
++const organizationSchema = {
++  "@context": "https://schema.org",
++  "@type": ["Organization", "ProfessionalService"],
++  "@id": `${SITE_URL}/#organization`,
++  name: "Breachrr Security",
++  legalName: "Breachrr Ltd",
++  url: SITE_URL,
++  logo: {
++    "@type": "ImageObject",
++    url: `${SITE_URL}/brand/wordmark/wordmark-ink.svg`,
++    width: 400,
++    height: 100,
++  },
++  image: `${SITE_URL}/opengraph-image`,
++  description: site.slogan,
++  slogan: site.slogan,
++  email: site.contact.email,
++  areaServed: [
++    { "@type": "Country", name: "United Kingdom" },
++    { "@type": "Country", name: "Nigeria" },
++  ],
++  serviceType: [
++    "Cybersecurity consulting",
++    "Security assessment",
++    "Security program development",
++    "SOC 2 readiness",
++    "ISO 27001 readiness",
++    "Application security",
++    "Cloud security",
++    "Incident response preparedness",
++  ],
++  knowsAbout: [
++    "Cybersecurity",
++    "Information security",
++    "SOC 2 Type II",
++    "ISO 27001",
++    "UK GDPR",
++    "Application security",
++    "Cloud security",
++    "Identity and access management",
++    "Incident response",
++    "Security architecture",
++  ],
++  founder: {
++    "@type": "Person",
++    name: "Mohammed Orunsolu",
+   },
++  sameAs: [
++    // TODO: add LinkedIn, X/Twitter, etc. once profiles are live.
++  ],
++  contactPoint: {
++    "@type": "ContactPoint",
++    contactType: "customer support",
++    email: site.contact.email,
++    availableLanguage: ["en"],
++  },
++};
++
++/**
++ * WebSite JSON-LD — enables site search markup for potential future site search.
++ */
++const websiteSchema = {
++  "@context": "https://schema.org",
++  "@type": "WebSite",
++  "@id": `${SITE_URL}/#website`,
++  url: SITE_URL,
++  name: "Breachrr Security",
++  publisher: { "@id": `${SITE_URL}/#organization` },
++  inLanguage: "en-GB",
+ };
+ 
+ export default function RootLayout({
+@@ -33,11 +216,32 @@ export default function RootLayout({
+   children: React.ReactNode;
+ }) {
+   return (
+-    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
++    <html
++      lang="en-GB"
++      className={`${GeistSans.variable} ${GeistMono.variable}`}
++    >
+       <body>
+         <SiteHeader />
+         <main>{children}</main>
+         <SiteFooter />
++
++        {/* Structured data — Organization + WebSite */}
++        <Script
++          id="ld-organization"
++          type="application/ld+json"
++          strategy="beforeInteractive"
++          dangerouslySetInnerHTML={{
++            __html: JSON.stringify(organizationSchema),
++          }}
++        />
++        <Script
++          id="ld-website"
++          type="application/ld+json"
++          strategy="beforeInteractive"
++          dangerouslySetInnerHTML={{
++            __html: JSON.stringify(websiteSchema),
++          }}
++        />
+       </body>
+     </html>
+   );
+diff --git a/app/not-found.module.css b/app/not-found.module.css
+new file mode 100644
+index 0000000..49fbd86
+--- /dev/null
++++ b/app/not-found.module.css
+@@ -0,0 +1,96 @@
++.section {
++  padding: 120px 48px;
++  min-height: 60vh;
++  display: flex;
++  align-items: center;
++  border-bottom: 1px solid var(--border-hairline);
++  background: var(--paper);
++  position: relative;
++  overflow: hidden;
++}
++.section::before {
++  content: "";
++  position: absolute;
++  inset: 0;
++  background-image:
++    linear-gradient(var(--ink) 1px, transparent 1px),
++    linear-gradient(90deg, var(--ink) 1px, transparent 1px);
++  background-size: 48px 48px;
++  opacity: 0.04;
++  pointer-events: none;
++}
++
++.inner {
++  max-width: 900px;
++  margin: 0 auto;
++  position: relative;
++  width: 100%;
++}
++
++.h1 {
++  font-family: var(--font-serif);
++  font-size: clamp(44px, 6vw, 72px);
++  line-height: 1.02;
++  letter-spacing: -0.03em;
++  font-weight: 400;
++  margin: 24px 0 32px;
++}
++.h1 em {
++  font-style: italic;
++  color: var(--moss);
++}
++
++.body {
++  font-size: 17px;
++  line-height: 1.6;
++  color: var(--text-body);
++  max-width: 640px;
++  margin-bottom: 48px;
++}
++
++.nav {
++  border-top: 1px solid var(--border-hairline);
++  padding-top: 32px;
++}
++.navList {
++  list-style: none;
++  padding: 0;
++  margin: 0;
++  display: grid;
++  grid-template-columns: 1fr 1fr;
++  gap: 12px;
++}
++.navLink {
++  display: block;
++  padding: 20px 24px;
++  background: var(--bg-raised);
++  border: 1px solid var(--border-hairline);
++  border-left: 3px solid transparent;
++  transition: border-left-color var(--motion-slow), background var(--motion-fast);
++}
++.navLink:hover {
++  border-left-color: var(--moss);
++  background: var(--stone-50);
++}
++.navLabel {
++  display: block;
++  font-family: var(--font-serif);
++  font-size: 22px;
++  letter-spacing: -0.015em;
++  margin-bottom: 8px;
++}
++.navDesc {
++  display: block;
++  font-size: 14px;
++  color: var(--text-body);
++  line-height: 1.5;
++}
++
++@media (max-width: 720px) {
++  .section {
++    padding: 72px 24px;
++  }
++  .navList {
++    grid-template-columns: 1fr;
++  }
++}
+diff --git a/app/not-found.tsx b/app/not-found.tsx
+new file mode 100644
+index 0000000..fb03128
+--- /dev/null
++++ b/app/not-found.tsx
+@@ -0,0 +1,69 @@
++import Link from "next/link";
++import { Eyebrow } from "@/components/ui";
++import styles from "./not-found.module.css";
++
++export const metadata = {
++  title: "Not found",
++  description: "The page you're looking for doesn't exist.",
++  robots: { index: false, follow: true },
++};
++
++/**
++ * 404 page. Rendered inside the same shell as every other page (SiteHeader +
++ * SiteFooter come from app/layout.tsx), so it feels part of the site rather
++ * than a raw error.
++ */
++export default function NotFound() {
++  return (
++    <section className={styles.section}>
++      <div className={styles.inner}>
++        <Eyebrow prefix="404">Not found</Eyebrow>
++        <h1 className={styles.h1}>
++          The page you&apos;re looking for<br />
++          <em>doesn&apos;t exist.</em>
++        </h1>
++        <p className={styles.body}>
++          It may have moved, been renamed, or never existed at all. Here&apos;s
++          where you probably wanted to go.
++        </p>
++
++        <nav className={styles.nav} aria-label="Recovery links">
++          <ul className={styles.navList}>
++            <li>
++              <Link href="/" className={styles.navLink}>
++                <span className={styles.navLabel}>Home</span>
++                <span className={styles.navDesc}>
++                  Start at the beginning.
++                </span>
++              </Link>
++            </li>
++            <li>
++              <Link href="/approach" className={styles.navLink}>
++                <span className={styles.navLabel}>Approach</span>
++                <span className={styles.navDesc}>
++                  How we work — three engagement types.
++                </span>
++              </Link>
++            </li>
++            <li>
++              <Link href="/services" className={styles.navLink}>
++                <span className={styles.navLabel}>Services</span>
++                <span className={styles.navDesc}>
++                  Six areas we cover across the security stack.
++                </span>
++              </Link>
++            </li>
++            <li>
++              <Link href="/contact" className={styles.navLink}>
++                <span className={styles.navLabel}>Contact</span>
++                <span className={styles.navDesc}>
++                  Start the conversation.
++                </span>
++              </Link>
++            </li>
++          </ul>
++        </nav>
++      </div>
++    </section>
++  );
++}
+diff --git a/app/opengraph-image.tsx b/app/opengraph-image.tsx
+new file mode 100644
+index 0000000..043af83
+--- /dev/null
++++ b/app/opengraph-image.tsx
+@@ -0,0 +1,153 @@
++import { ImageResponse } from "next/og";
++
++export const runtime = "edge";
++export const alt =
++  "Breachrr Security — Cybersecurity services for startups and growing businesses";
++export const size = { width: 1200, height: 630 };
++export const contentType = "image/png";
++
++/**
++ * Default Open Graph image — 1200x630 PNG generated at build time via Satori.
++ *
++ * Editorial layout matching the brand kit: paper canvas, hairline grid,
++ * wordmark treatment with moss middle-dot, tagline in serif italic, slogan
++ * in monospace.
++ */
++export default async function OpengraphImage() {
++  return new ImageResponse(
++    (
++      <div
++        style={{
++          height: "100%",
++          width: "100%",
++          background: "#f5f2ec",
++          position: "relative",
++          display: "flex",
++          flexDirection: "column",
++          justifyContent: "space-between",
++          padding: "80px",
++          fontFamily: "serif",
++        }}
++      >
++        {/* Hairline grid background */}
++        <div
++          style={{
++            position: "absolute",
++            inset: 0,
++            backgroundImage:
++              "linear-gradient(#1a1613 1px, transparent 1px), linear-gradient(90deg, #1a1613 1px, transparent 1px)",
++            backgroundSize: "48px 48px",
++            opacity: 0.04,
++            display: "flex",
++          }}
++        />
++
++        {/* Top: eyebrow */}
++        <div
++          style={{
++            display: "flex",
++            alignItems: "center",
++            fontFamily: "monospace",
++            fontSize: 20,
++            letterSpacing: "0.18em",
++            textTransform: "uppercase",
++            color: "#8a8078",
++          }}
++        >
++          Cybersecurity services
++        </div>
++
++        {/* Center: wordmark + tagline */}
++        <div
++          style={{
++            display: "flex",
++            flexDirection: "column",
++            gap: "40px",
++          }}
++        >
++          <div
++            style={{
++              display: "flex",
++              alignItems: "baseline",
++              fontSize: 120,
++              lineHeight: 1,
++              letterSpacing: "-0.03em",
++              color: "#1a1613",
++            }}
++          >
++            <span style={{ fontStyle: "normal" }}>Breachrr</span>
++            <span
++              style={{
++                fontStyle: "italic",
++                color: "#2f7d5b",
++                marginLeft: "20px",
++              }}
++            >
++              Security
++            </span>
++            <span
++              style={{
++                color: "#2f7d5b",
++                marginLeft: "12px",
++                lineHeight: 0.5,
++              }}
++            >
++              ·
++            </span>
++          </div>
++
++          <div
++            style={{
++              display: "flex",
++              fontSize: 44,
++              fontStyle: "italic",
++              color: "#4a4340",
++              lineHeight: 1.2,
++              letterSpacing: "-0.02em",
++              maxWidth: 900,
++            }}
++          >
++            Find the gaps. Fix the risks. Stay secure.
++          </div>
++        </div>
++
++        {/* Bottom: URL and slogan */}
++        <div
++          style={{
++            display: "flex",
++            justifyContent: "space-between",
++            alignItems: "center",
++            paddingTop: 24,
++            borderTop: "1px solid #cfc6b8",
++            fontFamily: "monospace",
++            fontSize: 20,
++            letterSpacing: "0.05em",
++            color: "#4a4340",
++          }}
++        >
++          <div style={{ display: "flex" }}>breachrrsecurity.com</div>
++          <div
++            style={{
++              display: "flex",
++              alignItems: "center",
++              gap: "12px",
++              color: "#2f7d5b",
++            }}
++          >
++            <span
++              style={{
++                display: "flex",
++                width: 12,
++                height: 12,
++                borderRadius: "50%",
++                background: "#2f7d5b",
++              }}
++            />
++            Open for engagements
++          </div>
++        </div>
++      </div>
++    ),
++    { ...size },
++  );
++}
+diff --git a/app/page.tsx b/app/page.tsx
+index db0101d..76da3b3 100644
+--- a/app/page.tsx
++++ b/app/page.tsx
+@@ -1,3 +1,4 @@
++import Script from "next/script";
+ import {
+   Hero,
+   CapabilitiesSection,
+@@ -8,7 +9,57 @@ import {
+   FaqBlock,
+ } from "@/components/sections";
+ import { Cta } from "@/components/ui";
+-import { cta } from "@/content/site";
++import { cta, faq, services } from "@/content/site";
++
++const SITE_URL = "https://breachrrsecurity.com";
++
++export const metadata = {
++  title:
++    "Breachrr Security — Cybersecurity services for startups and growing businesses",
++  description:
++    "Breachrr Security helps startups and growing businesses identify and reduce cybersecurity risks. Security assessments, program build-outs, and ongoing advisory across six service areas. Open for engagements.",
++  alternates: { canonical: "/" },
++  openGraph: {
++    url: "/",
++    title: "Breachrr Security",
++    description:
++      "Security assessments, program build-outs, and ongoing advisory. Open for engagements.",
++  },
++};
++
++/**
++ * FAQPage schema — earns rich results in Google. Questions appear as
++ * expandable answers directly in search results when the site ranks.
++ */
++const faqSchema = {
++  "@context": "https://schema.org",
++  "@type": "FAQPage",
++  "@id": `${SITE_URL}/#faq`,
++  mainEntity: faq.map((item) => ({
++    "@type": "Question",
++    name: item.question,
++    acceptedAnswer: {
++      "@type": "Answer",
++      text: item.answer,
++    },
++  })),
++};
++
++/**
++ * ItemList schema — signals the six service areas as a discoverable catalog.
++ */
++const servicesListSchema = {
++  "@context": "https://schema.org",
++  "@type": "ItemList",
++  "@id": `${SITE_URL}/#services`,
++  itemListElement: services.map((service, i) => ({
++    "@type": "ListItem",
++    position: i + 1,
++    url: `${SITE_URL}/services/${service.slug}`,
++    name: service.name,
++    description: service.tagline,
++  })),
++};
+ 
+ /**
+  * Homepage.
+@@ -34,6 +85,20 @@ export default function HomePage() {
+       <PracticeIntro />
+       <FaqBlock />
+       <Cta {...cta} variant="ink" />
++
++      {/* Structured data — FAQPage + ItemList */}
++      <Script
++        id="ld-faq"
++        type="application/ld+json"
++        strategy="beforeInteractive"
++        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
++      />
++      <Script
++        id="ld-services"
++        type="application/ld+json"
++        strategy="beforeInteractive"
++        dangerouslySetInnerHTML={{ __html: JSON.stringify(servicesListSchema) }}
++      />
+     </>
+   );
+ }
+diff --git a/app/privacy/page.tsx b/app/privacy/page.tsx
+index 7c6471f..a21b662 100644
+--- a/app/privacy/page.tsx
++++ b/app/privacy/page.tsx
+@@ -5,6 +5,12 @@ import { cta, site } from "@/content/site";
+ export const metadata = {
+   title: "Privacy Policy",
+   description: "How Breachrr Security handles personal data.",
++  alternates: { canonical: "/privacy" },
++  robots: { index: false, follow: true },
++  openGraph: {
++    url: "/privacy",
++    title: "Privacy Policy · Breachrr Security",
++  },
+ };
+ 
+ export default function PrivacyPage() {
+diff --git a/app/services/[slug]/page.tsx b/app/services/[slug]/page.tsx
+index a8e5c5c..52fc67f 100644
+--- a/app/services/[slug]/page.tsx
++++ b/app/services/[slug]/page.tsx
+@@ -1,4 +1,5 @@
+ import Link from "next/link";
++import Script from "next/script";
+ import { notFound } from "next/navigation";
+ import { Eyebrow, Cta } from "@/components/ui";
+ import { cta } from "@/content/site";
+@@ -9,6 +10,8 @@ import {
+ } from "@/lib/services";
+ import styles from "./page.module.css";
+ 
++const SITE_URL = "https://breachrrsecurity.com";
++
+ interface Params {
+   params: Promise<{ slug: string }>;
+ }
+@@ -23,9 +26,20 @@ export async function generateMetadata({ params }: Params) {
+   const { slug } = await params;
+   const service = getServiceBySlug(slug);
+   if (!service) return {};
++  const url = `/services/${service.slug}`;
+   return {
+     title: service.name,
+-    description: service.tagline,
++    description: `${service.tagline} ${service.summary}`.slice(0, 160),
++    alternates: { canonical: url },
++    openGraph: {
++      url,
++      title: `${service.name} · Breachrr Security`,
++      description: service.tagline,
++    },
++    twitter: {
++      title: `${service.name} · Breachrr Security`,
++      description: service.tagline,
++    },
+   };
+ }
+ 
+@@ -41,6 +55,59 @@ export default async function ServiceDetailPage({ params }: Params) {
+ 
+   const postures = getPosturesForService(service);
+ 
++  // Service JSON-LD
++  const serviceSchema = {
++    "@context": "https://schema.org",
++    "@type": "Service",
++    "@id": `${SITE_URL}/services/${service.slug}/#service`,
++    name: service.name,
++    description: service.tagline,
++    provider: { "@id": `${SITE_URL}/#organization` },
++    serviceType: service.name,
++    areaServed: [
++      { "@type": "Country", name: "United Kingdom" },
++      { "@type": "Country", name: "Nigeria" },
++    ],
++    hasOfferCatalog: {
++      "@type": "OfferCatalog",
++      name: `${service.name} — services`,
++      itemListElement: service.items.map((item, i) => ({
++        "@type": "Offer",
++        position: i + 1,
++        itemOffered: {
++          "@type": "Service",
++          name: item,
++        },
++      })),
++    },
++  };
++
++  // BreadcrumbList JSON-LD
++  const breadcrumbSchema = {
++    "@context": "https://schema.org",
++    "@type": "BreadcrumbList",
++    itemListElement: [
++      {
++        "@type": "ListItem",
++        position: 1,
++        name: "Home",
++        item: `${SITE_URL}/`,
++      },
++      {
++        "@type": "ListItem",
++        position: 2,
++        name: "Services",
++        item: `${SITE_URL}/services`,
++      },
++      {
++        "@type": "ListItem",
++        position: 3,
++        name: service.name,
++        item: `${SITE_URL}/services/${service.slug}`,
++      },
++    ],
++  };
++
+   return (
+     <>
+       <header className={styles.pageHead}>
+@@ -115,6 +182,20 @@ export default async function ServiceDetailPage({ params }: Params) {
+       </section>
+ 
+       <Cta {...cta} variant="ink" />
++
++      {/* Structured data — Service + BreadcrumbList */}
++      <Script
++        id={`ld-service-${service.slug}`}
++        type="application/ld+json"
++        strategy="beforeInteractive"
++        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
++      />
++      <Script
++        id={`ld-breadcrumb-${service.slug}`}
++        type="application/ld+json"
++        strategy="beforeInteractive"
++        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
++      />
+     </>
+   );
+ }
+diff --git a/app/services/page.tsx b/app/services/page.tsx
+index 6fadfab..025233c 100644
+--- a/app/services/page.tsx
++++ b/app/services/page.tsx
+@@ -6,7 +6,14 @@ import styles from "./page.module.css";
+ export const metadata = {
+   title: "Services",
+   description:
+-    "Six service areas across the security stack — from assessments to incident response. Every engagement scoped to what the work needs.",
++    "Six service areas across the security stack — security assessments, application & API security, cloud & infrastructure security, security advisory, security readiness (SOC 2, ISO 27001), and incident response. Every engagement scoped to what the work needs.",
++  alternates: { canonical: "/services" },
++  openGraph: {
++    url: "/services",
++    title: "Services · Breachrr Security",
++    description:
++      "Six service areas across the security stack. Every engagement scoped to what the work needs.",
++  },
+ };
+ 
+ /**
+diff --git a/app/sitemap.ts b/app/sitemap.ts
+new file mode 100644
+index 0000000..6139569
+--- /dev/null
++++ b/app/sitemap.ts
+@@ -0,0 +1,79 @@
++import type { MetadataRoute } from "next";
++import { services } from "@/content/site";
++
++const SITE_URL = "https://breachrrsecurity.com";
++
++/**
++ * Sitemap generator — enumerates every indexable route.
++ *
++ * Priorities and change frequencies chosen deliberately:
++ *   - Homepage: highest priority, moderate refresh
++ *   - Approach/Services overview: high priority, structural pages
++ *   - Individual service pages: medium priority, updated as offering evolves
++ *   - Contact/Work: medium priority
++ *   - Legal pages: lowest priority (rarely change)
++ *   - /dev is intentionally excluded (also disallowed in robots.txt)
++ */
++export default function sitemap(): MetadataRoute.Sitemap {
++  const now = new Date();
++
++  const staticRoutes: MetadataRoute.Sitemap = [
++    {
++      url: `${SITE_URL}/`,
++      lastModified: now,
++      changeFrequency: "weekly",
++      priority: 1.0,
++    },
++    {
++      url: `${SITE_URL}/approach`,
++      lastModified: now,
++      changeFrequency: "monthly",
++      priority: 0.9,
++    },
++    {
++      url: `${SITE_URL}/services`,
++      lastModified: now,
++      changeFrequency: "monthly",
++      priority: 0.9,
++    },
++    {
++      url: `${SITE_URL}/work`,
++      lastModified: now,
++      changeFrequency: "monthly",
++      priority: 0.7,
++    },
++    {
++      url: `${SITE_URL}/contact`,
++      lastModified: now,
++      changeFrequency: "monthly",
++      priority: 0.7,
++    },
++    {
++      url: `${SITE_URL}/trust`,
++      lastModified: now,
++      changeFrequency: "yearly",
++      priority: 0.4,
++    },
++    {
++      url: `${SITE_URL}/terms`,
++      lastModified: now,
++      changeFrequency: "yearly",
++      priority: 0.3,
++    },
++    {
++      url: `${SITE_URL}/privacy`,
++      lastModified: now,
++      changeFrequency: "yearly",
++      priority: 0.3,
++    },
++  ];
++
++  const serviceRoutes: MetadataRoute.Sitemap = services.map((service) => ({
++    url: `${SITE_URL}/services/${service.slug}`,
++    lastModified: now,
++    changeFrequency: "monthly",
++    priority: 0.8,
++  }));
++
++  return [...staticRoutes, ...serviceRoutes];
++}
+diff --git a/app/terms/page.tsx b/app/terms/page.tsx
+index f6860ee..30ab949 100644
+--- a/app/terms/page.tsx
++++ b/app/terms/page.tsx
+@@ -6,6 +6,12 @@ export const metadata = {
+   title: "Terms of Service",
+   description:
+     "The terms under which Breachrr Security engagements are carried out.",
++  alternates: { canonical: "/terms" },
++  robots: { index: false, follow: true },
++  openGraph: {
++    url: "/terms",
++    title: "Terms of Service · Breachrr Security",
++  },
+ };
+ 
+ export default function TermsPage() {
+diff --git a/app/trust/page.tsx b/app/trust/page.tsx
+index 68b64de..5df19a7 100644
+--- a/app/trust/page.tsx
++++ b/app/trust/page.tsx
+@@ -5,7 +5,14 @@ import { cta, site } from "@/content/site";
+ export const metadata = {
+   title: "Trust & Disclosure",
+   description:
+-    "How Breachrr Security handles the essentials — confidentiality, insurance, disclosure, and the tools we work with.",
++    "How Breachrr Security handles confidentiality, insurance, responsible disclosure, and the tools we work with. Standard NDA, professional indemnity insurance, and named sub-processors.",
++  alternates: { canonical: "/trust" },
++  openGraph: {
++    url: "/trust",
++    title: "Trust & Disclosure · Breachrr Security",
++    description:
++      "How we handle confidentiality, insurance, and disclosure.",
++  },
+ };
+ 
+ export default function TrustPage() {
+diff --git a/app/work/page.tsx b/app/work/page.tsx
+index 5802ede..7eae65e 100644
+--- a/app/work/page.tsx
++++ b/app/work/page.tsx
+@@ -6,7 +6,14 @@ import styles from "./page.module.css";
+ export const metadata = {
+   title: "Work",
+   description:
+-    "Selected engagements from Breachrr Security. As engagements close, they show up here.",
++    "Selected engagements from Breachrr Security. Comprehensive security assessments, program build-outs, and ongoing advisory work with growing SaaS companies. Case studies added as engagements close.",
++  alternates: { canonical: "/work" },
++  openGraph: {
++    url: "/work",
++    title: "Work · Breachrr Security",
++    description:
++      "Selected engagements. As they close, they show up here.",
++  },
+ };
+ 
+ /**
+diff --git a/next.config.mjs b/next.config.mjs
+index d5456a1..1ec8539 100644
+--- a/next.config.mjs
++++ b/next.config.mjs
+@@ -1,6 +1,132 @@
+ /** @type {import('next').NextConfig} */
++
++/**
++ * Content Security Policy — the highest-value security header.
++ *
++ * Design notes:
++ *   - script-src / style-src include 'unsafe-inline' because Next.js emits inline
++ *     runtime scripts and CSS Modules can emit inline styles. For a fully-static
++ *     site with no user input reaching the DOM, the practical attack surface for
++ *     inline-injection is zero. A nonce-based CSP is possible via middleware but
++ *     adds runtime complexity for negligible gain here.
++ *   - img-src includes data: for inline SVG data URIs.
++ *   - font-src is self-only — the geist package inlines fonts locally.
++ *   - frame-ancestors 'none' is enforced belt-and-braces via X-Frame-Options: DENY.
++ *   - upgrade-insecure-requests forces http → https for any subresources.
++ */
++const contentSecurityPolicy = [
++  "default-src 'self'",
++  "script-src 'self' 'unsafe-inline'",
++  "style-src 'self' 'unsafe-inline'",
++  "img-src 'self' data:",
++  "font-src 'self'",
++  "connect-src 'self'",
++  "frame-ancestors 'none'",
++  "base-uri 'self'",
++  "form-action 'self'",
++  "object-src 'none'",
++  "upgrade-insecure-requests",
++].join("; ");
++
++const securityHeaders = [
++  {
++    key: "Content-Security-Policy",
++    value: contentSecurityPolicy,
++  },
++  {
++    // Force HTTPS for 2 years, include subdomains, request preload-list inclusion.
++    key: "Strict-Transport-Security",
++    value: "max-age=63072000; includeSubDomains; preload",
++  },
++  {
++    // Block embedding in iframes anywhere. Backstops frame-ancestors in CSP.
++    key: "X-Frame-Options",
++    value: "DENY",
++  },
++  {
++    // Disable MIME type sniffing.
++    key: "X-Content-Type-Options",
++    value: "nosniff",
++  },
++  {
++    // Only send origin (no path/query) to cross-origin destinations.
++    key: "Referrer-Policy",
++    value: "strict-origin-when-cross-origin",
++  },
++  {
++    // Explicitly deny browser features we don't use.
++    key: "Permissions-Policy",
++    value: [
++      "camera=()",
++      "microphone=()",
++      "geolocation=()",
++      "payment=()",
++      "usb=()",
++      "midi=()",
++      "magnetometer=()",
++      "gyroscope=()",
++      "accelerometer=()",
++      "interest-cohort=()",
++    ].join(", "),
++  },
++  {
++    key: "X-DNS-Prefetch-Control",
++    value: "on",
++  },
++  {
++    // Cross-origin isolation — reduces risk from side-channel attacks.
++    key: "Cross-Origin-Opener-Policy",
++    value: "same-origin",
++  },
++  {
++    key: "Cross-Origin-Resource-Policy",
++    value: "same-origin",
++  },
++];
++
+ const nextConfig = {
+   reactStrictMode: true,
++  poweredByHeader: false, // remove X-Powered-By: Next.js
++  compress: true,
++
++  async headers() {
++    return [
++      {
++        // Apply security headers to every route.
++        source: "/:path*",
++        headers: securityHeaders,
++      },
++      {
++        // Long cache for hashed static assets.
++        source: "/_next/static/:path*",
++        headers: [
++          {
++            key: "Cache-Control",
++            value: "public, max-age=31536000, immutable",
++          },
++        ],
++      },
++      {
++        // Correct content type for the RFC 9116 file.
++        source: "/.well-known/security.txt",
++        headers: [
++          {
++            key: "Content-Type",
++            value: "text/plain; charset=utf-8",
++          },
++        ],
++      },
++    ];
++  },
++
++  async redirects() {
++    return [
++      // Redirect the internal dev route so it's not discoverable in prod.
++      // (robots.txt also disallows it — belt and braces.)
++      // Left in place for local development; production hosting can layer
++      // additional access control on top if desired.
++    ];
++  },
+ };
+ 
+ export default nextConfig;
+diff --git a/public/.well-known/security.txt b/public/.well-known/security.txt
+new file mode 100644
+index 0000000..6900cba
+--- /dev/null
++++ b/public/.well-known/security.txt
+@@ -0,0 +1,9 @@
++# Breachrr Security — Security Policy
++# https://datatracker.ietf.org/doc/html/rfc9116
++
++Contact: mailto:mo@breachrrsecurity.com
++# TODO: add security@breachrrsecurity.com once the alias is provisioned
++Expires: 2027-07-27T00:00:00.000Z
++Preferred-Languages: en
++Canonical: https://breachrrsecurity.com/.well-known/security.txt
++Policy: https://breachrrsecurity.com/trust
+diff --git a/public/robots.txt b/public/robots.txt
+new file mode 100644
+index 0000000..fc0e782
+--- /dev/null
++++ b/public/robots.txt
+@@ -0,0 +1,9 @@
++# Breachrr Security — robots.txt
++# https://www.robotstxt.org/robotstxt.html
++
++User-agent: *
++Allow: /
++Disallow: /dev/
++
++# Sitemap
++Sitemap: https://breachrrsecurity.com/sitemap.xml
+diff --git a/public/site.webmanifest b/public/site.webmanifest
+index b861650..e18dd7e 100644
+--- a/public/site.webmanifest
++++ b/public/site.webmanifest
+@@ -1,19 +1,25 @@
+ {
+   "name": "Breachrr Security",
+   "short_name": "Breachrr",
++  "description": "Cybersecurity services for startups and growing businesses.",
+   "icons": [
+     {
+-      "src": "/favicon/android-chrome-192.png",
++      "src": "/android-chrome-192.png",
+       "sizes": "192x192",
+-      "type": "image/png"
++      "type": "image/png",
++      "purpose": "any"
+     },
+     {
+-      "src": "/favicon/android-chrome-512.png",
++      "src": "/android-chrome-512.png",
+       "sizes": "512x512",
+-      "type": "image/png"
++      "type": "image/png",
++      "purpose": "any"
+     }
+   ],
+   "theme_color": "#1a1613",
+   "background_color": "#f5f2ec",
+-  "display": "standalone"
++  "display": "standalone",
++  "start_url": "/",
++  "scope": "/",
++  "lang": "en-GB"
+ }
+-- 
+2.43.0
+
