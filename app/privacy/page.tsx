@@ -5,6 +5,12 @@ import { cta, site } from "@/content/site";
 export const metadata = {
   title: "Privacy Policy",
   description: "How Breachrr Security handles personal data.",
+  alternates: { canonical: "/privacy" },
+  robots: { index: false, follow: true },
+  openGraph: {
+    url: "/privacy",
+    title: "Privacy Policy · Breachrr Security",
+  },
 };
 
 export default function PrivacyPage() {

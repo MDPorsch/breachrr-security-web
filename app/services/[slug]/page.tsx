@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Script from "next/script";
 import { notFound } from "next/navigation";
 import { Eyebrow, Cta } from "@/components/ui";
 import { cta } from "@/content/site";
@@ -8,6 +9,8 @@ import {
   getPosturesForService,
 } from "@/lib/services";
 import styles from "./page.module.css";
+
+const SITE_URL = "https://breachrrsecurity.com";
 
 interface Params {
   params: Promise<{ slug: string }>;
@@ -23,9 +26,20 @@ export async function generateMetadata({ params }: Params) {
   const { slug } = await params;
   const service = getServiceBySlug(slug);
   if (!service) return {};
+  const url = `/services/${service.slug}`;
   return {
     title: service.name,
-    description: service.tagline,
+    description: `${service.tagline} ${service.summary}`.slice(0, 160),
+    alternates: { canonical: url },
+    openGraph: {
+      url,
+      title: `${service.name} · Breachrr Security`,
+      description: service.tagline,
+    },
+    twitter: {
+      title: `${service.name} · Breachrr Security`,
+      description: service.tagline,
+    },
   };
 }
 
@@ -40,6 +54,59 @@ export default async function ServiceDetailPage({ params }: Params) {
   if (!service) notFound();
 
   const postures = getPosturesForService(service);
+
+  // Service JSON-LD
+  const serviceSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${SITE_URL}/services/${service.slug}/#service`,
+    name: service.name,
+    description: service.tagline,
+    provider: { "@id": `${SITE_URL}/#organization` },
+    serviceType: service.name,
+    areaServed: [
+      { "@type": "Country", name: "United Kingdom" },
+      { "@type": "Country", name: "Nigeria" },
+    ],
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: `${service.name} — services`,
+      itemListElement: service.items.map((item, i) => ({
+        "@type": "Offer",
+        position: i + 1,
+        itemOffered: {
+          "@type": "Service",
+          name: item,
+        },
+      })),
+    },
+  };
+
+  // BreadcrumbList JSON-LD
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: `${SITE_URL}/`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Services",
+        item: `${SITE_URL}/services`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: service.name,
+        item: `${SITE_URL}/services/${service.slug}`,
+      },
+    ],
+  };
 
   return (
     <>
@@ -115,6 +182,20 @@ export default async function ServiceDetailPage({ params }: Params) {
       </section>
 
       <Cta {...cta} variant="ink" />
+
+      {/* Structured data — Service + BreadcrumbList */}
+      <Script
+        id={`ld-service-${service.slug}`}
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
+      <Script
+        id={`ld-breadcrumb-${service.slug}`}
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
     </>
   );
 }

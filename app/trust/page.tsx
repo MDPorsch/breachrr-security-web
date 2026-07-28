@@ -5,7 +5,14 @@ import { cta, site } from "@/content/site";
 export const metadata = {
   title: "Trust & Disclosure",
   description:
-    "How Breachrr Security handles the essentials — confidentiality, insurance, disclosure, and the tools we work with.",
+    "How Breachrr Security handles confidentiality, insurance, responsible disclosure, and the tools we work with. Standard NDA, professional indemnity insurance, and named sub-processors.",
+  alternates: { canonical: "/trust" },
+  openGraph: {
+    url: "/trust",
+    title: "Trust & Disclosure · Breachrr Security",
+    description:
+      "How we handle confidentiality, insurance, and disclosure.",
+  },
 };
 
 export default function TrustPage() {

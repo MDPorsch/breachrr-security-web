@@ -1,0 +1,9 @@
+# Breachrr Security — robots.txt
+# https://www.robotstxt.org/robotstxt.html
+
+User-agent: *
+Allow: /
+Disallow: /dev/
+
+# Sitemap
+Sitemap: https://breachrrsecurity.com/sitemap.xml
