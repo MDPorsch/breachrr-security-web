@@ -1,0 +1,104 @@
+From 0f8b5c635b7625a6ce4929ccff874cc554c45e61 Mon Sep 17 00:00:00 2001
+From: Claude <claude@anthropic.local>
+Date: Tue, 28 Jul 2026 04:42:29 +0000
+Subject: [PATCH] chore: change contact email from mo@ to
+ info@breachrrsecurity.com
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Updates every reference across the codebase to the info@ alias:
+
+- content/site.ts — site.contact.email (source of truth for pages that
+  read from it) + cta.buttonHref (previously hardcoded)
+- public/.well-known/security.txt — RFC 9116 Contact field
+- SECURITY.md — vulnerability reporting instructions
+- app/work/page.tsx — footer note mailto (previously hardcoded — now
+  reads from site.contact.email so future changes only touch site.ts)
+
+Also removes the stale TODO in security.txt about provisioning a
+security@ alias, since info@ replaces the general contact address.
+
+Verified: no mo@breachrrsecurity references remain in tracked files.
+---
+ SECURITY.md                     | 2 +-
+ app/work/page.tsx               | 6 +++---
+ content/site.ts                 | 4 ++--
+ public/.well-known/security.txt | 3 +--
+ 4 files changed, 7 insertions(+), 8 deletions(-)
+
+diff --git a/SECURITY.md b/SECURITY.md
+index 0c6fbe5..af2b34b 100644
+--- a/SECURITY.md
++++ b/SECURITY.md
+@@ -6,7 +6,7 @@ taking the time to help.
+ 
+ ## Reporting a vulnerability
+ 
+-Please email **mo@breachrrsecurity.com** with the details. Include:
++Please email **info@breachrrsecurity.com** with the details. Include:
+ 
+ - A description of the vulnerability
+ - Steps to reproduce (or a proof of concept)
+diff --git a/app/work/page.tsx b/app/work/page.tsx
+index 7eae65e..43f01a7 100644
+--- a/app/work/page.tsx
++++ b/app/work/page.tsx
+@@ -1,6 +1,6 @@
+ import { Eyebrow, Cta } from "@/components/ui";
+ import { EngagementCard } from "@/components/sections";
+-import { engagements, cta } from "@/content/site";
++import { engagements, cta, site } from "@/content/site";
+ import styles from "./page.module.css";
+ 
+ export const metadata = {
+@@ -95,8 +95,8 @@ export default function WorkPage() {
+             More engagements will appear here as they close and clients
+             approve the write-ups. For a current picture of what
+             we&apos;re working on, email{" "}
+-            <a href="mailto:mo@breachrrsecurity.com" className={styles.link}>
+-              mo@breachrrsecurity.com
++            <a href={`mailto:${site.contact.email}`} className={styles.link}>
++              {site.contact.email}
+             </a>
+             .
+           </p>
+diff --git a/content/site.ts b/content/site.ts
+index 0cf386f..0ffe9ea 100644
+--- a/content/site.ts
++++ b/content/site.ts
+@@ -15,7 +15,7 @@ export const site = {
+   location: "London / Lagos",
+   bookingStatus: "Open for engagements",
+   contact: {
+-    email: "mo@breachrrsecurity.com",
++    email: "info@breachrrsecurity.com",
+   },
+   responseWindow: "48 hours",
+   slogan: "Find the gaps. Fix the risks. Stay secure.",
+@@ -326,7 +326,7 @@ export const cta = {
+   body:
+     "An intro conversation to talk through your situation. We'll ask about your stage, your compliance target, and what forced the conversation. Then we tell you honestly whether we're the right fit.",
+   buttonLabel: "Start the conversation",
+-  buttonHref: `mailto:${"mo@breachrrsecurity.com"}?subject=Intro%20conversation`,
++  buttonHref: `mailto:info@breachrrsecurity.com?subject=Intro%20conversation`,
+ } as const;
+ 
+ /**
+diff --git a/public/.well-known/security.txt b/public/.well-known/security.txt
+index 6900cba..6850f6b 100644
+--- a/public/.well-known/security.txt
++++ b/public/.well-known/security.txt
+@@ -1,8 +1,7 @@
+ # Breachrr Security — Security Policy
+ # https://datatracker.ietf.org/doc/html/rfc9116
+ 
+-Contact: mailto:mo@breachrrsecurity.com
+-# TODO: add security@breachrrsecurity.com once the alias is provisioned
++Contact: mailto:info@breachrrsecurity.com
+ Expires: 2027-07-27T00:00:00.000Z
+ Preferred-Languages: en
+ Canonical: https://breachrrsecurity.com/.well-known/security.txt
+-- 
+2.43.0
+
