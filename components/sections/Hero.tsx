@@ -1,5 +1,4 @@
 import { HeroRotator } from "./HeroRotator";
-import { LiveIndicator } from "@/components/brand";
 import { heroSubhead, site } from "@/content/site";
 import styles from "./Hero.module.css";
 
@@ -18,9 +17,6 @@ export function Hero() {
           <p className={styles.eyebrow}>
             Cybersecurity services
           </p>
-          <div className={styles.status}>
-            <LiveIndicator>{site.bookingStatus}</LiveIndicator>
-          </div>
         </div>
 
         <HeroRotator />
