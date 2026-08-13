@@ -71,7 +71,7 @@ export function SiteFooter() {
         <div className={styles.baselineInner}>
           <CorporateMark withCopyright />
           <span className={styles.baselineNote}>
-            All rights reserved. Registered in England &amp; Wales.
+            All rights reserved.
           </span>
         </div>
       </div>

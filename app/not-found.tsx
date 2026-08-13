@@ -41,7 +41,7 @@ export default function NotFound() {
               <Link href="/approach" className={styles.navLink}>
                 <span className={styles.navLabel}>Approach</span>
                 <span className={styles.navDesc}>
-                  How we work — three engagement types.
+                  How we work, across three engagement types.
                 </span>
               </Link>
             </li>

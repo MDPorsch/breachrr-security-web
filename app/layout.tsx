@@ -13,12 +13,12 @@ export const metadata: Metadata = {
 
   title: {
     default:
-      "Breachrr Security — Cybersecurity services for startups and growing businesses",
+      "Breachrr Security · Cybersecurity services for startups and growing businesses",
     template: "%s · Breachrr Security",
   },
 
   description:
-    "Breachrr Security helps startups and growing businesses identify and reduce cybersecurity risks, and build a security program that fits how they actually work. Security assessments, program build-outs, and ongoing advisory.",
+    "Breachrr Security helps startups and growing businesses identify and reduce cybersecurity risks, and build a security program that fits how they work. Security assessments, program build-outs, and ongoing advisory.",
 
   applicationName: "Breachrr Security",
   authors: [{ name: "Breachrr Security" }],
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
     url: SITE_URL,
     siteName: "Breachrr Security",
     title:
-      "Breachrr Security — Cybersecurity services for startups and growing businesses",
+      "Breachrr Security · Cybersecurity services for startups and growing businesses",
     description:
       "Security assessments, program build-outs, and ongoing advisory. Open for engagements.",
     images: [
@@ -70,7 +70,7 @@ export const metadata: Metadata = {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "Breachrr Security — Find the gaps. Fix the risks. Stay secure.",
+        alt: "Breachrr Security. Find the gaps. Fix the risks. Stay secure.",
       },
     ],
   },
@@ -158,7 +158,12 @@ const organizationSchema = {
   email: site.contact.email,
   areaServed: [
     { "@type": "Country", name: "United Kingdom" },
+    { "@type": "Country", name: "United States" },
     { "@type": "Country", name: "Nigeria" },
+    { "@type": "Country", name: "Ghana" },
+    { "@type": "Country", name: "Kenya" },
+    { "@type": "Country", name: "Uganda" },
+    { "@type": "Continent", name: "Africa" },
   ],
   serviceType: [
     "Cybersecurity consulting",

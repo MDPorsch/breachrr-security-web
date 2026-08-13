@@ -6,7 +6,7 @@ import styles from "./page.module.css";
 export const metadata = {
   title: "Services",
   description:
-    "Six service areas across the security stack — security assessments, application & API security, cloud & infrastructure security, security advisory, security readiness (SOC 2, ISO 27001), and incident response. Every engagement scoped to what the work needs.",
+    "Six service areas across the security stack: security assessments, application & API security, cloud & infrastructure security, security advisory, security readiness (SOC 2, ISO 27001), and incident response. Every engagement scoped to what the work needs.",
   alternates: { canonical: "/services" },
   openGraph: {
     url: "/services",
@@ -33,8 +33,8 @@ export default function ServicesPage() {
             <em>The security stack, covered.</em>
           </h1>
           <p className={styles.sub}>
-            Every engagement combines an engagement type — Assess, Build, or
-            Advise — with one or more of the service areas below. The service
+            Every engagement combines an engagement type (Assess, Build, or
+            Advise) with one or more of the service areas below. The service
             areas describe what the work touches; the engagement type describes
             the shape it takes.
           </p>

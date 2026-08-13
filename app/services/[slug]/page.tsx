@@ -70,7 +70,7 @@ export default async function ServiceDetailPage({ params }: Params) {
     ],
     hasOfferCatalog: {
       "@type": "OfferCatalog",
-      name: `${service.name} — services`,
+      name: `${service.name}: services`,
       itemListElement: service.items.map((item, i) => ({
         "@type": "Offer",
         position: i + 1,

@@ -61,7 +61,7 @@ export function EngagementCard({
 
       <footer className={styles.footer}>
         <span className={styles.signature}>
-          — Prepared by <em>Breachrr Security</em>
+          Prepared by <em>Breachrr Security</em>
         </span>
       </footer>
     </article>

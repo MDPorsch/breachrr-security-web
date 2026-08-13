@@ -20,7 +20,7 @@ export default function TrustPage() {
     <>
       <LegalPageShell
         title="Trust & Disclosure"
-        subtitle="How we handle the essentials — confidentiality, insurance, disclosure, and the tools we work with."
+        subtitle="How we handle the essentials: confidentiality, insurance, disclosure, and the tools we work with."
         effective="27 July 2026"
       >
         <LegalSection num="01" title="Non-disclosure">
@@ -72,19 +72,19 @@ export default function TrustPage() {
           {/* TODO: confirm actual sub-processor list before launch */}
           <ul>
             <li>
-              <strong>GitHub</strong> — code and issue tracking
+              <strong>GitHub:</strong> code and issue tracking
             </li>
             <li>
-              <strong>1Password</strong> — secrets and credentials
+              <strong>1Password:</strong> secrets and credentials
             </li>
             <li>
-              <strong>Notion</strong> — engagement documentation
+              <strong>Notion:</strong> engagement documentation
             </li>
             <li>
-              <strong>Google Workspace</strong> — email and file collaboration
+              <strong>Google Workspace:</strong> email and file collaboration
             </li>
             <li>
-              <strong>Slack</strong> — channel-based communication
+              <strong>Slack:</strong> channel-based communication
             </li>
           </ul>
         </LegalSection>

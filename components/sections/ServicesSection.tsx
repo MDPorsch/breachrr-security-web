@@ -23,10 +23,10 @@ export function ServicesSection() {
           </h2>
           <p className={styles.p}>
             The three engagement types above are how we work. These are the
-            areas we work across. Most engagements combine several — an
-            application review and a cloud review, a readiness build with an
+            areas we work across. Most engagements combine several: an
+            application review with a cloud review, a readiness build with an
             advisory continuation, an incident-response retainer paired with
-            quarterly assessments.
+            regular assessments.
           </p>
           <Link href="/services" className={styles.allLink}>
             All service areas

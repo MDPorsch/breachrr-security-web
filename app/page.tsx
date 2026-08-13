@@ -15,7 +15,7 @@ const SITE_URL = "https://breachrrsecurity.com";
 
 export const metadata = {
   title:
-    "Breachrr Security — Cybersecurity services for startups and growing businesses",
+    "Breachrr Security · Cybersecurity services for startups and growing businesses",
   description:
     "Breachrr Security helps startups and growing businesses identify and reduce cybersecurity risks. Security assessments, program build-outs, and ongoing advisory across six service areas. Open for engagements.",
   alternates: { canonical: "/" },

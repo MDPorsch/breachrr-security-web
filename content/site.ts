@@ -12,7 +12,6 @@ export const site = {
   name: "Breachrr Security",
   domain: "breachrrsecurity.com",
   legalEntity: "breachrr ltd",
-  location: "London / Lagos",
   bookingStatus: "Open for engagements",
   contact: {
     email: "info@breachrrsecurity.com",
@@ -76,15 +75,15 @@ export const capabilities = [
     name: "Assess",
     tagline: "Where you are, precisely.",
     summary:
-      "A security assessment. Scoped to whichever service area needs eyes — application, cloud, infrastructure, or identity. Findings register, prioritised, ready to close.",
+      "A security assessment scoped to whichever service area needs attention: application, cloud, infrastructure, or identity. You leave with a prioritised findings register, ready to close.",
     duration: "Scoped per engagement",
     whatHappens:
-      "A security assessment across the service areas that matter to the engagement — most commonly Application & API Security, Cloud & Infrastructure, or a Security Assessment covering multiple domains. We start with a scoping conversation — what you're building, what compliance target is ahead, what's already been done. Then we combine static analysis, cloud configuration review, and identity/access audit against what we find. No black-box guesswork; we work with your team and your access.",
+      "A security assessment across the service areas that matter to the engagement. Most commonly this is Application & API Security, Cloud & Infrastructure, or a Security Assessment covering multiple domains. We start with a scoping conversation to understand what you're building, what compliance target is ahead, and what's already been done. Then we combine static analysis, cloud configuration review, and identity/access audit against what we find. No black-box guesswork; we work alongside your team, with your access.",
     delivers: [
-      "Numbered findings register — severity, evidence, remediation guidance",
+      "Numbered findings register with severity, evidence, and remediation guidance",
       "Executive summary written for a non-technical reader",
       "Technical appendix with reproducible steps for engineering",
-      "Walkthrough call with your team, recorded",
+      "Recorded walkthrough call with your team",
       "Optional: help closing the critical and high findings",
     ],
     firstWeek:
@@ -97,16 +96,16 @@ export const capabilities = [
     name: "Build",
     tagline: "A program, not a policy binder.",
     summary:
-      "A structured security program build-out. Compliance target (SOC 2, ISO 27001, UK GDPR) as the anchor, controls as the deliverable, a roadmap for what's left at handoff.",
+      "A structured security program build-out with a compliance target (SOC 2, ISO 27001, UK GDPR) as the anchor. Controls are the deliverable, plus a roadmap for what's outstanding at handoff.",
     duration: "Scoped per engagement",
     whatHappens:
-      "A structured security program build-out anchored to a compliance target — SOC 2 Type II, ISO 27001, UK GDPR — or to a Security Readiness need driven by customer requirements. We start where the last audit left off, or where nothing exists. The program is designed collaboratively — your team learns as we build, so what we hand over stays running after we leave. Progress reviews throughout; no surprises.",
+      "A structured security program build-out anchored to a compliance target: SOC 2 Type II, ISO 27001, UK GDPR, or a Security Readiness need driven by customer requirements. We start where the last audit left off, or where nothing exists. The program is designed collaboratively so your team learns as we build; what we hand over stays running after we leave. Progress reviews throughout, no surprises.",
     delivers: [
-      "Complete policy stack — adapted to your operating context",
-      "Control framework mapped to your target — SOC 2 CC, ISO Annex A, or equivalent",
+      "Complete policy stack adapted to your operating context",
+      "Control framework mapped to your target (SOC 2 CC, ISO Annex A, or equivalent)",
       "Evidence collection process and reusable templates",
       "Remediation roadmap for what's outstanding at handoff",
-      "Team enablement — documentation and light-touch training",
+      "Team enablement, including documentation and light-touch training",
       "Regular progress reviews, recorded and archived",
     ],
     firstWeek:
@@ -119,17 +118,17 @@ export const capabilities = [
     name: "Advise",
     tagline: "The team you'd have hired if you had time.",
     summary:
-      "Ongoing partnership. Quarterly reviews and incident-response preparedness — expert security counsel when you need it.",
+      "Ongoing partnership with quarterly reviews and incident-response preparedness. Expert security counsel when you need it.",
     duration: "Ongoing retainer",
     whatHappens:
-      "Ongoing partnership after — or alongside — the program. The practice serves as your security team lead, with regular strategic reviews that keep the program healthy as the company grows. Incident-response preparedness means you don't figure it out under pressure.",
+      "An ongoing partnership after or alongside the program. The practice serves as your security team lead, with regular strategic reviews that keep the program healthy as the company grows. Incident-response preparedness means you don't figure it out under pressure.",
     delivers: [
       "Regular office hours",
       "Regular program health reviews and roadmap adjustments",
-      "Incident-response playbook + regular readiness drills",
-      "Compliance renewal support — SOC 2 Type II re-audit, ISO surveillance",
+      "Incident-response playbook plus regular readiness drills",
+      "Compliance renewal support for SOC 2 Type II re-audit and ISO surveillance",
       "Board-level security reporting when the room needs it",
-      "Escalation call — the first hour of any active incident",
+      "Escalation call for the first hour of any active incident",
     ],
     firstWeek:
       "Start: onboarding, systems familiarisation, current-state review. Then: first strategic review, priority setting. Once priorities are set: regular leadership check-ins, cadence established.",
@@ -151,7 +150,7 @@ export const services = [
     slug: "security-assessments",
     name: "Security Assessments",
     tagline: "Understand your security posture and identify the risks that matter most.",
-    summary: "The foundational engagement. Where the security conversation starts for most organisations — before the compliance target, before the roadmap. A grounded, evidence-led view of where you actually stand.",
+    summary: "The foundational engagement. This is where the security conversation starts for most organisations, before the compliance target and before the roadmap. A grounded, evidence-led view of where you stand.",
     items: [
       "Cybersecurity risk assessments",
       "Security posture assessments",
@@ -160,7 +159,7 @@ export const services = [
       "Security gap assessments",
     ],
     methodology:
-      "We work grey-box — with your access, alongside your team. Each assessment produces a numbered findings register, prioritised by real business impact rather than headline severity. Every finding has reproducible evidence, a specific remediation path, and a paragraph explaining why it matters in your context.",
+      "We work grey-box, with your access and alongside your team. Each assessment produces a numbered findings register, prioritised by real business impact rather than headline severity. Every finding comes with reproducible evidence, a specific remediation path, and a paragraph explaining why it matters in your context.",
     postures: ["assess"],
     linkLabel: "See what an assessment covers →",
   },
@@ -168,7 +167,7 @@ export const services = [
     slug: "application-api-security",
     name: "Application & API Security",
     tagline: "Identify and address security weaknesses in the applications and APIs your business relies on.",
-    summary: "Focused review of the surface most attackers actually touch. Application logic, authentication flows, API contracts, session handling, injection paths — read the way the next attacker will.",
+    summary: "Focused review of the surface most attackers touch: application logic, authentication flows, API contracts, session handling, and injection paths. Read the way the next attacker will read them.",
     items: [
       "Web application security",
       "API security assessments",
@@ -178,7 +177,7 @@ export const services = [
       "Secure development guidance",
     ],
     methodology:
-      "Manual review by a senior engineer, augmented (not replaced) by static analysis and light dynamic testing. We read the code the way an attacker reads production — with attention to business-logic weirdness and auth-boundary drift, not just OWASP-Top-10 checkboxes.",
+      "Manual review by a senior engineer, augmented (not replaced) by static analysis and light dynamic testing. We read the code the way an attacker reads production, with attention to business-logic weirdness and auth-boundary drift, rather than only ticking OWASP Top 10 boxes.",
     postures: ["assess", "advise"],
     linkLabel: "See what an application review covers →",
   },
@@ -186,7 +185,7 @@ export const services = [
     slug: "cloud-infrastructure-security",
     name: "Cloud & Infrastructure Security",
     tagline: "Strengthen the security of your cloud environments, infrastructure, identities, and networks.",
-    summary: "Where most modern breaches actually happen — misconfigured trust boundaries, over-scoped IAM, forgotten resources with public access. AWS, GCP, Azure, and everything under the console.",
+    summary: "Where most modern breaches happen: misconfigured trust boundaries, over-scoped IAM, forgotten resources with public access. AWS, GCP, Azure, and everything under the console.",
     items: [
       "Cloud security assessments",
       "Infrastructure security reviews",
@@ -203,7 +202,7 @@ export const services = [
     slug: "security-advisory",
     name: "Security Advisory",
     tagline: "Get practical cybersecurity expertise aligned with your organisation's goals.",
-    summary: "The ongoing brain-share. A named senior person for the questions that don't warrant a project — architecture calls, hiring rubrics, tool selection, incident triage, board reporting.",
+    summary: "The ongoing brain-share. A named senior person for the questions that don't warrant a project: architecture calls, hiring rubrics, tool selection, incident triage, and board reporting.",
     items: [
       "Security program development",
       "Security policies and procedures",
@@ -213,7 +212,7 @@ export const services = [
       "Security maturity improvement",
     ],
     methodology:
-      "Monthly retainer, shared channel, quarterly strategic reviews. We treat advisory as a relationship, not a hotline — the value compounds as we build shared context about your business, your team, and how you actually operate.",
+      "Monthly retainer, shared channel, quarterly strategic reviews. We treat advisory as a relationship rather than a hotline. The value compounds as we build shared context about your business, your team, and how you operate.",
     postures: ["advise", "build"],
     linkLabel: "See what advisory covers →",
   },
@@ -221,7 +220,7 @@ export const services = [
     slug: "security-readiness",
     name: "Security Readiness",
     tagline: "Prepare your organisation to meet the security expectations of customers, partners, and stakeholders.",
-    summary: "The engagement that gets you audit-ready — or customer-ready — without the compliance-theatre binder. SOC 2, ISO 27001, UK GDPR, or a specific enterprise customer's security questionnaire.",
+    summary: "The engagement that gets you audit-ready, or customer-ready, without the compliance-theatre binder. SOC 2, ISO 27001, UK GDPR, or a specific enterprise customer's security questionnaire.",
     items: [
       "Compliance readiness",
       "Security framework alignment",
@@ -230,7 +229,7 @@ export const services = [
       "Security documentation",
     ],
     methodology:
-      "We focus on the underlying practice, not the checkbox. Your auditor gets what they need; you keep the controls you build. The point isn't a certificate — it's an operating rhythm that produces the certificate as a side effect.",
+      "We focus on the underlying practice, not the checkbox. Your auditor gets what they need; you keep the controls you build. The point isn't a certificate. It's an operating rhythm that produces the certificate as a side effect.",
     postures: ["build", "advise"],
     linkLabel: "See what readiness covers →",
   },
@@ -247,7 +246,7 @@ export const services = [
       "Recovery and improvement planning",
     ],
     methodology:
-      "Preparedness first: playbooks written for the incident types your business actually faces, tested twice a year with your team. Response second: for retainer clients, a named lead on-call with a four-hour response window. For everyone else, we'll always answer, and refer if we can't take it on quickly enough.",
+      "Preparedness first: playbooks written for the incident types your business faces, tested regularly with your team. Response second: for retainer clients, a named lead on-call with a four-hour response window. For everyone else, we'll always answer, and refer if we can't take it on quickly enough.",
     postures: ["advise", "build"],
     linkLabel: "See what incident work covers →",
   },
@@ -265,7 +264,7 @@ export const buyerStages = [
   {
     label: "Something set up in a hurry",
     description:
-      "A scanner subscription. A policy copied from a template. MFA rolled out last quarter. Not nothing — not coherent either.",
+      "A scanner subscription. A policy copied from a template. MFA rolled out last quarter. It's not nothing, but it's not coherent either.",
   },
   {
     label: "You've outgrown your first attempt",
@@ -285,8 +284,8 @@ export const philosophy = {
   accent: "Not a package.",
   body: [
     "Every Breachrr Security engagement is tailored to your environment, priorities, and objectives. There is no template we pull off a shelf.",
-    "Cybersecurity works best as a partnership. Every engagement runs that way — alongside your founders, engineers, IT, and leadership, not around them.",
-    "No unnecessary complexity. No one-size-fits-all solutions. No security theatre. Just practical expertise focused on reducing risk that actually matters to your business.",
+    "Cybersecurity works best as a partnership. Every engagement runs that way, alongside your founders, engineers, IT, and leadership rather than around them.",
+    "No unnecessary complexity. No one-size-fits-all solutions. No security theatre. Just practical expertise focused on reducing the risk that matters to your business.",
   ],
 } as const;
 
@@ -297,7 +296,7 @@ export const faq = [
   {
     question: "How much does an engagement cost?",
     answer:
-      "It depends on scope. Fixed-fee, quoted after a 30-minute call and a light scoping doc. We don't publish starting-from numbers because they mislead — the shape of the work matters more than the size.",
+      "It depends on scope. Fixed-fee, quoted after an initial call and a light scoping doc. We don't publish starting-from numbers because they mislead. The shape of the work matters more than the size.",
   },
   {
     question: "Do you carry insurance and sign NDAs?",
@@ -307,12 +306,12 @@ export const faq = [
   {
     question: "How is Breachrr Security different from Breachrr?",
     answer:
-      "Same parent (Breachrr Ltd), different arms. Breachrr is the cybersecurity technology product line — credential-monitoring SaaS. Breachrr Security is the services arm — assessments, advisory, incident work. Separate teams, shared standards.",
+      "Same parent (Breachrr Ltd), different arms. Breachrr is the cybersecurity technology product line, a credential-monitoring SaaS. Breachrr Security is the services arm, covering assessments, advisory, and incident work. Separate teams, shared standards.",
   },
   {
     question: "Do you take incident response calls out of hours?",
     answer:
-      "For retainer clients, yes — with a named lead and a four-hour response window. For everyone else we'll always answer, and refer if we can't take it on quickly enough.",
+      "For retainer clients, yes, with a named lead and a four-hour response window. For everyone else we'll always answer, and refer if we can't take it on quickly enough.",
   },
 ] as const;
 
@@ -337,7 +336,7 @@ export const practiceIntro = {
   headline: "Specialist expertise.",
   accent: "Direct engagement.",
   body:
-    "Breachrr Security is a specialist cybersecurity consultancy. Every engagement is led by senior operators — not intermediaries. If we work together, you'll know exactly who is doing the work, and you'll hear from them directly.",
+    "Breachrr Security is a specialist cybersecurity consultancy. Every engagement is led by senior operators, not intermediaries. If we work together, you'll know exactly who is doing the work, and you'll hear from them directly.",
 } as const;
 
 /**
@@ -370,7 +369,7 @@ export const engagements = [
 export const contactPrompts = [
   "Company name and what you build",
   "Roughly what stage you're at (headcount, funding, customers)",
-  "What forced the conversation — compliance, a customer, an incident, something else",
+  "What forced the conversation: compliance, a customer, an incident, something else",
   "Any timeline you're working against",
   "What's already in place, if anything",
 ] as const;

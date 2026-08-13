@@ -41,7 +41,7 @@ export function LegalPageShell({
           <aside className={styles.aside}>
             <div className={styles.asideLabel}>Contents</div>
             <p className={styles.asideNote}>
-              Questions about anything on this page — {" "}
+              Questions about anything on this page? Email{" "}
               <a
                 href={`mailto:${site.contact.email}`}
                 className={styles.asideLink}

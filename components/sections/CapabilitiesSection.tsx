@@ -23,7 +23,7 @@ export function CapabilitiesSection() {
             <em>Assess. Build. Advise.</em>
           </h2>
           <p className={styles.p}>
-            These describe the shape of the work — how an engagement is scoped
+            These describe the shape of the work: how an engagement is scoped
             and delivered. Every engagement is one of these types applied
             across one or more service areas.
           </p>

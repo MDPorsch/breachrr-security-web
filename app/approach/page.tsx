@@ -6,13 +6,13 @@ import styles from "./page.module.css";
 export const metadata = {
   title: "Approach",
   description:
-    "How Breachrr Security works. Three engagement types — Assess, Build, Advise — scoped to what the work needs. Fixed-fee, quoted after a call. See what a security assessment, program build-out, or advisory retainer actually covers.",
+    "How Breachrr Security works. Three engagement types (Assess, Build, Advise) scoped to what the work needs. Fixed-fee, quoted after a call. See what a security assessment, program build-out, or advisory retainer covers.",
   alternates: { canonical: "/approach" },
   openGraph: {
     url: "/approach",
     title: "Approach · Breachrr Security",
     description:
-      "Three engagement types — Assess, Build, Advise. Fixed-fee, quoted after a call.",
+      "Three engagement types (Assess, Build, Advise). Fixed-fee, quoted after a call.",
   },
 };
 
@@ -32,10 +32,9 @@ export default function ApproachPage() {
             <em>One shape, cut to fit.</em>
           </h1>
           <p className={styles.sub}>
-            How the practice works. Assess, Build, Advise — what each one
-            actually looks like, what you leave with, and how a first week
-            starts. Not a tiered menu. A shape we cut to fit the engagement
-            in front of us.
+            How the practice works. Assess, Build, Advise: what each one
+            looks like, what you leave with, and how a first week starts. Not
+            a tiered menu. A shape we cut to fit the engagement in front of us.
           </p>
         </div>
       </header>
@@ -63,11 +62,11 @@ export default function ApproachPage() {
             Three engagement types. Different engagements combine them differently.
             A program build-out often starts with an assessment. Ongoing
             advisory usually follows a program. Sometimes a single assessment
-            is all that's needed — sometimes a five-year advisory partnership
+            is all that's needed; sometimes a five-year advisory partnership
             begins after one intense week.
           </p>
           <p className={styles.closingP}>
-            We scope engagements to what the work actually needs, not what a
+            We scope engagements to what the work needs, not what a
             tiered pricing sheet says.
           </p>
           <p className={styles.closingEpigraph}>

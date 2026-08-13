@@ -27,7 +27,7 @@ export default function PrivacyPage() {
             and any information you share about your organisation.
           </p>
           <p>
-            When you visit this website, we collect standard server logs — IP
+            When you visit this website, we collect standard server logs: IP
             address, browser, pages viewed. We do not use tracking cookies or
             third-party analytics that identify individual visitors.
           </p>
@@ -75,7 +75,7 @@ export default function PrivacyPage() {
         <LegalSection num="06" title="International transfers">
           <p>
             Data may be processed by our sub-processors in the US, EU, or UK.
-            All transfers use appropriate safeguards under UK GDPR — standard
+            All transfers use appropriate safeguards under UK GDPR: standard
             contractual clauses or adequacy decisions as applicable.
           </p>
         </LegalSection>
