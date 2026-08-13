@@ -22,7 +22,7 @@ export function SiteHeader() {
       <div className={styles.inner}>
         <Link
           href="/"
-          aria-label={`${site.name} — home`}
+          aria-label={`${site.name} · home`}
           className={styles.wordmarkLink}
         >
           <Wordmark variant="paper" size="nav" />

@@ -37,9 +37,9 @@ export default function ContactPage() {
             Start the <em>conversation.</em>
           </h1>
           <p className={styles.sub}>
-            An intro conversation is 30 minutes. We&apos;ll ask about your
-            stage, your compliance target, and what forced the conversation.
-            Then we tell you honestly whether we&apos;re the right fit.
+            An intro conversation to talk through your situation. We&apos;ll ask
+            about your stage, your compliance target, and what forced the
+            conversation. Then we tell you whether we&apos;re the right fit.
           </p>
         </div>
       </header>
@@ -58,17 +58,9 @@ export default function ContactPage() {
                 {site.contact.email}
               </a>
               <p className={styles.contactNote}>
-                Replies within {site.responseWindow}. If it&apos;s urgent — an
-                active incident, a compliance deadline this week — say so in
+                Replies within {site.responseWindow}. If it&apos;s urgent, an
+                active incident or a compliance deadline this week, say so in
                 the subject.
-              </p>
-            </div>
-
-            <div className={styles.contactBlock}>
-              <div className={styles.contactLabel}>Where we work</div>
-              <p className={styles.contactValue}>{site.location}</p>
-              <p className={styles.contactNote}>
-                Remote-first. Onsite when it helps.
               </p>
             </div>
 
@@ -89,7 +81,7 @@ export default function ContactPage() {
               A useful first email <em>looks like this.</em>
             </h2>
             <p className={styles.promptIntro}>
-              You don&apos;t have to include all of this. But the more of it
+              You don&apos;t have to include all of this. The more of it
               you can share up front, the more useful the intro conversation
               will be.
             </p>

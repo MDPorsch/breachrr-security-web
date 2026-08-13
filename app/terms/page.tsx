@@ -24,9 +24,7 @@ export default function TermsPage() {
       >
         <LegalSection num="01" title="Who we are">
           <p>
-            Breachrr Security is a trading name of Breachrr Ltd, company number{" "}
-            {/* TODO: replace with real Companies House number before launch */}
-            <strong>16234567</strong>, registered in England and Wales.
+            Breachrr Security operates under Breachrr Ltd.
           </p>
         </LegalSection>
 
@@ -40,15 +38,12 @@ export default function TermsPage() {
 
         <LegalSection num="03" title="Fees and payment">
           <p>
-            Fees are fixed and quoted in advance in the SOW.{" "}
-            {/* TODO: confirm payment terms before launch */}
-            <strong>50% is payable on Statement of Work signature</strong> and{" "}
-            <strong>50% on completion</strong> for engagements under £25,000.
-            Ongoing retainers are invoiced monthly, Net 30 from invoice date.
+            Fees are agreed in the Statement of Work and vary by engagement.
+            Payment terms, including invoicing schedule and any milestone
+            splits, are set out in each SOW.
           </p>
           <p>
-            Late payment attracts statutory interest under the Late Payment of
-            Commercial Debts (Interest) Act 1998.
+            Late payment attracts statutory interest under applicable law.
           </p>
         </LegalSection>
 
@@ -95,8 +90,7 @@ export default function TermsPage() {
 
         <LegalSection num="08" title="Governing law">
           <p>
-            These terms are governed by the laws of England and Wales. Disputes
-            are subject to the exclusive jurisdiction of the English courts.
+            Governing law and jurisdiction are set out in each Statement of Work.
           </p>
         </LegalSection>
 

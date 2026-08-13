@@ -20,7 +20,7 @@ export function BuyerStagesSection() {
           </h2>
           <p className={styles.p}>
             The buyer we serve isn't defined by size or revenue. It's defined
-            by the moment. Something forced the conversation — a first
+            by the moment. Something forced the conversation: a first
             enterprise customer, a first investor question, a first audit, a
             first serious incident. The security team is either being built,
             outsourced, or hired for the first time.

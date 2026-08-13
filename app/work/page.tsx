@@ -36,8 +36,8 @@ export default function WorkPage() {
           </h1>
           <p className={styles.sub}>
             Every engagement starts with a scoping conversation and ends with
-            a closing review. In between, weekly check-ins and full-team
-            visibility — we don&apos;t work in silos, and we don&apos;t throw
+            a closing review. In between, regular check-ins and full-team
+            visibility. We don&apos;t work in silos, and we don&apos;t throw
             documents over the wall.
           </p>
         </div>
@@ -49,28 +49,27 @@ export default function WorkPage() {
           <div className={styles.wwCol}>
             <div className={styles.wwLabel}>How we start</div>
             <p className={styles.wwText}>
-              A 30-minute intro call. We ask about the moment that forced the
-              conversation, your compliance target, and what&apos;s already in
-              place. If we&apos;re the right fit, we scope. If we&apos;re not,
-              we say so — and pass a recommendation if we know one.
+              An intro call to understand your situation. We ask about the moment
+              that forced the conversation, your compliance target, and what&apos;s
+              already in place. If we&apos;re the right fit, we scope. If we&apos;re
+              not, we say so, and pass a recommendation if we know one.
             </p>
           </div>
           <div className={styles.wwCol}>
             <div className={styles.wwLabel}>How we work</div>
             <p className={styles.wwText}>
-              Weekly progress reviews recorded and archived. Findings and
+              Regular progress reviews, recorded and archived. Findings and
               deliverables tracked in a shared register you keep after the
-              engagement. Your team learns as we work — nothing we hand over
-              needs an external translator.
+              engagement. Your team learns as we work, and nothing we hand
+              over needs an external translator.
             </p>
           </div>
           <div className={styles.wwCol}>
             <div className={styles.wwLabel}>How we close</div>
             <p className={styles.wwText}>
-              A closing review — what was delivered, what remains, and what
-              handoff looks like. If ongoing advisory makes sense, we
-              propose it. If not, we leave clean and check back in three
-              months.
+              A closing review covering what was delivered, what remains, and
+              what handoff looks like. If ongoing advisory makes sense, we
+              propose it. If not, we leave clean and check back later.
             </p>
           </div>
         </div>
@@ -83,7 +82,7 @@ export default function WorkPage() {
             Engagements
           </Eyebrow>
           <h2 className={styles.featuredH}>
-            What a program build-out <em>looks like.</em>
+            What an assessment engagement <em>looks like.</em>
           </h2>
           <div className={styles.engagementList}>
             {engagements.map((eng) => (

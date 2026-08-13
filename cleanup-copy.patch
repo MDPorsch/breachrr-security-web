@@ -1,0 +1,776 @@
+From 61b4cb9cb47484550c44ef256f0eab8296767f10 Mon Sep 17 00:00:00 2001
+From: Claude <claude@anthropic.local>
+Date: Thu, 13 Aug 2026 11:30:05 +0000
+Subject: [PATCH] =?UTF-8?q?chore:=20copy=20cleanup=20=E2=80=94=20remove=20?=
+ =?UTF-8?q?em=20dashes,=20hedging=20words,=20drifted=20time=20constraints?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Voice-of-brand cleanup pass. Every user-visible em dash replaced (colon,
+comma, sentence break, or parenthetical as appropriate). Every 'actually'
+hedging tic dropped except in load-bearing copy where it does real work.
+
+Also:
+- Removes 'location: London / Lagos' from content/site.ts (dead field)
+- Drops the Contact page 'Where we work' block that read from that field
+- Updates areaServed JSON-LD to seven-entry list: UK, US, Nigeria, Ghana,
+  Kenya, Uganda, Africa (per confirmed instructions)
+- Terms of Service revisions:
+  * §01 shortened to 'Breachrr Security operates under Breachrr Ltd.'
+    (removes Companies House number and jurisdiction disclosure)
+  * §03 generalised — payment terms deferred to each SOW
+  * §08 generalised — governing law and jurisdiction deferred to each SOW
+- Footer baseline: 'All rights reserved.' (drops 'Registered in England
+  & Wales')
+
+Bug fix caught during pass:
+- Work page featured section header: 'What a program build-out looks
+  like.' → 'What an assessment engagement looks like.' (Verixar was
+  reclassified from Build to Assess in phase 5; header never updated)
+
+Time-constraint drift caught and cleaned:
+- '30-minute call', 'weekly progress reviews', 'twice a year',
+  'three months' → sequence/regular language matching phase 5 rule
+---
+ app/approach/page.tsx                       | 15 +++--
+ app/contact/page.tsx                        | 20 ++-----
+ app/layout.tsx                              | 13 +++--
+ app/not-found.tsx                           |  2 +-
+ app/opengraph-image.tsx                     |  2 +-
+ app/page.tsx                                |  2 +-
+ app/privacy/page.tsx                        |  4 +-
+ app/services/[slug]/page.tsx                |  2 +-
+ app/services/page.tsx                       |  6 +-
+ app/terms/page.tsx                          | 18 ++----
+ app/trust/page.tsx                          | 12 ++--
+ app/work/page.tsx                           | 27 +++++----
+ components/layout/LegalPageShell.tsx        |  2 +-
+ components/layout/SiteFooter.tsx            |  2 +-
+ components/layout/SiteHeader.tsx            |  2 +-
+ components/sections/BuyerStagesSection.tsx  |  2 +-
+ components/sections/CapabilitiesSection.tsx |  2 +-
+ components/sections/EngagementCard.tsx      |  2 +-
+ components/sections/ServicesSection.tsx     |  6 +-
+ content/site.ts                             | 65 ++++++++++-----------
+ 20 files changed, 97 insertions(+), 109 deletions(-)
+
+diff --git a/app/approach/page.tsx b/app/approach/page.tsx
+index 24a7810..363cda9 100644
+--- a/app/approach/page.tsx
++++ b/app/approach/page.tsx
+@@ -6,13 +6,13 @@ import styles from "./page.module.css";
+ export const metadata = {
+   title: "Approach",
+   description:
+-    "How Breachrr Security works. Three engagement types — Assess, Build, Advise — scoped to what the work needs. Fixed-fee, quoted after a call. See what a security assessment, program build-out, or advisory retainer actually covers.",
++    "How Breachrr Security works. Three engagement types (Assess, Build, Advise) scoped to what the work needs. Fixed-fee, quoted after a call. See what a security assessment, program build-out, or advisory retainer covers.",
+   alternates: { canonical: "/approach" },
+   openGraph: {
+     url: "/approach",
+     title: "Approach · Breachrr Security",
+     description:
+-      "Three engagement types — Assess, Build, Advise. Fixed-fee, quoted after a call.",
++      "Three engagement types (Assess, Build, Advise). Fixed-fee, quoted after a call.",
+   },
+ };
+ 
+@@ -32,10 +32,9 @@ export default function ApproachPage() {
+             <em>One shape, cut to fit.</em>
+           </h1>
+           <p className={styles.sub}>
+-            How the practice works. Assess, Build, Advise — what each one
+-            actually looks like, what you leave with, and how a first week
+-            starts. Not a tiered menu. A shape we cut to fit the engagement
+-            in front of us.
++            How the practice works. Assess, Build, Advise: what each one
++            looks like, what you leave with, and how a first week starts. Not
++            a tiered menu. A shape we cut to fit the engagement in front of us.
+           </p>
+         </div>
+       </header>
+@@ -63,11 +62,11 @@ export default function ApproachPage() {
+             Three engagement types. Different engagements combine them differently.
+             A program build-out often starts with an assessment. Ongoing
+             advisory usually follows a program. Sometimes a single assessment
+-            is all that's needed — sometimes a five-year advisory partnership
++            is all that's needed; sometimes a five-year advisory partnership
+             begins after one intense week.
+           </p>
+           <p className={styles.closingP}>
+-            We scope engagements to what the work actually needs, not what a
++            We scope engagements to what the work needs, not what a
+             tiered pricing sheet says.
+           </p>
+           <p className={styles.closingEpigraph}>
+diff --git a/app/contact/page.tsx b/app/contact/page.tsx
+index a41f05b..7682ccc 100644
+--- a/app/contact/page.tsx
++++ b/app/contact/page.tsx
+@@ -37,9 +37,9 @@ export default function ContactPage() {
+             Start the <em>conversation.</em>
+           </h1>
+           <p className={styles.sub}>
+-            An intro conversation is 30 minutes. We&apos;ll ask about your
+-            stage, your compliance target, and what forced the conversation.
+-            Then we tell you honestly whether we&apos;re the right fit.
++            An intro conversation to talk through your situation. We&apos;ll ask
++            about your stage, your compliance target, and what forced the
++            conversation. Then we tell you whether we&apos;re the right fit.
+           </p>
+         </div>
+       </header>
+@@ -58,20 +58,12 @@ export default function ContactPage() {
+                 {site.contact.email}
+               </a>
+               <p className={styles.contactNote}>
+-                Replies within {site.responseWindow}. If it&apos;s urgent — an
+-                active incident, a compliance deadline this week — say so in
++                Replies within {site.responseWindow}. If it&apos;s urgent, an
++                active incident or a compliance deadline this week, say so in
+                 the subject.
+               </p>
+             </div>
+ 
+-            <div className={styles.contactBlock}>
+-              <div className={styles.contactLabel}>Where we work</div>
+-              <p className={styles.contactValue}>{site.location}</p>
+-              <p className={styles.contactNote}>
+-                Remote-first. Onsite when it helps.
+-              </p>
+-            </div>
+-
+             <a href={mailto} className={styles.button}>
+               Start the conversation
+               <span className={styles.buttonArrow} aria-hidden="true">
+@@ -89,7 +81,7 @@ export default function ContactPage() {
+               A useful first email <em>looks like this.</em>
+             </h2>
+             <p className={styles.promptIntro}>
+-              You don&apos;t have to include all of this. But the more of it
++              You don&apos;t have to include all of this. The more of it
+               you can share up front, the more useful the intro conversation
+               will be.
+             </p>
+diff --git a/app/layout.tsx b/app/layout.tsx
+index 9d96273..0579b0e 100644
+--- a/app/layout.tsx
++++ b/app/layout.tsx
+@@ -13,12 +13,12 @@ export const metadata: Metadata = {
+ 
+   title: {
+     default:
+-      "Breachrr Security — Cybersecurity services for startups and growing businesses",
++      "Breachrr Security · Cybersecurity services for startups and growing businesses",
+     template: "%s · Breachrr Security",
+   },
+ 
+   description:
+-    "Breachrr Security helps startups and growing businesses identify and reduce cybersecurity risks, and build a security program that fits how they actually work. Security assessments, program build-outs, and ongoing advisory.",
++    "Breachrr Security helps startups and growing businesses identify and reduce cybersecurity risks, and build a security program that fits how they work. Security assessments, program build-outs, and ongoing advisory.",
+ 
+   applicationName: "Breachrr Security",
+   authors: [{ name: "Breachrr Security" }],
+@@ -62,7 +62,7 @@ export const metadata: Metadata = {
+     url: SITE_URL,
+     siteName: "Breachrr Security",
+     title:
+-      "Breachrr Security — Cybersecurity services for startups and growing businesses",
++      "Breachrr Security · Cybersecurity services for startups and growing businesses",
+     description:
+       "Security assessments, program build-outs, and ongoing advisory. Open for engagements.",
+     images: [
+@@ -70,7 +70,7 @@ export const metadata: Metadata = {
+         url: "/opengraph-image",
+         width: 1200,
+         height: 630,
+-        alt: "Breachrr Security — Find the gaps. Fix the risks. Stay secure.",
++        alt: "Breachrr Security. Find the gaps. Fix the risks. Stay secure.",
+       },
+     ],
+   },
+@@ -158,7 +158,12 @@ const organizationSchema = {
+   email: site.contact.email,
+   areaServed: [
+     { "@type": "Country", name: "United Kingdom" },
++    { "@type": "Country", name: "United States" },
+     { "@type": "Country", name: "Nigeria" },
++    { "@type": "Country", name: "Ghana" },
++    { "@type": "Country", name: "Kenya" },
++    { "@type": "Country", name: "Uganda" },
++    { "@type": "Continent", name: "Africa" },
+   ],
+   serviceType: [
+     "Cybersecurity consulting",
+diff --git a/app/not-found.tsx b/app/not-found.tsx
+index fb03128..9f11ac8 100644
+--- a/app/not-found.tsx
++++ b/app/not-found.tsx
+@@ -41,7 +41,7 @@ export default function NotFound() {
+               <Link href="/approach" className={styles.navLink}>
+                 <span className={styles.navLabel}>Approach</span>
+                 <span className={styles.navDesc}>
+-                  How we work — three engagement types.
++                  How we work, across three engagement types.
+                 </span>
+               </Link>
+             </li>
+diff --git a/app/opengraph-image.tsx b/app/opengraph-image.tsx
+index 42fae43..4ef8db6 100644
+--- a/app/opengraph-image.tsx
++++ b/app/opengraph-image.tsx
+@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
+ 
+ export const runtime = "edge";
+ export const alt =
+-  "Breachrr Security — Cybersecurity services for startups and growing businesses";
++  "Breachrr Security. Cybersecurity services for startups and growing businesses";
+ export const size = { width: 1200, height: 630 };
+ export const contentType = "image/png";
+ 
+diff --git a/app/page.tsx b/app/page.tsx
+index 76da3b3..7fe374b 100644
+--- a/app/page.tsx
++++ b/app/page.tsx
+@@ -15,7 +15,7 @@ const SITE_URL = "https://breachrrsecurity.com";
+ 
+ export const metadata = {
+   title:
+-    "Breachrr Security — Cybersecurity services for startups and growing businesses",
++    "Breachrr Security · Cybersecurity services for startups and growing businesses",
+   description:
+     "Breachrr Security helps startups and growing businesses identify and reduce cybersecurity risks. Security assessments, program build-outs, and ongoing advisory across six service areas. Open for engagements.",
+   alternates: { canonical: "/" },
+diff --git a/app/privacy/page.tsx b/app/privacy/page.tsx
+index a21b662..09e5fed 100644
+--- a/app/privacy/page.tsx
++++ b/app/privacy/page.tsx
+@@ -27,7 +27,7 @@ export default function PrivacyPage() {
+             and any information you share about your organisation.
+           </p>
+           <p>
+-            When you visit this website, we collect standard server logs — IP
++            When you visit this website, we collect standard server logs: IP
+             address, browser, pages viewed. We do not use tracking cookies or
+             third-party analytics that identify individual visitors.
+           </p>
+@@ -75,7 +75,7 @@ export default function PrivacyPage() {
+         <LegalSection num="06" title="International transfers">
+           <p>
+             Data may be processed by our sub-processors in the US, EU, or UK.
+-            All transfers use appropriate safeguards under UK GDPR — standard
++            All transfers use appropriate safeguards under UK GDPR: standard
+             contractual clauses or adequacy decisions as applicable.
+           </p>
+         </LegalSection>
+diff --git a/app/services/[slug]/page.tsx b/app/services/[slug]/page.tsx
+index 52fc67f..789a303 100644
+--- a/app/services/[slug]/page.tsx
++++ b/app/services/[slug]/page.tsx
+@@ -70,7 +70,7 @@ export default async function ServiceDetailPage({ params }: Params) {
+     ],
+     hasOfferCatalog: {
+       "@type": "OfferCatalog",
+-      name: `${service.name} — services`,
++      name: `${service.name}: services`,
+       itemListElement: service.items.map((item, i) => ({
+         "@type": "Offer",
+         position: i + 1,
+diff --git a/app/services/page.tsx b/app/services/page.tsx
+index 025233c..d2334ad 100644
+--- a/app/services/page.tsx
++++ b/app/services/page.tsx
+@@ -6,7 +6,7 @@ import styles from "./page.module.css";
+ export const metadata = {
+   title: "Services",
+   description:
+-    "Six service areas across the security stack — security assessments, application & API security, cloud & infrastructure security, security advisory, security readiness (SOC 2, ISO 27001), and incident response. Every engagement scoped to what the work needs.",
++    "Six service areas across the security stack: security assessments, application & API security, cloud & infrastructure security, security advisory, security readiness (SOC 2, ISO 27001), and incident response. Every engagement scoped to what the work needs.",
+   alternates: { canonical: "/services" },
+   openGraph: {
+     url: "/services",
+@@ -33,8 +33,8 @@ export default function ServicesPage() {
+             <em>The security stack, covered.</em>
+           </h1>
+           <p className={styles.sub}>
+-            Every engagement combines an engagement type — Assess, Build, or
+-            Advise — with one or more of the service areas below. The service
++            Every engagement combines an engagement type (Assess, Build, or
++            Advise) with one or more of the service areas below. The service
+             areas describe what the work touches; the engagement type describes
+             the shape it takes.
+           </p>
+diff --git a/app/terms/page.tsx b/app/terms/page.tsx
+index 30ab949..4de797f 100644
+--- a/app/terms/page.tsx
++++ b/app/terms/page.tsx
+@@ -24,9 +24,7 @@ export default function TermsPage() {
+       >
+         <LegalSection num="01" title="Who we are">
+           <p>
+-            Breachrr Security is a trading name of Breachrr Ltd, company number{" "}
+-            {/* TODO: replace with real Companies House number before launch */}
+-            <strong>16234567</strong>, registered in England and Wales.
++            Breachrr Security operates under Breachrr Ltd.
+           </p>
+         </LegalSection>
+ 
+@@ -40,15 +38,12 @@ export default function TermsPage() {
+ 
+         <LegalSection num="03" title="Fees and payment">
+           <p>
+-            Fees are fixed and quoted in advance in the SOW.{" "}
+-            {/* TODO: confirm payment terms before launch */}
+-            <strong>50% is payable on Statement of Work signature</strong> and{" "}
+-            <strong>50% on completion</strong> for engagements under £25,000.
+-            Ongoing retainers are invoiced monthly, Net 30 from invoice date.
++            Fees are agreed in the Statement of Work and vary by engagement.
++            Payment terms, including invoicing schedule and any milestone
++            splits, are set out in each SOW.
+           </p>
+           <p>
+-            Late payment attracts statutory interest under the Late Payment of
+-            Commercial Debts (Interest) Act 1998.
++            Late payment attracts statutory interest under applicable law.
+           </p>
+         </LegalSection>
+ 
+@@ -95,8 +90,7 @@ export default function TermsPage() {
+ 
+         <LegalSection num="08" title="Governing law">
+           <p>
+-            These terms are governed by the laws of England and Wales. Disputes
+-            are subject to the exclusive jurisdiction of the English courts.
++            Governing law and jurisdiction are set out in each Statement of Work.
+           </p>
+         </LegalSection>
+ 
+diff --git a/app/trust/page.tsx b/app/trust/page.tsx
+index 5df19a7..2ec4bf3 100644
+--- a/app/trust/page.tsx
++++ b/app/trust/page.tsx
+@@ -20,7 +20,7 @@ export default function TrustPage() {
+     <>
+       <LegalPageShell
+         title="Trust & Disclosure"
+-        subtitle="How we handle the essentials — confidentiality, insurance, disclosure, and the tools we work with."
++        subtitle="How we handle the essentials: confidentiality, insurance, disclosure, and the tools we work with."
+         effective="27 July 2026"
+       >
+         <LegalSection num="01" title="Non-disclosure">
+@@ -72,19 +72,19 @@ export default function TrustPage() {
+           {/* TODO: confirm actual sub-processor list before launch */}
+           <ul>
+             <li>
+-              <strong>GitHub</strong> — code and issue tracking
++              <strong>GitHub:</strong> code and issue tracking
+             </li>
+             <li>
+-              <strong>1Password</strong> — secrets and credentials
++              <strong>1Password:</strong> secrets and credentials
+             </li>
+             <li>
+-              <strong>Notion</strong> — engagement documentation
++              <strong>Notion:</strong> engagement documentation
+             </li>
+             <li>
+-              <strong>Google Workspace</strong> — email and file collaboration
++              <strong>Google Workspace:</strong> email and file collaboration
+             </li>
+             <li>
+-              <strong>Slack</strong> — channel-based communication
++              <strong>Slack:</strong> channel-based communication
+             </li>
+           </ul>
+         </LegalSection>
+diff --git a/app/work/page.tsx b/app/work/page.tsx
+index 43f01a7..82f8301 100644
+--- a/app/work/page.tsx
++++ b/app/work/page.tsx
+@@ -36,8 +36,8 @@ export default function WorkPage() {
+           </h1>
+           <p className={styles.sub}>
+             Every engagement starts with a scoping conversation and ends with
+-            a closing review. In between, weekly check-ins and full-team
+-            visibility — we don&apos;t work in silos, and we don&apos;t throw
++            a closing review. In between, regular check-ins and full-team
++            visibility. We don&apos;t work in silos, and we don&apos;t throw
+             documents over the wall.
+           </p>
+         </div>
+@@ -49,28 +49,27 @@ export default function WorkPage() {
+           <div className={styles.wwCol}>
+             <div className={styles.wwLabel}>How we start</div>
+             <p className={styles.wwText}>
+-              A 30-minute intro call. We ask about the moment that forced the
+-              conversation, your compliance target, and what&apos;s already in
+-              place. If we&apos;re the right fit, we scope. If we&apos;re not,
+-              we say so — and pass a recommendation if we know one.
++              An intro call to understand your situation. We ask about the moment
++              that forced the conversation, your compliance target, and what&apos;s
++              already in place. If we&apos;re the right fit, we scope. If we&apos;re
++              not, we say so, and pass a recommendation if we know one.
+             </p>
+           </div>
+           <div className={styles.wwCol}>
+             <div className={styles.wwLabel}>How we work</div>
+             <p className={styles.wwText}>
+-              Weekly progress reviews recorded and archived. Findings and
++              Regular progress reviews, recorded and archived. Findings and
+               deliverables tracked in a shared register you keep after the
+-              engagement. Your team learns as we work — nothing we hand over
+-              needs an external translator.
++              engagement. Your team learns as we work, and nothing we hand
++              over needs an external translator.
+             </p>
+           </div>
+           <div className={styles.wwCol}>
+             <div className={styles.wwLabel}>How we close</div>
+             <p className={styles.wwText}>
+-              A closing review — what was delivered, what remains, and what
+-              handoff looks like. If ongoing advisory makes sense, we
+-              propose it. If not, we leave clean and check back in three
+-              months.
++              A closing review covering what was delivered, what remains, and
++              what handoff looks like. If ongoing advisory makes sense, we
++              propose it. If not, we leave clean and check back later.
+             </p>
+           </div>
+         </div>
+@@ -83,7 +82,7 @@ export default function WorkPage() {
+             Engagements
+           </Eyebrow>
+           <h2 className={styles.featuredH}>
+-            What a program build-out <em>looks like.</em>
++            What an assessment engagement <em>looks like.</em>
+           </h2>
+           <div className={styles.engagementList}>
+             {engagements.map((eng) => (
+diff --git a/components/layout/LegalPageShell.tsx b/components/layout/LegalPageShell.tsx
+index 8d06d80..7bf7622 100644
+--- a/components/layout/LegalPageShell.tsx
++++ b/components/layout/LegalPageShell.tsx
+@@ -41,7 +41,7 @@ export function LegalPageShell({
+           <aside className={styles.aside}>
+             <div className={styles.asideLabel}>Contents</div>
+             <p className={styles.asideNote}>
+-              Questions about anything on this page — {" "}
++              Questions about anything on this page? Email{" "}
+               <a
+                 href={`mailto:${site.contact.email}`}
+                 className={styles.asideLink}
+diff --git a/components/layout/SiteFooter.tsx b/components/layout/SiteFooter.tsx
+index adf0cd7..c130748 100644
+--- a/components/layout/SiteFooter.tsx
++++ b/components/layout/SiteFooter.tsx
+@@ -71,7 +71,7 @@ export function SiteFooter() {
+         <div className={styles.baselineInner}>
+           <CorporateMark withCopyright />
+           <span className={styles.baselineNote}>
+-            All rights reserved. Registered in England &amp; Wales.
++            All rights reserved.
+           </span>
+         </div>
+       </div>
+diff --git a/components/layout/SiteHeader.tsx b/components/layout/SiteHeader.tsx
+index ba8afad..66c755f 100644
+--- a/components/layout/SiteHeader.tsx
++++ b/components/layout/SiteHeader.tsx
+@@ -22,7 +22,7 @@ export function SiteHeader() {
+       <div className={styles.inner}>
+         <Link
+           href="/"
+-          aria-label={`${site.name} — home`}
++          aria-label={`${site.name} · home`}
+           className={styles.wordmarkLink}
+         >
+           <Wordmark variant="paper" size="nav" />
+diff --git a/components/sections/BuyerStagesSection.tsx b/components/sections/BuyerStagesSection.tsx
+index 176c6a4..40c2dbd 100644
+--- a/components/sections/BuyerStagesSection.tsx
++++ b/components/sections/BuyerStagesSection.tsx
+@@ -20,7 +20,7 @@ export function BuyerStagesSection() {
+           </h2>
+           <p className={styles.p}>
+             The buyer we serve isn't defined by size or revenue. It's defined
+-            by the moment. Something forced the conversation — a first
++            by the moment. Something forced the conversation: a first
+             enterprise customer, a first investor question, a first audit, a
+             first serious incident. The security team is either being built,
+             outsourced, or hired for the first time.
+diff --git a/components/sections/CapabilitiesSection.tsx b/components/sections/CapabilitiesSection.tsx
+index 610582d..7363f79 100644
+--- a/components/sections/CapabilitiesSection.tsx
++++ b/components/sections/CapabilitiesSection.tsx
+@@ -23,7 +23,7 @@ export function CapabilitiesSection() {
+             <em>Assess. Build. Advise.</em>
+           </h2>
+           <p className={styles.p}>
+-            These describe the shape of the work — how an engagement is scoped
++            These describe the shape of the work: how an engagement is scoped
+             and delivered. Every engagement is one of these types applied
+             across one or more service areas.
+           </p>
+diff --git a/components/sections/EngagementCard.tsx b/components/sections/EngagementCard.tsx
+index b7445ab..0522164 100644
+--- a/components/sections/EngagementCard.tsx
++++ b/components/sections/EngagementCard.tsx
+@@ -61,7 +61,7 @@ export function EngagementCard({
+ 
+       <footer className={styles.footer}>
+         <span className={styles.signature}>
+-          — Prepared by <em>Breachrr Security</em>
++          Prepared by <em>Breachrr Security</em>
+         </span>
+       </footer>
+     </article>
+diff --git a/components/sections/ServicesSection.tsx b/components/sections/ServicesSection.tsx
+index 4cc6323..4430fc6 100644
+--- a/components/sections/ServicesSection.tsx
++++ b/components/sections/ServicesSection.tsx
+@@ -23,10 +23,10 @@ export function ServicesSection() {
+           </h2>
+           <p className={styles.p}>
+             The three engagement types above are how we work. These are the
+-            areas we work across. Most engagements combine several — an
+-            application review and a cloud review, a readiness build with an
++            areas we work across. Most engagements combine several: an
++            application review with a cloud review, a readiness build with an
+             advisory continuation, an incident-response retainer paired with
+-            quarterly assessments.
++            regular assessments.
+           </p>
+           <Link href="/services" className={styles.allLink}>
+             All service areas
+diff --git a/content/site.ts b/content/site.ts
+index 0ffe9ea..3c52423 100644
+--- a/content/site.ts
++++ b/content/site.ts
+@@ -12,7 +12,6 @@ export const site = {
+   name: "Breachrr Security",
+   domain: "breachrrsecurity.com",
+   legalEntity: "breachrr ltd",
+-  location: "London / Lagos",
+   bookingStatus: "Open for engagements",
+   contact: {
+     email: "info@breachrrsecurity.com",
+@@ -76,15 +75,15 @@ export const capabilities = [
+     name: "Assess",
+     tagline: "Where you are, precisely.",
+     summary:
+-      "A security assessment. Scoped to whichever service area needs eyes — application, cloud, infrastructure, or identity. Findings register, prioritised, ready to close.",
++      "A security assessment scoped to whichever service area needs attention: application, cloud, infrastructure, or identity. You leave with a prioritised findings register, ready to close.",
+     duration: "Scoped per engagement",
+     whatHappens:
+-      "A security assessment across the service areas that matter to the engagement — most commonly Application & API Security, Cloud & Infrastructure, or a Security Assessment covering multiple domains. We start with a scoping conversation — what you're building, what compliance target is ahead, what's already been done. Then we combine static analysis, cloud configuration review, and identity/access audit against what we find. No black-box guesswork; we work with your team and your access.",
++      "A security assessment across the service areas that matter to the engagement. Most commonly this is Application & API Security, Cloud & Infrastructure, or a Security Assessment covering multiple domains. We start with a scoping conversation to understand what you're building, what compliance target is ahead, and what's already been done. Then we combine static analysis, cloud configuration review, and identity/access audit against what we find. No black-box guesswork; we work alongside your team, with your access.",
+     delivers: [
+-      "Numbered findings register — severity, evidence, remediation guidance",
++      "Numbered findings register with severity, evidence, and remediation guidance",
+       "Executive summary written for a non-technical reader",
+       "Technical appendix with reproducible steps for engineering",
+-      "Walkthrough call with your team, recorded",
++      "Recorded walkthrough call with your team",
+       "Optional: help closing the critical and high findings",
+     ],
+     firstWeek:
+@@ -97,16 +96,16 @@ export const capabilities = [
+     name: "Build",
+     tagline: "A program, not a policy binder.",
+     summary:
+-      "A structured security program build-out. Compliance target (SOC 2, ISO 27001, UK GDPR) as the anchor, controls as the deliverable, a roadmap for what's left at handoff.",
++      "A structured security program build-out with a compliance target (SOC 2, ISO 27001, UK GDPR) as the anchor. Controls are the deliverable, plus a roadmap for what's outstanding at handoff.",
+     duration: "Scoped per engagement",
+     whatHappens:
+-      "A structured security program build-out anchored to a compliance target — SOC 2 Type II, ISO 27001, UK GDPR — or to a Security Readiness need driven by customer requirements. We start where the last audit left off, or where nothing exists. The program is designed collaboratively — your team learns as we build, so what we hand over stays running after we leave. Progress reviews throughout; no surprises.",
++      "A structured security program build-out anchored to a compliance target: SOC 2 Type II, ISO 27001, UK GDPR, or a Security Readiness need driven by customer requirements. We start where the last audit left off, or where nothing exists. The program is designed collaboratively so your team learns as we build; what we hand over stays running after we leave. Progress reviews throughout, no surprises.",
+     delivers: [
+-      "Complete policy stack — adapted to your operating context",
+-      "Control framework mapped to your target — SOC 2 CC, ISO Annex A, or equivalent",
++      "Complete policy stack adapted to your operating context",
++      "Control framework mapped to your target (SOC 2 CC, ISO Annex A, or equivalent)",
+       "Evidence collection process and reusable templates",
+       "Remediation roadmap for what's outstanding at handoff",
+-      "Team enablement — documentation and light-touch training",
++      "Team enablement, including documentation and light-touch training",
+       "Regular progress reviews, recorded and archived",
+     ],
+     firstWeek:
+@@ -119,17 +118,17 @@ export const capabilities = [
+     name: "Advise",
+     tagline: "The team you'd have hired if you had time.",
+     summary:
+-      "Ongoing partnership. Quarterly reviews and incident-response preparedness — expert security counsel when you need it.",
++      "Ongoing partnership with quarterly reviews and incident-response preparedness. Expert security counsel when you need it.",
+     duration: "Ongoing retainer",
+     whatHappens:
+-      "Ongoing partnership after — or alongside — the program. The practice serves as your security team lead, with regular strategic reviews that keep the program healthy as the company grows. Incident-response preparedness means you don't figure it out under pressure.",
++      "An ongoing partnership after or alongside the program. The practice serves as your security team lead, with regular strategic reviews that keep the program healthy as the company grows. Incident-response preparedness means you don't figure it out under pressure.",
+     delivers: [
+       "Regular office hours",
+       "Regular program health reviews and roadmap adjustments",
+-      "Incident-response playbook + regular readiness drills",
+-      "Compliance renewal support — SOC 2 Type II re-audit, ISO surveillance",
++      "Incident-response playbook plus regular readiness drills",
++      "Compliance renewal support for SOC 2 Type II re-audit and ISO surveillance",
+       "Board-level security reporting when the room needs it",
+-      "Escalation call — the first hour of any active incident",
++      "Escalation call for the first hour of any active incident",
+     ],
+     firstWeek:
+       "Start: onboarding, systems familiarisation, current-state review. Then: first strategic review, priority setting. Once priorities are set: regular leadership check-ins, cadence established.",
+@@ -151,7 +150,7 @@ export const services = [
+     slug: "security-assessments",
+     name: "Security Assessments",
+     tagline: "Understand your security posture and identify the risks that matter most.",
+-    summary: "The foundational engagement. Where the security conversation starts for most organisations — before the compliance target, before the roadmap. A grounded, evidence-led view of where you actually stand.",
++    summary: "The foundational engagement. This is where the security conversation starts for most organisations, before the compliance target and before the roadmap. A grounded, evidence-led view of where you stand.",
+     items: [
+       "Cybersecurity risk assessments",
+       "Security posture assessments",
+@@ -160,7 +159,7 @@ export const services = [
+       "Security gap assessments",
+     ],
+     methodology:
+-      "We work grey-box — with your access, alongside your team. Each assessment produces a numbered findings register, prioritised by real business impact rather than headline severity. Every finding has reproducible evidence, a specific remediation path, and a paragraph explaining why it matters in your context.",
++      "We work grey-box, with your access and alongside your team. Each assessment produces a numbered findings register, prioritised by real business impact rather than headline severity. Every finding comes with reproducible evidence, a specific remediation path, and a paragraph explaining why it matters in your context.",
+     postures: ["assess"],
+     linkLabel: "See what an assessment covers →",
+   },
+@@ -168,7 +167,7 @@ export const services = [
+     slug: "application-api-security",
+     name: "Application & API Security",
+     tagline: "Identify and address security weaknesses in the applications and APIs your business relies on.",
+-    summary: "Focused review of the surface most attackers actually touch. Application logic, authentication flows, API contracts, session handling, injection paths — read the way the next attacker will.",
++    summary: "Focused review of the surface most attackers touch: application logic, authentication flows, API contracts, session handling, and injection paths. Read the way the next attacker will read them.",
+     items: [
+       "Web application security",
+       "API security assessments",
+@@ -178,7 +177,7 @@ export const services = [
+       "Secure development guidance",
+     ],
+     methodology:
+-      "Manual review by a senior engineer, augmented (not replaced) by static analysis and light dynamic testing. We read the code the way an attacker reads production — with attention to business-logic weirdness and auth-boundary drift, not just OWASP-Top-10 checkboxes.",
++      "Manual review by a senior engineer, augmented (not replaced) by static analysis and light dynamic testing. We read the code the way an attacker reads production, with attention to business-logic weirdness and auth-boundary drift, rather than only ticking OWASP Top 10 boxes.",
+     postures: ["assess", "advise"],
+     linkLabel: "See what an application review covers →",
+   },
+@@ -186,7 +185,7 @@ export const services = [
+     slug: "cloud-infrastructure-security",
+     name: "Cloud & Infrastructure Security",
+     tagline: "Strengthen the security of your cloud environments, infrastructure, identities, and networks.",
+-    summary: "Where most modern breaches actually happen — misconfigured trust boundaries, over-scoped IAM, forgotten resources with public access. AWS, GCP, Azure, and everything under the console.",
++    summary: "Where most modern breaches happen: misconfigured trust boundaries, over-scoped IAM, forgotten resources with public access. AWS, GCP, Azure, and everything under the console.",
+     items: [
+       "Cloud security assessments",
+       "Infrastructure security reviews",
+@@ -203,7 +202,7 @@ export const services = [
+     slug: "security-advisory",
+     name: "Security Advisory",
+     tagline: "Get practical cybersecurity expertise aligned with your organisation's goals.",
+-    summary: "The ongoing brain-share. A named senior person for the questions that don't warrant a project — architecture calls, hiring rubrics, tool selection, incident triage, board reporting.",
++    summary: "The ongoing brain-share. A named senior person for the questions that don't warrant a project: architecture calls, hiring rubrics, tool selection, incident triage, and board reporting.",
+     items: [
+       "Security program development",
+       "Security policies and procedures",
+@@ -213,7 +212,7 @@ export const services = [
+       "Security maturity improvement",
+     ],
+     methodology:
+-      "Monthly retainer, shared channel, quarterly strategic reviews. We treat advisory as a relationship, not a hotline — the value compounds as we build shared context about your business, your team, and how you actually operate.",
++      "Monthly retainer, shared channel, quarterly strategic reviews. We treat advisory as a relationship rather than a hotline. The value compounds as we build shared context about your business, your team, and how you operate.",
+     postures: ["advise", "build"],
+     linkLabel: "See what advisory covers →",
+   },
+@@ -221,7 +220,7 @@ export const services = [
+     slug: "security-readiness",
+     name: "Security Readiness",
+     tagline: "Prepare your organisation to meet the security expectations of customers, partners, and stakeholders.",
+-    summary: "The engagement that gets you audit-ready — or customer-ready — without the compliance-theatre binder. SOC 2, ISO 27001, UK GDPR, or a specific enterprise customer's security questionnaire.",
++    summary: "The engagement that gets you audit-ready, or customer-ready, without the compliance-theatre binder. SOC 2, ISO 27001, UK GDPR, or a specific enterprise customer's security questionnaire.",
+     items: [
+       "Compliance readiness",
+       "Security framework alignment",
+@@ -230,7 +229,7 @@ export const services = [
+       "Security documentation",
+     ],
+     methodology:
+-      "We focus on the underlying practice, not the checkbox. Your auditor gets what they need; you keep the controls you build. The point isn't a certificate — it's an operating rhythm that produces the certificate as a side effect.",
++      "We focus on the underlying practice, not the checkbox. Your auditor gets what they need; you keep the controls you build. The point isn't a certificate. It's an operating rhythm that produces the certificate as a side effect.",
+     postures: ["build", "advise"],
+     linkLabel: "See what readiness covers →",
+   },
+@@ -247,7 +246,7 @@ export const services = [
+       "Recovery and improvement planning",
+     ],
+     methodology:
+-      "Preparedness first: playbooks written for the incident types your business actually faces, tested twice a year with your team. Response second: for retainer clients, a named lead on-call with a four-hour response window. For everyone else, we'll always answer, and refer if we can't take it on quickly enough.",
++      "Preparedness first: playbooks written for the incident types your business faces, tested regularly with your team. Response second: for retainer clients, a named lead on-call with a four-hour response window. For everyone else, we'll always answer, and refer if we can't take it on quickly enough.",
+     postures: ["advise", "build"],
+     linkLabel: "See what incident work covers →",
+   },
+@@ -265,7 +264,7 @@ export const buyerStages = [
+   {
+     label: "Something set up in a hurry",
+     description:
+-      "A scanner subscription. A policy copied from a template. MFA rolled out last quarter. Not nothing — not coherent either.",
++      "A scanner subscription. A policy copied from a template. MFA rolled out last quarter. It's not nothing, but it's not coherent either.",
+   },
+   {
+     label: "You've outgrown your first attempt",
+@@ -285,8 +284,8 @@ export const philosophy = {
+   accent: "Not a package.",
+   body: [
+     "Every Breachrr Security engagement is tailored to your environment, priorities, and objectives. There is no template we pull off a shelf.",
+-    "Cybersecurity works best as a partnership. Every engagement runs that way — alongside your founders, engineers, IT, and leadership, not around them.",
+-    "No unnecessary complexity. No one-size-fits-all solutions. No security theatre. Just practical expertise focused on reducing risk that actually matters to your business.",
++    "Cybersecurity works best as a partnership. Every engagement runs that way, alongside your founders, engineers, IT, and leadership rather than around them.",
++    "No unnecessary complexity. No one-size-fits-all solutions. No security theatre. Just practical expertise focused on reducing the risk that matters to your business.",
+   ],
+ } as const;
+ 
+@@ -297,7 +296,7 @@ export const faq = [
+   {
+     question: "How much does an engagement cost?",
+     answer:
+-      "It depends on scope. Fixed-fee, quoted after a 30-minute call and a light scoping doc. We don't publish starting-from numbers because they mislead — the shape of the work matters more than the size.",
++      "It depends on scope. Fixed-fee, quoted after an initial call and a light scoping doc. We don't publish starting-from numbers because they mislead. The shape of the work matters more than the size.",
+   },
+   {
+     question: "Do you carry insurance and sign NDAs?",
+@@ -307,12 +306,12 @@ export const faq = [
+   {
+     question: "How is Breachrr Security different from Breachrr?",
+     answer:
+-      "Same parent (Breachrr Ltd), different arms. Breachrr is the cybersecurity technology product line — credential-monitoring SaaS. Breachrr Security is the services arm — assessments, advisory, incident work. Separate teams, shared standards.",
++      "Same parent (Breachrr Ltd), different arms. Breachrr is the cybersecurity technology product line, a credential-monitoring SaaS. Breachrr Security is the services arm, covering assessments, advisory, and incident work. Separate teams, shared standards.",
+   },
+   {
+     question: "Do you take incident response calls out of hours?",
+     answer:
+-      "For retainer clients, yes — with a named lead and a four-hour response window. For everyone else we'll always answer, and refer if we can't take it on quickly enough.",
++      "For retainer clients, yes, with a named lead and a four-hour response window. For everyone else we'll always answer, and refer if we can't take it on quickly enough.",
+   },
+ ] as const;
+ 
+@@ -337,7 +336,7 @@ export const practiceIntro = {
+   headline: "Specialist expertise.",
+   accent: "Direct engagement.",
+   body:
+-    "Breachrr Security is a specialist cybersecurity consultancy. Every engagement is led by senior operators — not intermediaries. If we work together, you'll know exactly who is doing the work, and you'll hear from them directly.",
++    "Breachrr Security is a specialist cybersecurity consultancy. Every engagement is led by senior operators, not intermediaries. If we work together, you'll know exactly who is doing the work, and you'll hear from them directly.",
+ } as const;
+ 
+ /**
+@@ -370,7 +369,7 @@ export const engagements = [
+ export const contactPrompts = [
+   "Company name and what you build",
+   "Roughly what stage you're at (headcount, funding, customers)",
+-  "What forced the conversation — compliance, a customer, an incident, something else",
++  "What forced the conversation: compliance, a customer, an incident, something else",
+   "Any timeline you're working against",
+   "What's already in place, if anything",
+ ] as const;
+-- 
+2.43.0
+

@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 export const alt =
-  "Breachrr Security — Cybersecurity services for startups and growing businesses";
+  "Breachrr Security. Cybersecurity services for startups and growing businesses";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
